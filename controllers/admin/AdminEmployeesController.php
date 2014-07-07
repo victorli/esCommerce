@@ -235,12 +235,13 @@ class AdminEmployeesControllerCore extends AdminController
 					'name' => 'lastname',
 					'required' => true
 				),
-				array(
+				//remove employee avartar
+				/*array(
 					'type' => 'html',
 					'name' => 'employee_avatar',
 					'html_content' => '<div id="employee-thumbnail"><a href="http://www.prestashop.com/forums/index.php?app=core&module=usercp" target="_blank" style="background-image:url('.$obj->getImage().')"></a></div>
 					<div class="alert alert-info">'.sprintf($this->l('Your avatar in PrestaShop 1.6.x is your profile picture on %1$s. To change your avatar, log in to PrestaShop.com with your email %2$s and follow the on-screen instructions.'), '<a href="http://www.prestashop.com/forums/index.php?app=core&module=usercp" class="alert-link" target="_blank">PrestaShop.com</a>', $obj->email).'</div>',
-				),
+				),*/
 				array(
 					'type' => 'text',
 					'class'=> 'fixed-width-xxl',
@@ -266,14 +267,16 @@ class AdminEmployeesControllerCore extends AdminController
 				'hint' => sprintf($this->l('Minimum of %s characters.'), Validate::ADMIN_PASSWORD_LENGTH),
 				'name' => 'passwd'
 				);	
-		$this->fields_form['input'][] = array(
+		//remove addons check
+		/*$this->fields_form['input'][] = array(
 			'type' => 'prestashop_addons',
 			'label' => 'PrestaShop Addons',
 			'name' => 'prestashop_addons',
-		);
+		);*/
 
 		$this->fields_form['input'] = array_merge($this->fields_form['input'], array(
-			array(
+			//remove  prestashop connection
+			/*array(
 				'type' => 'switch',
 				'label' => $this->l('Connect to PrestaShop'),
 				'name' => 'optin',
@@ -292,7 +295,7 @@ class AdminEmployeesControllerCore extends AdminController
 					)
 				),
 				'hint' => $this->l('PrestaShop can provide you with guidance on a regular basis by sending you tips on how to optimize the management of your store which will help you grow your business. If you do not wish to receive these tips, please uncheck this box.')
-			),
+			),*/
 			array(
 				'type' => 'default_tab',
 				'label' => $this->l('Default page'),
