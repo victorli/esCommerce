@@ -117,7 +117,7 @@
 				</button>
 
 				<a id="header_shopname" href="{$default_tab_link|escape:'html':'UTF-8'}">
-					<img src="{$img_dir}prestashop-avatar.png" alt="{$shop_name|escape:'html':'UTF-8'}" />
+					<img src="{$img_dir}escommerce-avatar.png" alt="{$shop_name|escape:'html':'UTF-8'}" />
 					{$shop_name}
 				</a>
 
@@ -212,7 +212,8 @@
 				</ul>
 {/if}
 				<ul id="header_employee_box">
-					{if !isset($logged_on_addons) || !$logged_on_addons}
+					
+					{* {if !isset($logged_on_addons) || !$logged_on_addons}
 						<li>
 							<a href="#" class="addons_connect" data-toggle="modal" data-target="#modal_addons_connect" class="toolbar_btn" title="{l s='Addons'}">
 								<i class="icon-chain-broken"></i>
@@ -220,7 +221,7 @@
 								<span class="string-short">{l s='Addons'}</span>
 							</a>
 						</li>
-					{/if}
+					{/if} *}
 {if {$base_url}}
 					<li>
 						<a href="{if isset($base_url_tc)}{$base_url_tc}{else}{$base_url}{/if}" id="header_foaccess" target="_blank" title="{l s='View my shop'}">
