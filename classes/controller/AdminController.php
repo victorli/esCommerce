@@ -1270,7 +1270,7 @@ class AdminControllerCore extends Controller
 			$this->page_header_toolbar_title = array_pop($this->toolbar_title);
 		$this->addPageHeaderToolBarModulesListButton();
 
-		$this->context->smarty->assign('help_link', 'http://help.prestashop.com/'.$this->context->language->iso_code.'/doc/'.Tools::getValue('controller').'?version='._PS_VERSION_.'&country='.$this->context->country->iso_code);
+		$this->context->smarty->assign('help_link', 'http://escommerce.blx90.com/doc/'.Tools::getValue('controller').'?version='._PS_VERSION_.'&country='.$this->context->country->iso_code);
 	}
 
 	/**
