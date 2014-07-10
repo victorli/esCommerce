@@ -126,7 +126,7 @@ class Alipay extends PaymentModule{
 		$helper->default_form_language = $lang;
 		$helper->allow_employee_form_lang = $lang;
 		
-		$helper->title = $this->dislayName;
+		$helper->title = $this->displayName;
 		$helper->show_toolbar = true;
 		$helper->toolbar_scroll = true;
 		$helper->submit_action = 'submit'.$this->name;
