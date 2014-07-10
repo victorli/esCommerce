@@ -120,7 +120,7 @@ class Alipay extends PaymentModule{
 		$helper = new HelperForm();
 		$helper->module = $this;
 		$helper->name_controller = $this->name;
-		$helper->token = Tools::getAdminTokenLite('AdminModule');
+		$helper->token = Tools::getAdminTokenLite('AdminModules');
 		$helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
 		
 		$helper->default_form_language = $lang;
