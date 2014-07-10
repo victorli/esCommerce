@@ -167,6 +167,9 @@ abstract class ModuleCore
 	const CACHE_FILE_UNTRUSTED_MODULES_LIST = '/config/xml/untrusted_modules_list.xml';
 
 	public static $hosted_modules_blacklist = array('autoupgrade');
+	
+	//add this const to specify the module created by BLX90 and trusted
+	const AUTHOR_IS_BLX90 = 'BLX90';
 
 	/**
 	 * Constructor
@@ -1634,6 +1637,8 @@ abstract class ModuleCore
 
 		if (!is_object($obj))
 			return false;
+		elseif ($obj->author == self::AUTHOR_IS_BLX90)
+			return true;
 		elseif ($obj->module_key === '')
 			return false;
 		else
