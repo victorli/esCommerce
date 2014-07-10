@@ -29,9 +29,9 @@ class Alipay extends PaymentModule{
 		$this->currencies = true;
 		$this->currencies_mode = 'checkbox';
 		
-		$configs = Configuration::getMultiple(array('ALIPAY_WAY'));
-		if(!empty($configs['ALIPAY_WAY']))
-			$this->alipay_way = $configs['ALIPAY_WAY'];
+		$configs = Configuration::getMultiple(array('BLX_ALIPAY_WAY'));
+		if(!empty($configs['BLX_ALIPAY_WAY']))
+			$this->alipay_way = $configs['BLX_ALIPAY_WAY'];
 		
 		parent::__construct();
 		
@@ -51,7 +51,7 @@ class Alipay extends PaymentModule{
 		if(!parent::install() || 
 			!$this->registerHook('payment') || 
 			!$this->registerHook('paymentReturn') || 
-			!Configuration::updateValue('ALIPAY_NAME','Alipay')
+			!Configuration::updateValue('BLX_ALIPAY_NAME','Alipay')
 			)
 			return false;
 		return true;
@@ -59,7 +59,8 @@ class Alipay extends PaymentModule{
 	
 	public function uninstall(){
 		if(!parent::uninstall() || 
-			!Configuration::deleteByName('ALIPAY_NAME')
+			!Configuration::deleteByName('BLX_ALIPAY_NAME') || 
+			!Configuration::deleteByName('BLX_ALIPAY_WAY')
 		)
 			return false;
 			
