@@ -51,7 +51,8 @@ class Alipay extends PaymentModule{
 		if(!parent::install() || 
 			!$this->registerHook('payment') || 
 			!$this->registerHook('paymentReturn') || 
-			!Configuration::updateValue('BLX_ALIPAY_NAME','Alipay')
+			!Configuration::updateValue('BLX_ALIPAY_NAME','Alipay') ||
+			!Configuration::updateValue('BLX_ALIPAY_WAY',self::PAY_WAY_PARTNER_TRADE)
 			)
 			return false;
 		return true;
@@ -103,7 +104,7 @@ class Alipay extends PaymentModule{
 				array(
 					'type' => 'select',
 					'label' => $this->l('Alipay way'),
-					'name'	=> 'ALIPAY_WAY',
+					'name'	=> 'BLX_ALIPAY_WAY',
 					'required' => true,
 					'options' => array(
 						'query' => $way_options,
@@ -143,7 +144,7 @@ class Alipay extends PaymentModule{
 			)
 		);
 		
-		$helper->fields_value['ALIPAY_WAY'] = Configuration::get('ALIPAY_WAY');
+		$helper->fields_value['BLX_ALIPAY_WAY'] = Configuration::get('BLX_ALIPAY_WAY');
 		
 		return $helper->generateForm($fields_form);
 	}
