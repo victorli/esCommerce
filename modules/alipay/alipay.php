@@ -14,6 +14,9 @@ if (!defined('_PS_VERSION_'))
 	
 class Alipay extends PaymentModule{
 	
+	const PAY_WAY_PARTNER_TRADE = 'PARTNER';
+	const PAY_WAY_DIRECT_PAY = 'DIRECT';
+	
 	public function __construct(){
 		$this->name = 	'alipay';
 		$this->tab	=	'payments_gateways';
@@ -22,6 +25,13 @@ class Alipay extends PaymentModule{
 		$this->need_instance = 0;
 		$this->ps_versions_compliancy = array('min'=>'1.5','max'=>'1.6');
 		$this->bootstrap	=	true;
+		
+		$this->currencies = true;
+		$this->currencies_mode = 'checkbox';
+		
+		$configs = Configuration::getMultiple(array('ALIPAY_WAY'));
+		if(!empty($configs['ALIPAY_WAY']))
+			$this->alipay_way = $configs['ALIPAY_WAY'];
 		
 		parent::__construct();
 		
@@ -56,4 +66,90 @@ class Alipay extends PaymentModule{
 		return true;
 	}
 	
+	public function getContent(){
+		$output = null;
+		
+		if(Tools::isSubmit('submit'.$this->name)){
+			$alipay_way = strval(Tools::getValue('ALIPAY_WAY'));
+			if(!$alipay_way || empty($alipay_way) || !Validate::isGenericName($alipay_way))
+				$output .= $this->displayError($this->l('Invalid pay way'));
+			else{
+				Configuration::updateValue('ALIPAY_WAY',$alipay_way);
+				$output .= $this->displayConfirmation($this->l('Settings updated'));
+			}
+		}
+		
+		return $output.$this->displayForm();
+	}
+	
+	public function displayForm(){
+		$lang = (int)Configuration::get('PS_LANG_DEFAULT');
+		
+		$way_options = array(
+			array(
+				'id_option' => self::PAY_WAY_PARTNER_TRADE,
+				'name'		=> $this->l('Partner Trade')
+			),
+			array(
+				'id_option' => self::PAY_WAY_DIRECT_PAY,
+				'name'		=> $this->l('Direct Pay')
+			)
+		);
+		
+		$fields_form[0]['form']=array(
+			'legend' => array('title' => $this->l('Setting')),
+			'input' => array(
+				array(
+					'type' => 'select',
+					'label' => $this->l('Alipay way'),
+					'name'	=> 'ALIPAY_WAY',
+					'required' => true,
+					'options' => array(
+						'query' => $way_options,
+						'id'	=> 'id_option',
+						'name'	=> 'name'
+					)
+				)
+			),
+			'submit' => array(
+				'title' => $this->l('Save'),
+				'class' => 'button'
+			)
+		);
+		
+		$helper = new HelperForm();
+		$helper->module = $this;
+		$helper->name_controller = $this->name;
+		$helper->token = Tools::getAdminTokenLite('AdminModule');
+		$helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
+		
+		$helper->default_form_language = $lang;
+		$helper->allow_employee_form_lang = $lang;
+		
+		$helper->title = $this->dislayName;
+		$helper->show_toolbar = true;
+		$helper->toolbar_scroll = true;
+		$helper->submit_action = 'submit'.$this->name;
+		
+		$helper->toolbar_btn = array(
+			'save' => array(
+				'desc' => $this->l('Save'),
+				'href' => AdminController::$currentIndex.'&configure='.$this->name.'&save'.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules')
+			),
+			'back' => array(
+				'desc' => $this->l('Back to list'),
+				'href' => AdminController::$currentIndex.'&token='.Tools::getAdminTokenLite('AdminModules')
+			)
+		);
+		
+		$helper->fields_value['ALIPAY_WAY'] = Configuration::get('ALIPAY_WAY');
+		
+		return $helper->generateForm($fields_form);
+	}
+	
 }
+
+
+
+
+
