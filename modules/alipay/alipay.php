@@ -16,7 +16,7 @@ class Alipay extends PaymentModule{
 	
 	public function __construct(){
 		$this->name = 	'alipay';
-		$this->tab	=	'payment_gateways';
+		$this->tab	=	'payments_gateways';
 		$this->version	=	'0.1.0';
 		$this->author	=	'BLX90';
 		$this->need_instance = 0;
