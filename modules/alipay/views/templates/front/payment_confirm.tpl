@@ -3,7 +3,7 @@
 * @copyright 2014 BLX90
 * @author blx90<zs.li@blx90.com>
 *}
-
+{capture name=path}{l s='Check payment' mod='alipay'}{/capture}
 <h1 class="page-heading">
 	{l s='Order summary' mod='alipay'}
 </h1>
