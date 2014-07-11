@@ -155,9 +155,9 @@ class Alipay extends PaymentModule{
 			
 		$this->context->smarty->assign(
 			array(
-				'alipay_module_name' => Configuration::get('BLX_ALIPAY_NAME'),
-				'alipay_module_link' => $this->context->link->getModuleLink('alipay','display'),
-				'alipay_module_path' => $this->_path
+				'module_name' => Configuration::get('BLX_ALIPAY_NAME'),
+				'module_link' => $this->context->link->getModuleLink('alipay','payment'),
+				'module_path' => $this->_path
 			)
 		);
 		
