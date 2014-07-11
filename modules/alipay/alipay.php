@@ -84,6 +84,18 @@ class Alipay extends PaymentModule{
 		return $output.$this->displayForm();
 	}
 	
+	public function checkCurrency($cart){
+		$currency_order = new Currency($cart->id_currency);
+		$currencies_module = $this->getCurrency($cart->id_currency);
+		
+		if(is_array($currencies_module))
+			foreach ($currencies_module as $currency_module)
+				if ($currency_order->id == $currency_module['id_currency']) {
+					return true;
+				}
+		return false;
+	}
+	
 	public function displayForm(){
 		$lang = (int)Configuration::get('PS_LANG_DEFAULT');
 		
@@ -151,6 +163,9 @@ class Alipay extends PaymentModule{
 	
 	public function hookPayment($params){
 		if(!$this->active)
+			return;
+		
+		if (!$this->checkCurrency($params['cart']))
 			return;
 			
 		$this->context->smarty->assign(
