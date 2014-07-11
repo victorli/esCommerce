@@ -149,6 +149,24 @@ class Alipay extends PaymentModule{
 		return $helper->generateForm($fields_form);
 	}
 	
+	public function hookPayment($params){
+		if(!$this->active)
+			return;
+			
+		$this->context->smarty->assign(
+			array(
+				'alipay_module_name' => Configuration::get('BLX_ALIPAY_NAME'),
+				'alipay_module_link' => $this->context->link->getModuleLink('alipay','display')
+			)
+		);
+		
+		return $this->display(__FILE__.'payment.tpl');
+	}
+	
+	public function hookPaymentReturn($params){
+		
+	}
+	
 }
 
 
