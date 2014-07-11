@@ -3,7 +3,7 @@
  * @author blx90 <zs.li@blx90.com>
  * @since 20140711
  */
-class AlipayPaymentFrontController extends ModuleFrontController{
+class AlipayPaymentModuleFrontController extends ModuleFrontController{
 	
 	public function initContent(){
 		parent::initContent();
