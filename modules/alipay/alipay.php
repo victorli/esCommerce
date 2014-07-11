@@ -160,7 +160,7 @@ class Alipay extends PaymentModule{
 			)
 		);
 		
-		return $this->display(__FILE__.'payment.tpl');
+		return $this->display(__FILE__,'payment.tpl');
 	}
 	
 	public function hookPaymentReturn($params){
