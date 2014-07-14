@@ -21,8 +21,9 @@ class Alipay extends PaymentModule{
 	const SIGN_TYPE = 'MD5';
 	const PAY_WAY_PARTNER_TRADE = 'PARTNER';
 	const PAY_WAY_DIRECT_PAY = 'DIRECT';
-	
 	const INPUT_CHARSET = 'utf-8';
+	
+	const ALIPAY_ORDER_STATUS = 'PS_OS_ALIPAY';
 	
 	public function __construct(){
 		$this->name = 	'alipay';
@@ -63,17 +64,19 @@ class Alipay extends PaymentModule{
 		if(Shop::isFeatureActive())
 			Shop::setContext(Shop::CONTEXT_ALL);
 		
+		//Add new order state
+		if(!$this->_addOrderState(self::ALIPAY_ORDER_STATUS, $this->l('Waiting Alipay payment.')))
+			return false;
+			
 		if(!parent::install() || 
 			!$this->registerHook('payment') || 
 			!$this->registerHook('paymentReturn') || 
 			!Configuration::updateValue('BLX_ALIPAY_NAME','Alipay') ||
-			!Configuration::updateValue('BLX_ALIPAY_WAY',self::PAY_WAY_PARTNER_TRADE)
+			!Configuration::updateValue('BLX_ALIPAY_WAY',self::PAY_WAY_PARTNER_TRADE) || 
+			!Configuration::updateValue(self::ALIPAY_ORDER_STATUS,$this->id_orderState)
 			)
 			return false;
 			
-		//Add new order state
-		if(!$this->_addOrderState('PS_OS_ALIPAY', $this->l('Waiting Alipay payment.')))
-			return false;
 		return true;
 	}
 	
@@ -279,8 +282,7 @@ class Alipay extends PaymentModule{
 
 			copy(dirname(__FILE__).'/logo.gif', dirname(__FILE__).'/../../img/os/'.(int)$orderState->id.'.gif');
 		}
-		
-		return true;
+		return ($this->id_orderState = $orderState->id);
 	}
 	
 	private function _createLinkString($param){
