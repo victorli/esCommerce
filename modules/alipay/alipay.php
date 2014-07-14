@@ -43,9 +43,9 @@ class Alipay extends PaymentModule{
 			$this->alipay_way = $configs['BLX_ALIPAY_WAY'];
 		if (!empty($configs['BLX_ALIPAY_CACERT']))
 			$this->alipay_cacert = $configs['BLX_ALIPAY_CACERT'];
-		if (!empty($configs['BLX_ALIPAY_PARTNER_NO']))
+		if (!empty($configs['BLX_ALIPAY_PARTNER_ID']))
 			$this->alipay_partner_no = $configs['BLX_ALIPAY_PARTNER_ID'];
-		if (!empty($configs['BLX_ALIPAY_KET']))
+		if (!empty($configs['BLX_ALIPAY_SIGN_KET']))
 			$this->alipay_key = $configs['BLX_ALIPAY_SIGN_KEY'];
 		
 		parent::__construct();
@@ -95,11 +95,26 @@ class Alipay extends PaymentModule{
 		$output = null;
 		
 		if(Tools::isSubmit('submit'.$this->name)){
-			$alipay_way = strval(Tools::getValue('ALIPAY_WAY'));
-			if(!$alipay_way || empty($alipay_way) || !Validate::isGenericName($alipay_way))
+			$alipay_account = strvar(Tools::getValue('BLX_ALIPAY_ACCOUNT'));
+			$alipay_partner_id = strvar(Tools::getValue('BLX_ALIPAY_PARTNER_ID'));
+			$alipay_sign_key = strvar(Tools::getValue('BLX_ALIPAY_SIGN_KEY'));
+			$alipay_way = strval(Tools::getValue('BLX_ALIPAY_WAY'));
+			
+			if(!$alipay_account || empty($alipay_account))
+				$output .= $this->displayError($this->l('Invalid alipay account'))."<br/>";
+			if(!$alipay_partner_id || empty($alipay_partner_id) || substr($alipay_partner_id, 0, 4) != '2088' || strlen($alipay_partner_id) != 16)
+				$output .= $this->displayError($this->l('Partner id is a digital string start with:2088 and length 16.'))."<br/>";
+			if(!$alipay_sign_key || empty($alipay_sign_key))
+				$output .= $this->displayError($this->l('Invalid alipay sign key.'))."<br/>";
+			if(!$alipay_way || empty($alipay_way))
 				$output .= $this->displayError($this->l('Invalid pay way'));
-			else{
-				Configuration::updateValue('ALIPAY_WAY',$alipay_way);
+			
+			if(is_null($output)){	
+				Configuration::updateValue('BLX_ALIPAY_ACCOUNT',$alipay_account);
+				Configuration::updateValue('BLX_ALIPAY_PARTNER_ID',$alipay_partner_id);
+				Configuration::updateValue('BLX_ALIPAY_SIGN_KEY',$alipay_sign_key);
+				Configuration::updateValue('BLX_ALIPAY_WAY',$alipay_way);
+				
 				$output .= $this->displayConfirmation($this->l('Settings updated'));
 			}
 		}
