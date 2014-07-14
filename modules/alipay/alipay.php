@@ -87,7 +87,8 @@ class Alipay extends PaymentModule{
 			!Configuration::deleteByName('BLX_ALIPAY_CACERT') || 
 			!Configuration::deleteByName('BLX_ALIPAY_ACCOUNT') || 
 			!Configuration::deleteByName('BLX_ALIPAY_PARTNER_ID') || 
-			!Configuration::deleteByName('BLX_ALIPAY_SIGN_KEY')
+			!Configuration::deleteByName('BLX_ALIPAY_SIGN_KEY') || 
+			!Configuration::deleteByName(self::ALIPAY_ORDER_STATUS)
 		)
 			return false;
 			
