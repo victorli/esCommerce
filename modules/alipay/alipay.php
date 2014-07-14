@@ -254,7 +254,7 @@ class Alipay extends PaymentModule{
 			$orderState->color='orange';
 			$orderState->unremovable = 1;
 			$orderState->name = array();
-			foreach (Language::getLanguage() as $lang)
+			foreach (Language::getLanguages() as $lang)
 				$orderState->name[$lang['id_lang']] = $name;
 			if(!$orderState->add())
 				return false;
