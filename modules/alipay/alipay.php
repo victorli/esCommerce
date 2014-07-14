@@ -202,6 +202,9 @@ class Alipay extends PaymentModule{
 		);
 		
 		$helper->fields_value['BLX_ALIPAY_WAY'] = Configuration::get('BLX_ALIPAY_WAY');
+		$helper->fields_value['BLX_ALIPAY_ACCOUNT'] = Configuration::get('BLX_ALIPAY_ACCOUNT');
+		$helper->fields_value['BLX_ALIPAY_PARTNER_ID'] = Configuration::get('BLX_ALIPAY_PARTNER_ID');
+		$helper->fields_value['BLX_ALIPAY_SIGN_KEY'] = Configuration::get('BLX_ALIPAY_SIGN_KEY');
 		
 		return $helper->generateForm($fields_form);
 	}
