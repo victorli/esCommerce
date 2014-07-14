@@ -36,15 +36,17 @@ class Alipay extends PaymentModule{
 		$this->currencies = true;
 		$this->currencies_mode = 'checkbox';
 		
-		$configs = Configuration::getMultiple(array('BLX_ALIPAY_WAY'));
+		$configs = Configuration::getMultiple(array('BLX_ALIPAY_ACCOUNT','BLX_ALIPAY_WAY','BLX_ALIPAY_CACERT','BLX_ALIPAY_PARTNER_ID','BLX_ALIPAY_SIGN_KEY'));
+		if (!empty($configs['BLX_ALIPAY_ACCOUNT']))
+			$this->alipay_key = $configs['BLX_ALIPAY_ACCOUNT'];
 		if(!empty($configs['BLX_ALIPAY_WAY']))
 			$this->alipay_way = $configs['BLX_ALIPAY_WAY'];
 		if (!empty($configs['BLX_ALIPAY_CACERT']))
 			$this->alipay_cacert = $configs['BLX_ALIPAY_CACERT'];
 		if (!empty($configs['BLX_ALIPAY_PARTNER_NO']))
-			$this->alipay_partner_no = $configs['BLX_ALIPAY_PARTNER_NO'];
+			$this->alipay_partner_no = $configs['BLX_ALIPAY_PARTNER_ID'];
 		if (!empty($configs['BLX_ALIPAY_KET']))
-			$this->alipay_key = $configs['BLX_ALIPAY_KEY'];
+			$this->alipay_key = $configs['BLX_ALIPAY_SIGN_KEY'];
 		
 		parent::__construct();
 		
@@ -81,7 +83,7 @@ class Alipay extends PaymentModule{
 			!Configuration::deleteByName('BLX_ALIPAY_WAY') || 
 			!Configuration::deleteByName('BLX_ALIPAY_CACERT') || 
 			!Configuration::deleteByName('BLX_ALIPAY_ACCOUNT') || 
-			!Configuration::deleteByName('BLX_ALIPAY_PARTNER_NO') || 
+			!Configuration::deleteByName('BLX_ALIPAY_PARTNER_ID') || 
 			!Configuration::deleteByName('BLX_ALIPAY_SIGN_KEY')
 		)
 			return false;
@@ -138,21 +140,22 @@ class Alipay extends PaymentModule{
 					'type' =>'text',
 					'label' => $this->l('Alipay Account'),
 					'name'  => 'BLX_ALIPAY_ACCOUNT',
-					'require' => true,
+					'size' => 50,
+					'required' => true,
 					'desc' => $this->l('Your alipay account applied from Alipay.')
 					),
 				array(
 					'type' =>'text',
-					'label' => $this->l('Partner No'),
-					'name'  => 'BLX_ALIPAY_PARTNER_NO',
-					'require' => true,
-					'desc' => $this->l('Your partner no applied from Alipay.')
+					'label' => $this->l('PID'),
+					'name'  => 'BLX_ALIPAY_PARTNER_ID',
+					'required' => true,
+					'desc' => $this->l('Your partner id(PID) applied from Alipay.')
 					),
 				array(
 					'type' =>'text',
 					'label' => $this->l('Sign Key'),
 					'name' => 'BLX_ALIPAY_SIGN_KEY',
-					'require' => true,
+					'required' => true,
 					'desc' => $this->l('Your security key applied from Alipay.')
 				),
 				array(
