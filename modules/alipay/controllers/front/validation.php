@@ -40,6 +40,9 @@ class AlipayValidationModuleFrontController extends ModuleFrontController{
 		//validate and add new order
 		$this->module->validateOrder($cart->id,Configuration::get('PS_OS_ALIPAY'),$total,$this->module->displayName,NULL,$mailVars,(int)$currency->id,false,$customer->secure_key);
 		
-		Tools::redirect('index.php?controller=order-confirmation&id_cart='.$cart->id.'&id_module='.$this->module->id.'&id_order='.$this->module->currentOrder.'&key='.$customer->secure_key);
+		if(Tools::getValue('submit') == 'confirm-and-pay-later')
+			Tools::redirect('index.php?controller=order-history');
+		else
+			Tools::redirect('index.php?controller=order-confirmation&id_cart='.$cart->id.'&id_module='.$this->module->id.'&id_order='.$this->module->currentOrder.'&key='.$customer->secure_key);
 	}
 }
