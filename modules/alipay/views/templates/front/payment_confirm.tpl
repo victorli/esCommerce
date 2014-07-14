@@ -65,8 +65,13 @@
             </a>
             <button 
             class="button btn btn-default button-medium" 
-            type="submit">
-                <span>{l s='I confirm my order' mod='alipay'}<i class="icon-chevron-right right"></i></span>
+            type="submit" name="submit" value="confirm-and-pay">
+                <span>{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
+            </button>
+            <button 
+            class="button btn btn-default button-medium" 
+            type="submit" name="submit" value="confirm-and-pay-later">
+                <span>{l s='Confirm order and Pay later' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
         </p>
  </form>
