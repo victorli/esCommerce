@@ -1,5 +1,6 @@
 <?php
 /**
+ * @license MIT
  * @author blx90 <zs.li@blx90.com>
  * @since 20140711
  */

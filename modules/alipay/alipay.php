@@ -14,8 +14,15 @@ if (!defined('_PS_VERSION_'))
 	
 class Alipay extends PaymentModule{
 	
+	const ALIPAY_GATEWAY_NEW = 'https://mapi.alipay.com/gateway.do?';
+	const ALIPAY_HTTPS_VERIFY_URL = 'https://mapi.alipay.com/gateway.do?service=notify_verify&';
+	const ALIPAY_HTTP_VERIFY_URL = 'http://notify.alipay.com/trade/notify_query.do?';
+	
+	const SIGN_TYPE = 'MD5';
 	const PAY_WAY_PARTNER_TRADE = 'PARTNER';
 	const PAY_WAY_DIRECT_PAY = 'DIRECT';
+	
+	const INPUT_CHARSET = 'utf-8';
 	
 	public function __construct(){
 		$this->name = 	'alipay';
@@ -32,6 +39,12 @@ class Alipay extends PaymentModule{
 		$configs = Configuration::getMultiple(array('BLX_ALIPAY_WAY'));
 		if(!empty($configs['BLX_ALIPAY_WAY']))
 			$this->alipay_way = $configs['BLX_ALIPAY_WAY'];
+		if (!empty($configs['BLX_ALIPAY_CACERT']))
+			$this->alipay_cacert = $configs['BLX_ALIPAY_CACERT'];
+		if (!empty($configs['BLX_ALIPAY_PARTNER_NO']))
+			$this->alipay_partner_no = $configs['BLX_ALIPAY_PARTNER_NO'];
+		if (!empty($configs['BLX_ALIPAY_KET']))
+			$this->alipay_key = $configs['BLX_ALIPAY_KEY'];
 		
 		parent::__construct();
 		
@@ -55,13 +68,18 @@ class Alipay extends PaymentModule{
 			!Configuration::updateValue('BLX_ALIPAY_WAY',self::PAY_WAY_PARTNER_TRADE)
 			)
 			return false;
+			
+		//Add new order state
+		if(!$this->_addOrderState('PS_OS_ALIPAY', $this->l('Waiting Alipay payment.')))
+			return false;
 		return true;
 	}
 	
 	public function uninstall(){
 		if(!parent::uninstall() || 
 			!Configuration::deleteByName('BLX_ALIPAY_NAME') || 
-			!Configuration::deleteByName('BLX_ALIPAY_WAY')
+			!Configuration::deleteByName('BLX_ALIPAY_WAY') || 
+			!Configuration::deleteByName('BLX_ALIPAY_CACERT')
 		)
 			return false;
 			
@@ -113,6 +131,27 @@ class Alipay extends PaymentModule{
 		$fields_form[0]['form']=array(
 			'legend' => array('title' => $this->l('Setting')),
 			'input' => array(
+				array(
+					'type' =>'text',
+					'label' => $this->l('Alipay Account'),
+					'name'  => 'BLX_ALIPAY_ACCOUNT',
+					'require' => true,
+					'desc' => $this->l('Your alipay account applied from Alipay.')
+					),
+				array(
+					'type' =>'text',
+					'label' => $this->l('Partner No'),
+					'name'  => 'BLX_ALIPAY_PARTNER_NO',
+					'require' => true,
+					'desc' => $this->l('Your partner no applied from Alipay.')
+					),
+				array(
+					'type' =>'text',
+					'label' => $this->l('Sign Key'),
+					'name' => 'BLX_ALIPAY_SIGN_KEY',
+					'require' => true,
+					'desc' => $this->l('Your security key applied from Alipay.')
+				),
 				array(
 					'type' => 'select',
 					'label' => $this->l('Alipay way'),
@@ -183,6 +222,177 @@ class Alipay extends PaymentModule{
 		
 	}
 	
+	public function getPaymentType($flag){
+		switch ($flag){
+			case self::PAY_WAY_DIRECT_PAY: return "1";break;
+			case self::PAY_WAY_PARTNER_TRADE: return "1";break;
+		}
+		return false;
+	}
+	
+	public function getPaymentService($flag){
+		switch ($flag){
+			case self::PAY_WAY_DIRECT_PAY: return "create_direct_pay_by_user";break;
+			case self::PAY_WAY_PARTNER_TRADE: return "create_partner_trade_by_buyer";break;
+		}
+		return false;
+	}
+	/**
+	 * add new order status
+	 * @param unknown_type $state
+	 * @param unknown_type $name
+	 */
+	private function _addOrderState($state,$name){
+		$orderState = new OrderState((int)Configuration::get($state));
+		if(!Validate::isLoadedObject($orderState)){
+			$orderState->color='orange';
+			$orderState->unremovable = 1;
+			$orderState->name = array();
+			foreach (Language::getLanguage() as $lang)
+				$orderState->name[$lang['id_lang']] = $name;
+			if(!$orderState->add())
+				return false;
+
+			copy(dirname(__FILE__).'/logo.gif', dirname(__FILE__).'/../../img/os/'.(int)$orderState->id.'.gif');
+		}
+		
+		return true;
+	}
+	
+	private function _createLinkString($param){
+		$args = "";
+		while(list($key,$val)=each($param))
+			$args .=$key."=".$val."&";
+		
+		$args = substr($args, 0, count($args)-2);
+		
+		if(get_magic_quotes_gpc())
+			$args = stripslashes($args);
+		
+		return $args;
+	}
+	
+	private function _createLinkStringUrlencode($param){
+		$args = "";
+		while(list($key,$val)=each($param))
+			$args .=$key."=".urlencode($val)."&";
+		
+		$args = substr($args, 0, count($args)-2);
+		
+		if(get_magic_quotes_gpc())
+			$args = stripslashes($args);
+		
+		return $args;
+	}
+	
+	private function _processParamsFilter($param){
+		$param_filter = array();
+		while(list($key,$val) = each($param))
+			if ($key == 'sign' || $key == 'sign_key' || $val == '')
+				continue;
+			else 
+				$param_filter[$key] = $param[$key];
+				
+		return $param_filter;
+	}
+	
+	private function _processArgsSort($param){
+		ksort($param);
+		reset($param);
+		
+		return $param;
+	}
+	
+	private function _processCharsetEncode($input,$_output_charset ,$_input_charset) {
+		$output = "";
+		if(!isset($_output_charset) )$_output_charset  = $_input_charset;
+		if($_input_charset == $_output_charset || $input ==null ) {
+			$output = $input;
+		} elseif (function_exists("mb_convert_encoding")) {
+			$output = mb_convert_encoding($input,$_output_charset,$_input_charset);
+		} elseif(function_exists("iconv")) {
+			$output = iconv($_input_charset,$_output_charset,$input);
+		} else die("sorry, you have no libs support for charset change.");
+		return $output;
+	}
+	
+	private function _processCharsetDecode($input,$_input_charset ,$_output_charset) {
+		$output = "";
+		if(!isset($_input_charset) )$_input_charset  = $_input_charset ;
+		if($_input_charset == $_output_charset || $input ==null ) {
+			$output = $input;
+		} elseif (function_exists("mb_convert_encoding")) {
+			$output = mb_convert_encoding($input,$_output_charset,$_input_charset);
+		} elseif(function_exists("iconv")) {
+			$output = iconv($_input_charset,$_output_charset,$input);
+		} else die("sorry, you have no libs support for charset changes.");
+		return $output;
+	}
+	
+	private function _processMD5Sign($str){
+		$str = $str . $this->alipay_key;
+		return md5($str);
+	}
+	
+	private function _processMD5Verify($str, $sign){
+		$tmpSign = $this->_processMD5Sign($str);
+		
+		if ($tmpSign == $sign) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private function _buildRequestSign($param_sort){
+		$str = $this->_createLinkString($param_sort);
+		$sign = $this->_processMD5Sign($str);
+		
+		return $sign;
+	}
+	
+	private function _bulidRequestParam($param){
+		$param_filter = $this->_processParamsFilter($param);
+		$param_sort = $this->_processArgsSort($param_filter);
+		
+		$sign = $this->_buildRequestSign($param_sort);
+		
+		$param_sort['sign'] = $sign;
+		$param_sort['sign_type'] = self::SIGN_TYPE;
+		
+		return $param_sort;
+	}
+	
+	public function processHttpRequestPost($url, $param, $input_charset=''){
+		if (trim($input_charset) != '')
+			$url = $url."_input_charset=".$input_charset;
+			
+		$curl = curl_init($url);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);//严格认证
+		curl_setopt($curl, CURLOPT_CAINFO,$this->alipay_cacert);//证书地址
+		curl_setopt($curl, CURLOPT_HEADER, 0 ); // 过滤HTTP头
+		curl_setopt($curl,CURLOPT_RETURNTRANSFER, 1);// 显示输出结果
+		curl_setopt($curl,CURLOPT_POST,true); // post传输数据
+		curl_setopt($curl,CURLOPT_POSTFIELDS,$param);// post传输数据
+		$responseText = curl_exec($curl);
+		curl_close($curl);
+		
+		return $responseText;
+	}
+	
+	public function processHttpRequestGet($url){
+		$curl = curl_init($url);
+		curl_setopt($curl, CURLOPT_HEADER, 0 ); // 过滤HTTP头
+		curl_setopt($curl,CURLOPT_RETURNTRANSFER, 1);// 显示输出结果
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);//严格认证
+		curl_setopt($curl, CURLOPT_CAINFO,$this->alipay_cacert);//证书地址
+		$responseText = curl_exec($curl);
+		curl_close($curl);
+		
+		return $responseText;
+	}
 }
 
 
