@@ -63,15 +63,17 @@
             href="{$link->getPageLink('order', true, NULL, "step=3")|escape:'html':'UTF-8'}">
                 <i class="icon-chevron-left"></i>{l s='Other payment methods' mod='alipay'}
             </a>
-            <button 
-            class="button btn btn-default button-medium" 
-            type="submit" name="submit" value="confirm-and-pay">
-                <span>{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
-            </button>
+           
             <button 
             class="button btn btn-default button-medium" 
             type="submit" name="submit" value="confirm-and-pay-later">
                 <span>{l s='Confirm order and Pay later' mod='alipay'}<i class="icon-chevron-right right"></i></span>
+            </button>
+       		
+             <button 
+            class="button btn btn-default button-medium" 
+            type="submit" name="submit" value="confirm-and-pay" style="margin-right:5px;">
+                <span>{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
         </p>
  </form>
