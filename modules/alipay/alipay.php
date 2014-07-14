@@ -79,7 +79,10 @@ class Alipay extends PaymentModule{
 		if(!parent::uninstall() || 
 			!Configuration::deleteByName('BLX_ALIPAY_NAME') || 
 			!Configuration::deleteByName('BLX_ALIPAY_WAY') || 
-			!Configuration::deleteByName('BLX_ALIPAY_CACERT')
+			!Configuration::deleteByName('BLX_ALIPAY_CACERT') || 
+			!Configuration::deleteByName('BLX_ALIPAY_ACCOUNT') || 
+			!Configuration::deleteByName('BLX_ALIPAY_PARTNER_NO') || 
+			!Configuration::deleteByName('BLX_ALIPAY_SIGN_KEY')
 		)
 			return false;
 			
