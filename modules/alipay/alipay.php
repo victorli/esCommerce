@@ -55,7 +55,7 @@ class Alipay extends PaymentModule{
 		
 		$this->confirmUninstall	=	$this->l('Are you sure to remove this Alipay payment?');
 		
-		if(!Configuration::get('ALIPAY_NAME'))
+		if(!Configuration::get('BLX_ALIPAY_NAME'))
 			$this->warning	=	$this->l('No name provided');
 	}
 	
@@ -95,9 +95,9 @@ class Alipay extends PaymentModule{
 		$output = null;
 		
 		if(Tools::isSubmit('submit'.$this->name)){
-			$alipay_account = strvar(Tools::getValue('BLX_ALIPAY_ACCOUNT'));
-			$alipay_partner_id = strvar(Tools::getValue('BLX_ALIPAY_PARTNER_ID'));
-			$alipay_sign_key = strvar(Tools::getValue('BLX_ALIPAY_SIGN_KEY'));
+			$alipay_account = strval(Tools::getValue('BLX_ALIPAY_ACCOUNT'));
+			$alipay_partner_id = strval(Tools::getValue('BLX_ALIPAY_PARTNER_ID'));
+			$alipay_sign_key = strval(Tools::getValue('BLX_ALIPAY_SIGN_KEY'));
 			$alipay_way = strval(Tools::getValue('BLX_ALIPAY_WAY'));
 			
 			if(!$alipay_account || empty($alipay_account))
