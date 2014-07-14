@@ -95,9 +95,9 @@ class Alipay extends PaymentModule{
 		$output = null;
 		
 		if(Tools::isSubmit('submit'.$this->name)){
-			$alipay_account = strval(Tools::getValue('BLX_ALIPAY_ACCOUNT'));
-			$alipay_partner_id = strval(Tools::getValue('BLX_ALIPAY_PARTNER_ID'));
-			$alipay_sign_key = strval(Tools::getValue('BLX_ALIPAY_SIGN_KEY'));
+			$alipay_account = strval(trim(Tools::getValue('BLX_ALIPAY_ACCOUNT')));
+			$alipay_partner_id = strval(trim(Tools::getValue('BLX_ALIPAY_PARTNER_ID')));
+			$alipay_sign_key = strval(trim(Tools::getValue('BLX_ALIPAY_SIGN_KEY')));
 			$alipay_way = strval(Tools::getValue('BLX_ALIPAY_WAY'));
 			
 			if(!$alipay_account || empty($alipay_account))
