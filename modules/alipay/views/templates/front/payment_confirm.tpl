@@ -90,7 +90,15 @@ $(document).ready(function(){
 			data : $('form#blx_alipay_confirm_form').serialize()+'&submit='+submit,
 			dataType : 'json',
 			success: function(data,status){
-				
+				if(data.code == 'success'){
+					if(data.action == 'redirect')
+						window.location.href = data.msg;
+					else if(data.action == 'jump')
+						window.open(data.msg,"jumpTab");
+				}else if(data.code == 'error'){
+					if(data.action == 'redirect')
+						window.location.href = data.msg;
+				}
 			}
 		});
 	});
