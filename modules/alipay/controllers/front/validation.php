@@ -6,6 +6,8 @@
  */
 class AlipayValidationModuleFrontController extends ModuleFrontController{
 	
+	public $result = array();
+	
 	public function initContent(){
 		parent::initContent();
 		
@@ -17,7 +19,7 @@ class AlipayValidationModuleFrontController extends ModuleFrontController{
 			$cart->id_address_delivery == 0 || 
 			$cart->id_address_invoice == 0 || 
 			!$this->module->active)
-			Tools::redirect('index.php?controller=order&step=1');
+			$this->_checkAjaxRequest('error', 'redirect', 'index.php?controller=order&step=1');
 			
 		$authorized = false;
 		foreach (Module::getPaymentModules() as $module){
@@ -27,11 +29,11 @@ class AlipayValidationModuleFrontController extends ModuleFrontController{
 			}
 		}
 		if (!$authorized)
-			die($this->module->l('This payment method is not avaliable.','validation'));
+			$this->_checkAjaxRequest('error', 'die', $this->module->l('This payment method is not avaliable.','validation'));
 			
 		$customer = new Customer($cart->id_customer);
 		if (!Validate::isLoadedObject($customer))
-			Tools::redirect('index.php?controller=order&step=1');
+			$this->_checkAjaxRequest('error', 'redirect', 'index.php?controller=order&step=1');
 			
 		$currency = $this->context->currency;
 		$total = (float)$cart->getOrderTotal(true,Cart::BOTH);
@@ -41,7 +43,7 @@ class AlipayValidationModuleFrontController extends ModuleFrontController{
 		$this->module->validateOrder($cart->id,Configuration::get('PS_OS_ALIPAY'),$total,$this->module->displayName,NULL,$mailVars,(int)$currency->id,false,$customer->secure_key);
 		
 		if(Tools::getValue('submit') == 'confirm-and-pay-later')
-			Tools::redirect('index.php?controller=history&key='.$customer->secure_key);
+			$this->_checkAjaxRequest('success', 'redirect', 'index.php?controller=history');
 		elseif (Tools::getValue('submit') == 'confirm-and-pay'){
 			$params = array(
 				'id_cart' => $cart->id,
@@ -49,16 +51,26 @@ class AlipayValidationModuleFrontController extends ModuleFrontController{
 				'key'	=> $customer->secure_key,
 				'id_module' => $this->module->id	
 			);
-			Tools::redirect($this->context->link->getModuleLink('alipay','jump',$params));
+			$this->_checkAjaxRequest('success', 'jump',$this->context->link->getModuleLink('alipay','jump',$params));
+		}
+	}
+	
+	private function _checkAjaxRequest($code,$action,$msg){
+		if($this->ajax){
+			$this->result['code'] = $code;
+			$this->result['action'] = $action;
+			$this->result['msg'] = $msg;
+		}else{
+			if ($code == 'error' && $action == 'die')
+				die($msg);
+			else{
+				Tools::redirect($msg);
+			}
 		}
 	}
 	
 	public function displayAjax(){
-		$result = array();
-		$result['code'] = "success";
-		$result['jump_url'] = 'test';
-		$result['target'] = "blank";
 		
-		return json_encode($result);
+		die(Tools::jsonEncode($this->result));
 	}
 }
