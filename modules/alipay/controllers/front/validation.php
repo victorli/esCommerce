@@ -42,7 +42,14 @@ class AlipayValidationModuleFrontController extends ModuleFrontController{
 		
 		if(Tools::getValue('submit') == 'confirm-and-pay-later')
 			Tools::redirect('index.php?controller=history&key='.$customer->secure_key);
-		else
-			Tools::redirect('index.php?controller=order-confirmation&id_cart='.$cart->id.'&id_module='.$this->module->id.'&id_order='.$this->module->currentOrder.'&key='.$customer->secure_key);
+		elseif (Tools::getValue('submit') == 'confirm-and-pay'){
+			$params = array(
+				'id_cart' => $cart->id,
+				'id_order' =>$this->module->currentOrder,
+				'key'	=> $customer->secure_key,
+				'id_module' => $this->module->id	
+			);
+			Tools::redirect($this->context->link->getModuleLink('alipay','jump',$params));
+		}
 	}
 }

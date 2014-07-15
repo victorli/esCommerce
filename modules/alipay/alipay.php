@@ -250,7 +250,10 @@ class Alipay extends PaymentModule{
 		
 	}
 	
-	public function getPaymentType($flag){
+	public function getPaymentType($flag=null){
+		if(is_null($flag))
+			$flag = Configuration::get('BLX_ALIPAY_WAY');
+			
 		switch ($flag){
 			case self::PAY_WAY_DIRECT_PAY: return "1";break;
 			case self::PAY_WAY_PARTNER_TRADE: return "1";break;
@@ -258,7 +261,10 @@ class Alipay extends PaymentModule{
 		return false;
 	}
 	
-	public function getPaymentService($flag){
+	public function getPaymentService($flag=null){
+		if(is_null($flag))
+			$flag = Configuration::get('BLX_ALIPAY_WAY');
+		
 		switch ($flag){
 			case self::PAY_WAY_DIRECT_PAY: return "create_direct_pay_by_user";break;
 			case self::PAY_WAY_PARTNER_TRADE: return "create_partner_trade_by_buyer";break;
@@ -378,7 +384,7 @@ class Alipay extends PaymentModule{
 		return $sign;
 	}
 	
-	private function _bulidRequestParam($param){
+	private function _buildRequestParam($param){
 		$param_filter = $this->_processParamsFilter($param);
 		$param_sort = $this->_processArgsSort($param_filter);
 		
@@ -419,6 +425,32 @@ class Alipay extends PaymentModule{
 		curl_close($curl);
 		
 		return $responseText;
+	}
+	
+	public function getRequestParam($id_order){
+		$order = new Order((int)$id_order);
+		$param = array(
+			'action'=>self::ALIPAY_GATEWAY_NEW,
+			'input_charset'=>self::INPUT_CHARSET,
+			'inputs'=>array(
+				'service'=>$this->getPaymentService(),
+				'partner'=>Configuration::get('BLX_ALIPAY_PARTNER_ID'),
+				'payment_type'=>$this->getPaymentType(),
+				'notify_url'=>Configuration::get('BLX_ALIPAY_NOTIFY_URL'),
+				'return_url'=>Configuration::get('BLX_ALIPAY_RETURN_URL'),
+				'seller_email'=>Configuration::get('BLX_ALIPAY_ACCOUNT'),
+				'out_trade_no'=>$order->id_order,
+				'subject'=>$order->name,
+				'total_fee'=>$order->getOrdersTotalPaid(),
+				'body'=>'',//order description
+				'show_url'=>'',
+				'anti_phishing_key'=>'',
+				'exter_invoke_id'=>'',
+				'_input_charset'=>self::INPUT_CHARSET
+			)
+		);
+		
+		return $this->_buildRequestParam($param);
 	}
 }
 
