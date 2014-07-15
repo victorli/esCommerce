@@ -74,7 +74,7 @@
             class="button btn btn-default button-medium" 
             style="margin-right:5px;"
             onclick="submitJump()" 
-            >
+            type="submit" name="submit" value="confirm-and-pay">
                 <span>{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
         </p>
