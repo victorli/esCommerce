@@ -84,7 +84,7 @@ $(document).ready(function(){
 	$('button[name=submit]').click(function(){
 		$.ajax({
 			type : 'POST',
-			url	: "{$link->getModuleLink('alipay','validation',[],true)|escape:'html':'UTF-8'}",
+			url	: "{$link->getModuleLink('alipay','validation',['ajax'=>true],true)|escape:'html':'UTF-8'}",
 			data : $('form#blx_alipay_confirm_form').serialize(),
 			dataType : 'json',
 			success: function(data,status){

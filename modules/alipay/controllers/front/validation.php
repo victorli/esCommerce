@@ -10,7 +10,6 @@ class AlipayValidationModuleFrontController extends ModuleFrontController{
 	
 	public function initContent(){
 		parent::initContent();
-		
 	}
 	
 	public function postProcess(){
