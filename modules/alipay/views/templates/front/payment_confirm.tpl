@@ -81,11 +81,13 @@
 {*Here we use ajax request to validate the order and go next according to the response*}
 <script type="text/javascript">
 $(document).ready(function(){
-	$('button[name=submit]').click(function(){
+	$('button[name=submit]').click(function(event){
+		event.preventDefault();
+		var submit = $(this).val();
 		$.ajax({
 			type : 'POST',
 			url	: "{$link->getModuleLink('alipay','validation',['ajax'=>true],true)|escape:'html':'UTF-8'}",
-			data : $('form#blx_alipay_confirm_form').serialize(),
+			data : $('form#blx_alipay_confirm_form').serialize()+'&submit='+submit,
 			dataType : 'json',
 			success: function(data,status){
 				
