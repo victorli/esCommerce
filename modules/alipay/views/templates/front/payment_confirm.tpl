@@ -66,25 +66,23 @@
            
             <button 
             class="button btn btn-default button-medium" 
-            type="button" name="submit" value="confirm-and-pay-later">
+            type="submit" name="submit" value="confirm-and-pay-later">
                 <span>{l s='Confirm order and Pay later' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
        		
-             <a 
+             <button
             class="button btn btn-default button-medium" 
             style="margin-right:5px;"
-            onclick="javascript:submitJump()" 
-            href="javascript:void(0)" 
-            target="_blank"
+            onclick="submitJump()" 
             >
                 <span>{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
-            </a>
+            </button>
         </p>
  </form>
 {/if}
 {*Here we use ajax request to validate the order and go next according to the response*}
 <script type="text/javascript">
 function submitJump(){
-	$('form#blx_alipay_confirm_form').submit();
+	$('form#blx_alipay_confirm_form').attr('target','_blank');
 }
 </script>
