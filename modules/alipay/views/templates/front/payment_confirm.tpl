@@ -15,7 +15,7 @@
  	{l s='Your shopping cart is empty.' mod='alipay'}
  </p> 
 {else}
- <form action="{$link->getModuleLink('alipay','validation',[],true)|escape:'html':'UTF-8'}" method="post">
+ <form action="#" method="post" id="blx_alipay_confirm_form">
  		<div class="box cheque-box">
             <h3 class="page-subheading">
                 {l s='Alipay payment.' mod='alipay'}
@@ -66,15 +66,32 @@
            
             <button 
             class="button btn btn-default button-medium" 
-            type="submit" name="submit" value="confirm-and-pay-later">
+            type="button" name="submit" value="confirm-and-pay-later">
                 <span>{l s='Confirm order and Pay later' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
        		
              <button 
             class="button btn btn-default button-medium" 
-            type="submit" name="submit" value="confirm-and-pay" style="margin-right:5px;">
+            type="button" name="submit" value="confirm-and-pay" style="margin-right:5px;">
                 <span>{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
         </p>
  </form>
 {/if}
+{*Here we use ajax request to validate the order and go next according to the response*}
+<script type="text/javascript">
+$(document).ready(function(){
+	$('button[name=submit]').click(function(){
+		$.ajax({
+			type : 'POST',
+			url	: "{$link->getModuleLink('alipay','validation',[],true)|escape:'html':'UTF-8'}",
+			data : $('form#blx_alipay_confirm_form').serialize(),
+			dataType : 'json',
+			success: function(data,status){
+				
+			}
+		});
+	});
+	
+});
+</script>

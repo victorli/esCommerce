@@ -87,5 +87,6 @@ class AlipayJumpModuleFrontController extends ModuleFrontController{
 				return Hook::exec('displayPaymentReturn',$params,$this->id_module);
 			}
 		}
+		return null;
 	}
 }

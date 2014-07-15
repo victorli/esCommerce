@@ -52,4 +52,13 @@ class AlipayValidationModuleFrontController extends ModuleFrontController{
 			Tools::redirect($this->context->link->getModuleLink('alipay','jump',$params));
 		}
 	}
+	
+	public function displayAjax(){
+		$result = array();
+		$result['code'] = "success";
+		$result['jump_url'] = 'test';
+		$result['target'] = "blank";
+		
+		return json_encode($result);
+	}
 }
