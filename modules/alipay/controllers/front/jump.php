@@ -19,6 +19,7 @@ class AlipayJumpModuleFrontController extends ModuleFrontController{
 		$this->id_cart = Tools::getValue('id_cart',0);
 		$this->id_order = Tools::getValue('id_order',0);
 		$this->secure_key = Tools::getValue('key',false);
+		$this->id_module = Tools::getValue('id_module',0);
 		
 		$is_guest = false;
 		
