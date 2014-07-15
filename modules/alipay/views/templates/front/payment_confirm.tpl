@@ -74,7 +74,7 @@
             class="button btn btn-default button-medium" 
             style="margin-right:5px;"
             onclick="javascript:submitJump()" 
-            href="#" 
+            href="javascript:hrefReturn()" 
             target="_blank"
             >
                 <span>{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
@@ -86,5 +86,8 @@
 <script type="text/javascript">
 function submitJump(){
 	$('form#blx_alipay_jump_form').submit();
+}
+function hrefReturn(){
+	return;
 }
 </script>
