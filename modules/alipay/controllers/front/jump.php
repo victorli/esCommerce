@@ -69,7 +69,7 @@ class AlipayJumpModuleFrontController extends ModuleFrontController{
 		$reqParam = $module->getRequestParam($this->id_order);
 		$this->context->smarty->assign($reqParam);
 		
-		$this->setTemplate(__FILE__,'jump.tpl');
+		$this->setTemplate('jump.tpl');
 	}
 	
 	public function displayPaymentReturn(){
