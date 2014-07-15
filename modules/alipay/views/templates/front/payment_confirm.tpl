@@ -15,7 +15,7 @@
  	{l s='Your shopping cart is empty.' mod='alipay'}
  </p> 
 {else}
- <form action="#" method="post" id="blx_alipay_confirm_form">
+ <form action="{$link->getModuleLink('alipay','validation',[],true)|escape:'html':'UTF-8'}" method="post" id="blx_alipay_confirm_form">
  		<div class="box cheque-box">
             <h3 class="page-subheading">
                 {l s='Alipay payment.' mod='alipay'}
@@ -70,38 +70,21 @@
                 <span>{l s='Confirm order and Pay later' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
        		
-             <button 
+             <a 
             class="button btn btn-default button-medium" 
-            type="button" name="submit" value="confirm-and-pay" style="margin-right:5px;">
+            style="margin-right:5px;"
+            onclick="javascript:submitJump()" 
+            href="#" 
+            target="_blank"
+            >
                 <span>{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
-            </button>
+            </a>
         </p>
  </form>
 {/if}
 {*Here we use ajax request to validate the order and go next according to the response*}
 <script type="text/javascript">
-$(document).ready(function(){
-	$('button[name=submit]').click(function(event){
-		event.preventDefault();
-		var submit = $(this).val();
-		$.ajax({
-			type : 'POST',
-			url	: "{$link->getModuleLink('alipay','validation',['ajax'=>true],true)|escape:'html':'UTF-8'}",
-			data : $('form#blx_alipay_confirm_form').serialize()+'&submit='+submit,
-			dataType : 'json',
-			success: function(data,status){
-				if(data.code == 'success'){
-					if(data.action == 'redirect')
-						window.location.href = data.msg;
-					else if(data.action == 'jump')
-						window.open(data.msg,"jumpTab");
-				}else if(data.code == 'error'){
-					if(data.action == 'redirect')
-						window.location.href = data.msg;
-				}
-			}
-		});
-	});
-	
-});
+function submitJump(){
+	$('form#blx_alipay_jump_form').submit();
+}
 </script>
