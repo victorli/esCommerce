@@ -47,6 +47,9 @@ class AlipayPaymentModuleFrontController extends ModuleFrontController{
 			Tools::redirect('index.php?controller=order&step=1');
 			
 		$this->id_cart = $cart->id;
+		if(empty($this->id_cart) || is_null($this->id_cart))
+			Tools::redirect('index.php?controller=history');
+		
 		$this->nbProducts = $cart->nbProducts();
 		$authorized = false;
 		foreach (Module::getPaymentModules() as $module){
@@ -68,10 +71,10 @@ class AlipayPaymentModuleFrontController extends ModuleFrontController{
 		$this->total = (float)$cart->getOrderTotal(true,Cart::BOTH);
 		
 		$mailVars = array();
-		$order = Order::getOrderByCartId($cart->id);
+		$order = Order::getOrderByCartId($this->id_cart);
 		if(Validate::isLoadedObject($order))
 			Tools::redirect('index.php?controller=history');
 
-		$this->module->validateOrder($cart->id,Configuration::get('PS_OS_ALIPAY'),$this->total,$this->module->displayName,NULL,$mailVars,(int)$this->currency->id,false,$this->secure_key);
+		$this->module->validateOrder($this->id_cart,Configuration::get('PS_OS_ALIPAY'),$this->total,$this->module->displayName,NULL,$mailVars,(int)$this->currency->id,false,$this->secure_key);
 	}
 }
