@@ -37,7 +37,7 @@ class Alipay extends PaymentModule{
 		$this->currencies = true;
 		$this->currencies_mode = 'checkbox';
 		
-		$configs = Configuration::getMultiple(array('BLX_ALIPAY_ACCOUNT','BLX_ALIPAY_WAY','BLX_ALIPAY_CACERT','BLX_ALIPAY_PARTNER_ID','BLX_ALIPAY_SIGN_KEY'));
+		$configs = Configuration::getMultiple(array('BLX_ALIPAY_ACCOUNT','BLX_ALIPAY_WAY','BLX_ALIPAY_CACERT','BLX_ALIPAY_PARTNER_ID','BLX_ALIPAY_SIGN_KEY','BLX_ALIPAY_SERVER_IP'));
 		if (!empty($configs['BLX_ALIPAY_ACCOUNT']))
 			$this->alipay_key = $configs['BLX_ALIPAY_ACCOUNT'];
 		if(!empty($configs['BLX_ALIPAY_WAY']))
@@ -48,6 +48,8 @@ class Alipay extends PaymentModule{
 			$this->alipay_partner_no = $configs['BLX_ALIPAY_PARTNER_ID'];
 		if (!empty($configs['BLX_ALIPAY_SIGN_KET']))
 			$this->alipay_key = $configs['BLX_ALIPAY_SIGN_KEY'];
+		if (!empty($configs['BLX_ALIPAY_SERVER_IP']))
+			$this->alipay_key = $configs['BLX_ALIPAY_SERVER_IP'];
 		
 		parent::__construct();
 		
@@ -73,7 +75,8 @@ class Alipay extends PaymentModule{
 			!$this->registerHook('paymentReturn') || 
 			!Configuration::updateValue('BLX_ALIPAY_NAME','Alipay') ||
 			!Configuration::updateValue('BLX_ALIPAY_WAY',self::PAY_WAY_PARTNER_TRADE) || 
-			!Configuration::updateValue(self::ALIPAY_ORDER_STATUS,$this->id_orderState)
+			!Configuration::updateValue(self::ALIPAY_ORDER_STATUS,$this->id_orderState) || 
+			!Configuration::updateValue('BLX_ALIPAY_SERVER_IP',Tools::getValue('SERVER_ADDR'))
 			)
 			return false;
 			
@@ -88,7 +91,8 @@ class Alipay extends PaymentModule{
 			!Configuration::deleteByName('BLX_ALIPAY_ACCOUNT') || 
 			!Configuration::deleteByName('BLX_ALIPAY_PARTNER_ID') || 
 			!Configuration::deleteByName('BLX_ALIPAY_SIGN_KEY') || 
-			!Configuration::deleteByName(self::ALIPAY_ORDER_STATUS)
+			!Configuration::deleteByName(self::ALIPAY_ORDER_STATUS) || 
+			!Configuration::deleteByName('BLX_ALIPAY_SERVER_IP')
 		)
 			return false;
 			
@@ -103,6 +107,7 @@ class Alipay extends PaymentModule{
 			$alipay_partner_id = strval(trim(Tools::getValue('BLX_ALIPAY_PARTNER_ID')));
 			$alipay_sign_key = strval(trim(Tools::getValue('BLX_ALIPAY_SIGN_KEY')));
 			$alipay_way = strval(Tools::getValue('BLX_ALIPAY_WAY'));
+			$server_ip = strval(trim(Tools::getValue('BLX_ALIPAY_SERVER_IP')));
 			
 			if(!$alipay_account || empty($alipay_account))
 				$output .= $this->displayError($this->l('Invalid alipay account'))."<br/>";
@@ -112,12 +117,15 @@ class Alipay extends PaymentModule{
 				$output .= $this->displayError($this->l('Invalid alipay sign key.'))."<br/>";
 			if(!$alipay_way || empty($alipay_way))
 				$output .= $this->displayError($this->l('Invalid pay way'));
+			if(!$server_ip || empty($server_ip) || !Validate::ip2Long($server_ip))
+				$output .= $this->displayError($this->l('Invalid ip address'));
 			
 			if(is_null($output)){	
 				Configuration::updateValue('BLX_ALIPAY_ACCOUNT',$alipay_account);
 				Configuration::updateValue('BLX_ALIPAY_PARTNER_ID',$alipay_partner_id);
 				Configuration::updateValue('BLX_ALIPAY_SIGN_KEY',$alipay_sign_key);
 				Configuration::updateValue('BLX_ALIPAY_WAY',$alipay_way);
+				Configuration::updateValue('BLX_ALIPAY_SERVER_IP',$server_ip);
 				
 				$output .= $this->displayConfirmation($this->l('Settings updated'));
 			}
@@ -178,6 +186,13 @@ class Alipay extends PaymentModule{
 					'desc' => $this->l('Your security key applied from Alipay.')
 				),
 				array(
+					'type' =>'text',
+					'label' => $this->l('Server IP'),
+					'name' => 'BLX_ALIPAY_SERVER_IP',
+					'required' => true,
+					'desc' => $this->l('Your server\' ip address.')
+				),
+				array(
 					'type' => 'select',
 					'label' => $this->l('Alipay way'),
 					'name'	=> 'BLX_ALIPAY_WAY',
@@ -224,6 +239,7 @@ class Alipay extends PaymentModule{
 		$helper->fields_value['BLX_ALIPAY_ACCOUNT'] = Configuration::get('BLX_ALIPAY_ACCOUNT');
 		$helper->fields_value['BLX_ALIPAY_PARTNER_ID'] = Configuration::get('BLX_ALIPAY_PARTNER_ID');
 		$helper->fields_value['BLX_ALIPAY_SIGN_KEY'] = Configuration::get('BLX_ALIPAY_SIGN_KEY');
+		$helper->fields_value['BLX_ALIPAY_SERVER_IP'] = Configuration::get('BLX_ALIPAY_SERVER_IP');
 		
 		return $helper->generateForm($fields_form);
 	}
@@ -442,10 +458,10 @@ class Alipay extends PaymentModule{
 				'out_trade_no'=>$order->id_order,
 				'subject'=>$order->name,
 				'total_fee'=>$order->getOrdersTotalPaid(),
-				'body'=>'',//order description
+				'body'=>'BODY TEST',//order description
 				'show_url'=>'',
 				'anti_phishing_key'=>'',
-				'exter_invoke_id'=>'',
+				'exter_invoke_id'=>Configuration::get('BLX_ALIPAY_SERVER_IP'),
 				'_input_charset'=>self::INPUT_CHARSET
 			)
 		);
