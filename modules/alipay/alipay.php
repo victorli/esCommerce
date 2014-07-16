@@ -76,7 +76,7 @@ class Alipay extends PaymentModule{
 			!Configuration::updateValue('BLX_ALIPAY_NAME','Alipay') ||
 			!Configuration::updateValue('BLX_ALIPAY_WAY',self::PAY_WAY_PARTNER_TRADE) || 
 			!Configuration::updateValue(self::ALIPAY_ORDER_STATUS,$this->id_orderState) || 
-			!Configuration::updateValue('BLX_ALIPAY_SERVER_IP',Tools::getValue('SERVER_ADDR'))
+			!Configuration::updateValue('BLX_ALIPAY_SERVER_IP',$_SERVER('SERVER_ADDR'))
 			)
 			return false;
 			
