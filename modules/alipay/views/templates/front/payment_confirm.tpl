@@ -73,7 +73,7 @@
              <button
             class="button btn btn-default button-medium" 
             style="margin-right:5px;" 
-            type="submit" name="submit" value="confirm-and-pay">
+            type="submit" name="submit" value="confirm-and-pay" onclick="javascript:$('form#blx_alipay_confirm_form').attr('target','_blank');">
                 <span>{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
         </p>

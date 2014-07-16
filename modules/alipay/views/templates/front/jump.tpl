@@ -26,9 +26,13 @@
 </p>
 {/if}
 
- <form action="{$action}_input_charset={$input_charset}" method="post" target="_blank" id="blx_alipay_jump_form">
+ <form action="{$action}_input_charset={$input_charset}" method="post" id="blx_alipay_jump_form">
  	{foreach from=$inputs key=key item=param}
  		<input type="hidden" name="{$key}" value="{$param}" />
  	{/foreach}
- 	<button class="button btn default-button medium-button" type="submit" id="blx_go_alipay_btn">{l s='Pay'}</button>
  </form>
+ <script type="text/javscript">
+	$(document).ready(function(e){
+		$('form#blx_alipay_jump_form').submit();
+	});
+</script>
