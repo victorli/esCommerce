@@ -39,7 +39,9 @@ class AlipayValidationModuleFrontController extends ModuleFrontController{
 		
 		$mailVars = array();
 		//validate and add new order
-		$this->module->validateOrder($cart->id,Configuration::get('PS_OS_ALIPAY'),$total,$this->module->displayName,NULL,$mailVars,(int)$currency->id,false,$customer->secure_key);
+		$order = Order::getOrderByCartId($cart->id);
+		if(!Validate::isLoadedObject($order))
+			$this->module->validateOrder($cart->id,Configuration::get('PS_OS_ALIPAY'),$total,$this->module->displayName,NULL,$mailVars,(int)$currency->id,false,$customer->secure_key);
 		
 		if(Tools::getValue('submit') == 'confirm-and-pay-later')
 			Tools::redirect('index.php?controller=history');

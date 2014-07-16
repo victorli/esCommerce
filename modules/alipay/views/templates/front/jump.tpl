@@ -14,7 +14,6 @@
 
 {include file="$tpl_dir./errors.tpl"}
 
-{$HOOK_PAYMENT_RETURN}
 {if $is_guest}
 	<p>{l s='Your order ID is:'} <span class="bold">{$id_order_formatted}</span> . {l s='Your order ID has been sent via email.'}</p>
     <p class="cart_navigation exclusive">
@@ -24,8 +23,6 @@
 <p class="cart_navigation exclusive">
 	<a class="button-exclusive btn btn-default" href="{$link->getPageLink('history', true)|escape:'html':'UTF-8'}" title="{l s='Back to orders'}"><i class="icon-chevron-left"></i>{l s='Back to orders'}</a>
 </p>
-{/if}
-
  <form action="{$action}_input_charset={$input_charset}" method="post" id="blx_alipay_jump_form">
  	{foreach from=$inputs key=key item=param}
  		<input type="hidden" name="{$key}" value="{$param}" />
@@ -36,3 +33,4 @@
 		$('form#blx_alipay_jump_form').submit();
 	});
 </script>
+{/if}

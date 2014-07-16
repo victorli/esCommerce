@@ -50,8 +50,7 @@ class AlipayJumpModuleFrontController extends ModuleFrontController{
 		parent::initContent();
 		
 		$this->context->smarty->assign(array(
-			'is_guest' => $this->context->customer->is_guest,
-			'HOOK_PAYMENT_RETURN' => $this->displayPaymentReturn()
+			'is_guest' => $this->context->customer->is_guest
 		));
 		
 		if($this->context->customer->is_guest){
@@ -70,23 +69,5 @@ class AlipayJumpModuleFrontController extends ModuleFrontController{
 		$this->context->smarty->assign($reqParam);
 		
 		$this->setTemplate('jump.tpl');
-	}
-	
-	public function displayPaymentReturn(){
-		if(Validate::isUnsignedId($this->id_order) && Validate::isUnsignedId($this->id_module)){
-			$params = array();
-			$order = new Order($this->id_order);
-			$currency = new Currency($order->id_currency);
-			
-			if(Validate::isLoadedObject($order)){
-				$params['total_to_pay'] = $order->getOrdersTotalPaid();
-				$params['currency'] = $currency->sign;
-				$params['objOrder'] = $order;
-				$params['currencyObj'] = $currency;
-				
-				return Hook::exec('displayPaymentReturn',$params,$this->id_module);
-			}
-		}
-		return null;
 	}
 }

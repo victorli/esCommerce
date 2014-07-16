@@ -15,7 +15,7 @@
  	{l s='Your shopping cart is empty.' mod='alipay'}
  </p> 
 {else}
- <form action="{$link->getModuleLink('alipay','validation',[],true)|escape:'html':'UTF-8'}" method="post" id="blx_alipay_confirm_form">
+ <form action="{$link->getModuleLink('alipay','jump',[],true)|escape:'html':'UTF-8'}" method="post" id="blx_alipay_confirm_form">
  		<div class="box cheque-box">
             <h3 class="page-subheading">
                 {l s='Alipay payment.' mod='alipay'}
@@ -26,6 +26,10 @@
                 </strong>
             </p>
             <p>
+            	<input type="hidden" name="id_order" value="{$id_order}" />
+            	<input type="hidden" name="key" value="{$key}" />
+            	<input type="hidden" name="id_cart" value="{$id_cart}" />
+            	<input type="hidden" name="id_module" value="{$id_module}" />
                 - {l s='The total amount of your order is' mod='alipay'}
                 <span id="amount" class="price">{displayPrice price=$total}</span>
                 {if $use_taxes == 1}
@@ -33,23 +37,7 @@
                 {/if}
             </p>
             <p>
-                -
-                {if $currencies|@count > 1}
-                    {l s='We allow several currencies to be sent via alipay.' mod='alipay'}
-                    <div class="form-group">
-                        <label>{l s='Choose one of the following:' mod='alipay'}</label>
-                        <select id="currency_payement" class="form-control" name="currency_payement">
-                            {foreach from=$currencies item=currency}
-                                <option value="{$currency.id_currency}" {if $currency.id_currency == $cust_currency}selected="selected"{/if}>
-                                    {$currency.name}
-                                </option>
-                            {/foreach}
-                        </select>
-                    </div>
-                {else}
-                    {l s='We allow the following currency to be sent via alipay:' mod='alipay'}&nbsp;<b>{$currencies.0.name}</b>
-                    <input type="hidden" name="currency_payement" value="{$currencies.0.id_currency}" />
-                {/if}
+                - {l s='We allow the following currency to be sent via alipay:' mod='alipay'}&nbsp;<b>{$cus_currency->name}</b>
             </p>
             <p>
                 - {l s='Alipay account information will be displayed on the next page.' mod='alipay'}
@@ -66,21 +54,21 @@
            
             <button 
             class="button btn btn-default button-medium" 
-            type="submit" name="submit" value="confirm-and-pay-later">
+            type="button" onclick="window.location.href='index.php?controller=history'">
                 <span>{l s='Confirm order and Pay later' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
        		
              <button
             class="button btn btn-default button-medium" 
             style="margin-right:5px;" 
-            type="submit" name="submit" value="confirm-and-pay" onclick="javascript:$('form#blx_alipay_confirm_form').attr('target','_blank');">
-                <span onclick="javascript:$.fancybox($('#pay-confirm-modal'));">{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
+            type="submit" onclick="javascript:$('form#blx_alipay_confirm_form').attr('target','_blank');">
+                <span onclick="javascript:$.fancybox($('#pay-confirm-modal'),{modal:true});">{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
         </p>
  </form>
 <!-- fancybox container triggered after 'confirm-and-pay' submit -->
 <div style="display:none;" id="pay-confirm-modal">
-<button class="button btn btn-default button-medium" onclick="javascript:window.location.href='index.php?controller=history'"><span>{l s='Pay successfully.' mod='alipay'}</span></button>
+<button class="button btn btn-default button-medium" onclick="javascript:window.location.href='index.php?controller=history'"><span>{l s='Pay successfully' mod='alipay'}</span></button>
 <button class="button btn btn-default button-medium" onclick="javascript:$.fancybox.close()"><span>{l s='Fail to pay' mod='alipay'}</span></button>
 </div>
 {/if}
