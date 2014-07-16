@@ -12,6 +12,12 @@ class AlipayPaymentModuleFrontController extends ModuleFrontController{
 	public $nbProducts = 0;
 	public $currency;
 	public $secure_key = null;
+	public $id_cart = 0;
+	
+	public function init(){
+		parent::init();
+		$this->display_column_left =false;
+	}
 	
 	public function initContent(){
 		parent::initContent();
@@ -22,7 +28,7 @@ class AlipayPaymentModuleFrontController extends ModuleFrontController{
 			//'currencies' => $this->module->getCurrency($cart->id_currency), //skip by chinese payment
 			'total' => $this->total,
 			'id_order' => $this->module->currentOrder,
-			'id_cart' => $this->context->cart->id,
+			'id_cart' => $this->id_cart,
 			'id_module' => $this->module->id
 			));	
 			
@@ -40,6 +46,7 @@ class AlipayPaymentModuleFrontController extends ModuleFrontController{
 			!$this->module->active)
 			Tools::redirect('index.php?controller=order&step=1');
 			
+		$this->id_cart = $cart->id;
 		$this->nbProducts = $cart->nbProducts();
 		$authorized = false;
 		foreach (Module::getPaymentModules() as $module){

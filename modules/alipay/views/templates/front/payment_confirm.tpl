@@ -54,15 +54,15 @@
            
             <button 
             class="button btn btn-default button-medium" 
-            type="button" onclick="window.location.href='index.php?controller=history'">
+            type="button" onclick="javascript:window.location.href='index.php?controller=history'">
                 <span>{l s='Confirm order and Pay later' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
        		
              <button
             class="button btn btn-default button-medium" 
             style="margin-right:5px;" 
-            type="submit" onclick="javascript:$('form#blx_alipay_confirm_form').attr('target','_blank');">
-                <span onclick="javascript:$.fancybox($('#pay-confirm-modal'),{modal:true});">{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
+            type="submit">
+                <span>{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
         </p>
  </form>
@@ -71,4 +71,11 @@
 <button class="button btn btn-default button-medium" onclick="javascript:window.location.href='index.php?controller=history'"><span>{l s='Pay successfully' mod='alipay'}</span></button>
 <button class="button btn btn-default button-medium" onclick="javascript:$.fancybox.close()"><span>{l s='Fail to pay' mod='alipay'}</span></button>
 </div>
+{literal}
+<script type="text/javascript">
+$(document).ready(function(){
+	$('button[type=submit]').click(function(){$.fancybox('#pay-confirm-modal'),{modal:true}});
+});
+{/literal}
+</script>
 {/if}
