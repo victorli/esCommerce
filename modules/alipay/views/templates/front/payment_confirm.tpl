@@ -80,7 +80,7 @@
  </form>
 <!-- fancybox container triggered after 'confirm-and-pay' submit -->
 <div style="display:none;" id="pay-confirm-modal">
-<button class="button btn btn-default button-medium" onclick="javascript:window.location.href=index.php?controller=history;"><span>{l s='Pay successfully.' mod='alipay'}</span></button>
-<button class="button btn btn-default button-medium" onclick="javascript:$.fancybox.close();"><span>{l s='Fail to pay' mod='alipay'}</span></button>
+<button class="button btn btn-default button-medium" onclick="javascript:window.location.href='index.php?controller=history'"><span>{l s='Pay successfully.' mod='alipay'}</span></button>
+<button class="button btn btn-default button-medium" onclick="javascript:$.fancybox.close()"><span>{l s='Fail to pay' mod='alipay'}</span></button>
 </div>
 {/if}
