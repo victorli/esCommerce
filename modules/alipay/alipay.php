@@ -116,7 +116,7 @@ class Alipay extends PaymentModule{
 				$output .= $this->displayError($this->l('Invalid alipay sign key.'))."<br/>";
 			if(!$alipay_way || empty($alipay_way))
 				$output .= $this->displayError($this->l('Invalid pay way'));
-			if(!$server_ip || empty($server_ip) || !Validate::isIp2Long($server_ip))
+			if(!$server_ip || empty($server_ip) || !preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/', $server_ip))
 				$output .= $this->displayError($this->l('Invalid ip address'));
 			
 			if(is_null($output)){	

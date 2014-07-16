@@ -78,4 +78,18 @@
             </button>
         </p>
  </form>
+<!-- fancybox container triggered after 'confirm-and-pay' submit -->
+<div style="display:none;" id="pay-confirm-modal">
+<button class="button btn btn-default button-medium" onclick="javascript:window.location.href=index.php?controller=history;">{l s='Pay successfully.' mod='alipay'}</button>
+<button class="button btn btn-default button-medium" onclick="javascript:$.fancybox.close();">{l s='Fail to pay' mod='alipay'}</button>
+</div>
 {/if}
+<script type="text/javascript">
+$(document).ready(function(e){
+	$('button[type=submit]').click(function(e){
+		if($(this).val() == 'confirm-add-pay'){
+			$.fancybox($('#pay-confirm-modal'));
+		}
+	});
+});
+</script>
