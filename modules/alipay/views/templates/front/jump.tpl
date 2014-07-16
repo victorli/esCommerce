@@ -31,7 +31,7 @@
  		<input type="hidden" name="{$key}" value="{$param}" />
  	{/foreach}
  </form>
- <script type="text/javscript">
+ <script type="text/javascript">
 	$(document).ready(function(e){
 		$('form#blx_alipay_jump_form').submit();
 	});
