@@ -30,4 +30,5 @@
  	{foreach from=$inputs key=key item=param}
  		<input type="hidden" name="{$key}" value="{$param}" />
  	{/foreach}
+ 	<button class="button btn default-button medium-button" type="submit" id="blx_go_alipay_btn">{l s='Pay'}</button>
  </form>

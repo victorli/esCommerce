@@ -72,17 +72,10 @@
        		
              <button
             class="button btn btn-default button-medium" 
-            style="margin-right:5px;"
-            onclick="submitJump()" 
+            style="margin-right:5px;" 
             type="submit" name="submit" value="confirm-and-pay">
                 <span>{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
         </p>
  </form>
 {/if}
-{*Here we use ajax request to validate the order and go next according to the response*}
-<script type="text/javascript">
-function submitJump(){
-	$('form#blx_alipay_confirm_form').attr('target','_blank');
-}
-</script>
