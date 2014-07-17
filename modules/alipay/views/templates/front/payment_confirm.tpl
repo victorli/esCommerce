@@ -73,7 +73,7 @@ $(document).ready(function(){
 	
 	$(submitBtn).click(function(){
 		$.fancybox({href:$(submitBtn).attr('data-href'),type:'ajax'});
-	);
+	});
 });
 {/literal}
 </script>
