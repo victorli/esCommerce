@@ -63,12 +63,12 @@ class Alipay extends PaymentModule{
 			
 		//initialize order status
 		$this->orderStatus = array(
-			'BLX_OS_CREATED'=>array('color'=>'','unremovable'=>1,'name'=>$this->l('Waiting to pay')),
-			'BLX_OS_WAIT_BUY_PAY'=>array('color'=>'','unremovable'=>1,'name'=>$this->l('Waiting buyer to pay')),
-			'BLX_OS_TRADE_CLOSED'=>array('color'=>'','unremovable'=>1,'name'=>$this->l('Trade closed')),
-			'BLX_OS_SUCCESS'=>array('color'=>'','unremovable'=>1,'name'=>$this->l('Pay successful')),
-			'BLX_OS_TRADE_PENDING'=>array('color'=>'','unremovable'=>1,'name'=>$this->l('Waiting saler to deposit')),
-			'BLX_OS_FINISHED'=>array('color'=>'','unremovable'=>1,'name'=>$this->l('Trade finished')),
+			'BLX_OS_CREATED'=>array('color'=>'Darkred','unremovable'=>1,'name'=>$this->l('Waiting to pay')),
+			'BLX_OS_WAIT_BUY_PAY'=>array('color'=>'Chocolate','unremovable'=>1,'name'=>$this->l('Waiting buyer to pay')),
+			'BLX_OS_TRADE_CLOSED'=>array('color'=>'LightSalmon','unremovable'=>1,'name'=>$this->l('Trade closed')),
+			'BLX_OS_SUCCESS'=>array('color'=>'LimeGreen','unremovable'=>1,'name'=>$this->l('Pay successful')),
+			'BLX_OS_TRADE_PENDING'=>array('color'=>'Olive','unremovable'=>1,'name'=>$this->l('Waiting saler to deposit')),
+			'BLX_OS_FINISHED'=>array('color'=>'Lime','unremovable'=>1,'name'=>$this->l('Trade finished'))
 		);
 	}
 	
@@ -104,7 +104,7 @@ class Alipay extends PaymentModule{
 			
 		if(!parent::install() || 
 			!$this->registerHook('payment') || 
-			!$this->registerHook('paymentReturn') || 
+			//!$this->registerHook('paymentReturn') || 
 			!Configuration::updateValue('BLX_ALIPAY_NAME','Alipay') ||
 			!Configuration::updateValue('BLX_ALIPAY_WAY',self::PAY_WAY_PARTNER_TRADE) || 
 			!$this->_addOrderStates()
@@ -291,10 +291,6 @@ class Alipay extends PaymentModule{
 		);
 		
 		return $this->display(__FILE__,'payment.tpl');
-	}
-	
-	public function hookPaymentReturn($params){
-		
 	}
 	
 	public function getPaymentType($flag=null){
