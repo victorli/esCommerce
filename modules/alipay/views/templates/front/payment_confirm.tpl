@@ -61,16 +61,15 @@
              <button
             class="button btn btn-default button-medium" 
             style="margin-right:5px;" 
-            type="submit">
+            type="submit" data-href="{$link->getModuleLink('alipay','jump',[ajax:true],true)|escape:'html':'UTF-8'}">
                 <span>{l s='Confirm order and Pay' mod='alipay'}<i class="icon-chevron-right right"></i></span>
             </button>
         </p>
  </form>
-<script type="text/javascript">var urlSplash = "{$link->getModuleLink('alipay','jump',[ajax:true],true)|escape:'html':'UTF-8'}";</script>
 {literal}
 <script type="text/javascript">
 $(document).ready(function(){
-	$.fancybox({href:urlSplash});
+	$.fancybox({href:$('button[type=submit]').attr('data-href')});
 	$('button[type=submit]').click(function(){$.fancybox('#pay-confirm-modal'),{modal:true}});
 });
 {/literal}
