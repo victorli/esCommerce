@@ -76,6 +76,6 @@ class AlipayPaymentModuleFrontController extends ModuleFrontController{
 		if(Validate::isLoadedObject($order))
 			Tools::redirect('index.php?controller=history');
 
-		$this->module->validateOrder($this->id_cart,Configuration::get('PS_OS_ALIPAY'),$this->total,$this->module->displayName,NULL,$mailVars,(int)$this->currency->id,false,$this->secure_key);
+		$this->module->validateOrder($this->id_cart,Configuration::get(Alipay::ALIPAY_ORDER_STATUS),$this->total,$this->module->displayName,NULL,$mailVars,(int)$this->currency->id,false,$this->secure_key);
 	}
 }

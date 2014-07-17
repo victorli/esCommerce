@@ -23,7 +23,7 @@ class Alipay extends PaymentModule{
 	const PAY_WAY_DIRECT_PAY = 'DIRECT';
 	const INPUT_CHARSET = 'utf-8';
 	
-	const ALIPAY_ORDER_STATUS = 'PS_OS_ALIPAY';
+	const ALIPAY_ORDER_STATUS = 'BLX_OS_ALIPAY';
 	
 	public function __construct(){
 		$this->name = 	'alipay';

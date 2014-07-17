@@ -68,13 +68,15 @@ class AlipayJumpModuleFrontController extends ModuleFrontController{
 			$module = Module::getInstanceById((int)($this->id_module));
 			$reqParam = $module->getRequestParam($this->id_order);
 			$this->context->smarty->assign($reqParam);
-			
-			$this->setTemplate('jump.tpl');
+		}else{
+			$this->context->smarty->assign('is_splash',true);
 		}
+		
+		$this->setTemplate('jump.tpl');
 	}
 	
-	public function  displayAjax(){
-		$this->context->smarty->assign('is_splash',true);
-		return $this->context->smarty->fetch('jump.tpl');
+	public function displayAjax(){
+		$ret = $this->smartyOutputContent($this->getTemplatePath(),'jump.tpl');
+		return;
 	}
 }
