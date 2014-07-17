@@ -70,8 +70,10 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	var submitBtn = $('form#blx_alipay_confirm_form button[type=submit]');
-	$.fancybox({href:$(submitBtn).attr('data-href'),type:'ajax'});
-	$(submitBtn).click(function(){$.fancybox('#pay-confirm-modal'),{modal:true}});
+	
+	$(submitBtn).click(function(){
+		$.fancybox({href:$(submitBtn).attr('data-href'),type:'ajax'});
+	);
 });
 {/literal}
 </script>
