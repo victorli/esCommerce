@@ -24,6 +24,13 @@ class Alipay extends PaymentModule{
 	const INPUT_CHARSET = 'utf-8';
 	
 	const ALIPAY_ORDER_STATUS = 'BLX_OS_ALIPAY';
+	const ALIPAY_ORDER_STATUS = 'BLX_OS_ALIPAY_WAIT_BUYER_PAY';
+	const ALIPAY_ORDER_STATUS = 'BLX_OS_ALIPAY_TRADE_CLOSED';
+	const ALIPAY_ORDER_STATUS = 'BLX_OS_ALIPAY_TRADE_SUCCESS';
+	const ALIPAY_ORDER_STATUS = 'BLX_OS_ALIPAY_TRADE_PENDING';
+	const ALIPAY_ORDER_STATUS = 'BLX_OS_ALIPAY_TRADE_FINISHED';
+	
+	public $orderStatus;
 	
 	public function __construct(){
 		$this->name = 	'alipay';
@@ -60,22 +67,54 @@ class Alipay extends PaymentModule{
 		
 		if(!Configuration::get('BLX_ALIPAY_NAME'))
 			$this->warning	=	$this->l('No name provided');
+			
+		//initialize order status
+		$this->orderStatus = array(
+			'BLX_OS_CREATED'=>array('color'=>'','unremovable'=>1,'name'=>$this->l('Waiting to pay')),
+			'BLX_OS_WAIT_BUY_PAY'=>array('color'=>'','unremovable'=>1,'name'=>$this->l('Waiting buyer to pay')),
+			'BLX_OS_TRADE_CLOSED'=>array('color'=>'','unremovable'=>1,'name'=>$this->l('Trade closed')),
+			'BLX_OS_SUCCESS'=>array('color'=>'','unremovable'=>1,'name'=>$this->l('Pay successful')),
+			'BLX_OS_TRADE_PENDING'=>array('color'=>'','unremovable'=>1,'name'=>$this->l('Waiting saler to deposit')),
+			'BLX_OS_FINISHED'=>array('color'=>'','unremovable'=>1,'name'=>$this->l('Trade finished')),
+		);
+	}
+	
+	private function _addOrderStates(){
+		foreach ($this->orderStatus as $state=>$param){
+			$orderState = new OrderState((int)Configuration::get($state));
+			if(!Validate::isLoadedObject($orderState)){
+				$orderState->color= $param['color'];
+				$orderState->unremovable = $param['unremovable'];
+				$orderState->name = array();
+				foreach (Language::getLanguages() as $lang)
+					$orderState->name[$lang['id_lang']] = $param['name'];
+				if(!$orderState->add())
+					return false;
+					
+				if(!Configuration::updateValue($state,$orderState->id))
+					return false;
+			}
+		}
+	}
+	
+	private function _removeOrderStatus(){
+		foreach ($this->orderStatus as $state=>$param){
+			if(!Configuration::deleteByName($state))
+				return false;
+		}
+		return true;
 	}
 	
 	public function install(){
 		if(Shop::isFeatureActive())
 			Shop::setContext(Shop::CONTEXT_ALL);
-		
-		//Add new order state
-		if(!$this->_addOrderState(self::ALIPAY_ORDER_STATUS, $this->l('Waiting Alipay payment.')))
-			return false;
 			
 		if(!parent::install() || 
 			!$this->registerHook('payment') || 
 			!$this->registerHook('paymentReturn') || 
 			!Configuration::updateValue('BLX_ALIPAY_NAME','Alipay') ||
 			!Configuration::updateValue('BLX_ALIPAY_WAY',self::PAY_WAY_PARTNER_TRADE) || 
-			!Configuration::updateValue(self::ALIPAY_ORDER_STATUS,$this->id_orderState)
+			!$this->_addOrderStates()
 			)
 			return false;
 			
@@ -90,8 +129,8 @@ class Alipay extends PaymentModule{
 			!Configuration::deleteByName('BLX_ALIPAY_ACCOUNT') || 
 			!Configuration::deleteByName('BLX_ALIPAY_PARTNER_ID') || 
 			!Configuration::deleteByName('BLX_ALIPAY_SIGN_KEY') || 
-			!Configuration::deleteByName(self::ALIPAY_ORDER_STATUS) || 
-			!Configuration::deleteByName('BLX_ALIPAY_SERVER_IP')
+			!Configuration::deleteByName('BLX_ALIPAY_SERVER_IP') || 
+			!$this->_removeOrderStatus()
 		)
 			return false;
 			
@@ -285,26 +324,6 @@ class Alipay extends PaymentModule{
 			case self::PAY_WAY_PARTNER_TRADE: return "create_partner_trade_by_buyer";break;
 		}
 		return false;
-	}
-	/**
-	 * add new order status
-	 * @param unknown_type $state
-	 * @param unknown_type $name
-	 */
-	private function _addOrderState($state,$name){
-		$orderState = new OrderState((int)Configuration::get($state));
-		if(!Validate::isLoadedObject($orderState)){
-			$orderState->color='orange';
-			$orderState->unremovable = 1;
-			$orderState->name = array();
-			foreach (Language::getLanguages() as $lang)
-				$orderState->name[$lang['id_lang']] = $name;
-			if(!$orderState->add())
-				return false;
-
-			copy(dirname(__FILE__).'/logo.gif', dirname(__FILE__).'/../../img/os/'.(int)$orderState->id.'.gif');
-		}
-		return ($this->id_orderState = $orderState->id);
 	}
 	
 	private function _createLinkString($param){
