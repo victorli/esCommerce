@@ -39,7 +39,7 @@ class Alipay extends PaymentModule{
 		
 		$configs = Configuration::getMultiple(array('BLX_ALIPAY_ACCOUNT','BLX_ALIPAY_WAY','BLX_ALIPAY_CACERT','BLX_ALIPAY_PARTNER_ID','BLX_ALIPAY_SIGN_KEY','BLX_ALIPAY_SERVER_IP'));
 		if (!empty($configs['BLX_ALIPAY_ACCOUNT']))
-			$this->alipay_key = $configs['BLX_ALIPAY_ACCOUNT'];
+			$this->alipay_account = $configs['BLX_ALIPAY_ACCOUNT'];
 		if(!empty($configs['BLX_ALIPAY_WAY']))
 			$this->alipay_way = $configs['BLX_ALIPAY_WAY'];
 		if (!empty($configs['BLX_ALIPAY_CACERT']))
@@ -47,9 +47,9 @@ class Alipay extends PaymentModule{
 		if (!empty($configs['BLX_ALIPAY_PARTNER_ID']))
 			$this->alipay_partner_no = $configs['BLX_ALIPAY_PARTNER_ID'];
 		if (!empty($configs['BLX_ALIPAY_SIGN_KET']))
-			$this->alipay_key = $configs['BLX_ALIPAY_SIGN_KEY'];
+			$this->alipay_sign_key = $configs['BLX_ALIPAY_SIGN_KEY'];
 		if (!empty($configs['BLX_ALIPAY_SERVER_IP']))
-			$this->alipay_key = $configs['BLX_ALIPAY_SERVER_IP'];
+			$this->alipay_server_ip = $configs['BLX_ALIPAY_SERVER_IP'];
 		
 		parent::__construct();
 		
@@ -388,7 +388,7 @@ class Alipay extends PaymentModule{
 	}
 	
 	private function _processMD5Sign($str){
-		$str = $str . $this->alipay_key;
+		$str = $str . Configuration::get('BLX_ALIPAY_SIGN_KEY');
 		return md5($str);
 	}
 	
@@ -421,7 +421,7 @@ class Alipay extends PaymentModule{
 		return $param_sort;
 	}
 	
-	public function processHttpRequestPost($url, $param, $input_charset=''){
+	private function _processHttpRequestPost($url, $param, $input_charset=''){
 		if (trim($input_charset) != '')
 			$url = $url."_input_charset=".$input_charset;
 			
@@ -439,7 +439,7 @@ class Alipay extends PaymentModule{
 		return $responseText;
 	}
 	
-	public function processHttpRequestGet($url){
+	private function _processHttpRequestGet($url){
 		$curl = curl_init($url);
 		curl_setopt($curl, CURLOPT_HEADER, 0 ); // 过滤HTTP头
 		curl_setopt($curl,CURLOPT_RETURNTRANSFER, 1);// 显示输出结果
@@ -476,6 +476,23 @@ class Alipay extends PaymentModule{
 		);
 		
 		return $this->_buildRequestParam($param);
+	}
+	
+	public function verifyNotify(){
+		$param_filter = $this->_processParamsFilter($_POST);
+		$param_sort = $this->_processArgsSort($param_filter);
+		$prestr = $this->_createLinkString($param_sort);
+		
+		$isSign = $this->_processMD5Verify($prestr, Tools::getValue('sign'));
+		if(!$isSign)
+			return false;
+			
+		$vUrl = self::ALIPAY_HTTP_VERIFY_URL . 'partner=' . Configuration::get('BLX_ALIPAY_PARTNER_ID') . '&notify_id=' . Tools::getValue('notify_id');
+		$resTxt = $this->_processHttpRequestGet($vUrl);
+		
+		if(preg_match('/true$/i', $resTxt))
+			return true;
+		return false;
 	}
 }
 
