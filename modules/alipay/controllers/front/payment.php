@@ -48,8 +48,11 @@ class AlipayPaymentModuleFrontController extends ModuleFrontController{
 			Tools::redirect('index.php?controller=order&step=1');
 			
 		$this->id_cart = $cart->id;
-		if(empty($this->id_cart) || is_null($this->id_cart))
-			Tools::redirect('index.php?controller=history');
+		if(empty($this->id_cart) || is_null($this->id_cart)){
+			//Tools::redirect('index.php?controller=history');
+			$this->nbProducts = 0; //alert order has been created and cart is empty
+			return;
+		}
 		
 		$this->nbProducts = $cart->nbProducts();
 		$authorized = false;
