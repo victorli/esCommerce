@@ -76,7 +76,7 @@ class AlipayJumpModuleFrontController extends ModuleFrontController{
 	}
 	
 	public function displayAjax(){
-		$ret = $this->smartyOutputContent($this->getTemplatePath(),'jump.tpl');
+		$ret = $this->smartyOutputContent($this->getTemplatePath().'jump.tpl');
 		return;
 	}
 }
