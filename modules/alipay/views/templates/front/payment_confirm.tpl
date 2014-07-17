@@ -66,14 +66,11 @@
             </button>
         </p>
  </form>
-<!-- fancybox container triggered after 'confirm-and-pay' submit -->
-<div style="display:none;" id="pay-confirm-modal">
-<button class="button btn btn-default button-medium" onclick="javascript:window.location.href='index.php?controller=history'"><span>{l s='Pay successfully' mod='alipay'}</span></button>
-<button class="button btn btn-default button-medium" onclick="javascript:$.fancybox.close()"><span>{l s='Fail to pay' mod='alipay'}</span></button>
-</div>
+<script type="text/javascript">var urlSplash = {$link->getModuleLink('alipay','jump',[ajax:true],true)|escape:'html':'UTF-8'};</script>
 {literal}
 <script type="text/javascript">
 $(document).ready(function(){
+	$.fancybox({href:urlSplash});
 	$('button[type=submit]').click(function(){$.fancybox('#pay-confirm-modal'),{modal:true}});
 });
 {/literal}
