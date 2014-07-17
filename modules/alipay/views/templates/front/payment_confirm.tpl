@@ -66,7 +66,7 @@
             </button>
         </p>
  </form>
-<script type="text/javascript">var urlSplash = {$link->getModuleLink('alipay','jump',[ajax:true],true)|escape:'html':'UTF-8'};</script>
+<script type="text/javascript">var urlSplash = "{$link->getModuleLink('alipay','jump',[ajax:true],true)|escape:'html':'UTF-8'}";</script>
 {literal}
 <script type="text/javascript">
 $(document).ready(function(){
