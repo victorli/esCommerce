@@ -15,7 +15,7 @@
  	{l s='Your shopping cart is empty.' mod='alipay'}
  </p> 
 {else}
- <form action="{$link->getModuleLink('alipay','jump',[],true)|escape:'html':'UTF-8'}" method="post" id="blx_alipay_confirm_form">
+ <form action="{$link->getModuleLink('alipay','jump',[],true)|escape:'html':'UTF-8'}" method="post" id="blx_alipay_confirm_form" target="_blank">
  		<div class="box cheque-box">
             <h3 class="page-subheading">
                 {l s='Alipay payment.' mod='alipay'}
@@ -37,7 +37,7 @@
                 {/if}
             </p>
             <p>
-                - {l s='We allow the following currency to be sent via alipay:' mod='alipay'}&nbsp;<b>{$cus_currency->name}</b>
+                - {l s='We allow the following currency to be sent via alipay:' mod='alipay'}&nbsp;<b>{$cus_currency.name}</b>
             </p>
             <p>
                 - {l s='Alipay account information will be displayed on the next page.' mod='alipay'}

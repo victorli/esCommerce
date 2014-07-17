@@ -29,7 +29,8 @@ class AlipayPaymentModuleFrontController extends ModuleFrontController{
 			'total' => $this->total,
 			'id_order' => $this->module->currentOrder,
 			'id_cart' => $this->id_cart,
-			'id_module' => $this->module->id
+			'id_module' => $this->module->id,
+			'key'	=> $this->secure_key
 			));	
 			
 		$this->setTemplate('payment_confirm.tpl');
