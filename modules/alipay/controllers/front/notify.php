@@ -7,6 +7,7 @@
 class AlipayNotifyModuleFrontController extends ModuleFrontController{
 	
 	var $params = null;
+	var $id_order = null;
 	
 	public function init(){
 		parent::init();
@@ -56,6 +57,44 @@ class AlipayNotifyModuleFrontController extends ModuleFrontController{
 		if(!$this->module->verifyNotify())
 			die($this->module->l('Sorry. System detected your request was dangerous!'));
 			
+		foreach (array_keys($this->params) as $key){
+			$this->params[$key] = Tools::getValue($key,NULL);
+		}
+		
+		$this->id_order = $params['out_trade_no'];
+		
+		$this->_saveNotifyRecord();
+		$this->_updateOrderStatus();
+	}
+	
+	private function _updateOrderStatus(){
+		$os = 'BLX_OS_';
+		$as = strtoupper($this->params['trade_status']);
+		switch ($as){
+			case 'WAIT_BUY_PAY' :
+			case 'TRADE_CLOSED' :
+			case 'TRADE_SUCCESS' :
+			case 'TRADE_PENDING' :
+			case 'TRADE_FINISHED' : $os .= $as; break;
+			default: $os = null;
+		}
+		
+		if(is_null($os))
+			die($this->module->l('Unknown order status from alipay:'.$as));
+			
+		$order = new Order((int)$this->id_order);
+		if(!Validate::isLoadedObject($order) || empty($this->id_order) || is_null($this->id_order)){
+			die($this->module->l('Invalid order id:'.$this->id_order));
+		}
+
+		$orderState = new OrderState((int)Configuration::get($os));
+		if(!Validate::isLoadedObject($orderState))
+			die($this->module->l('Unknown order status:'.$os));
+			
+		$order->setCurrentState($orderState->id);
+	}
+	
+	private function _saveNotifyRecord(){
 		
 	}
 }

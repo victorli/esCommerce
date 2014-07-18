@@ -66,9 +66,9 @@ class Alipay extends PaymentModule{
 			'BLX_OS_CREATED'=>array('color'=>'Darkred','unremovable'=>1,'name'=>$this->l('Waiting to pay')),
 			'BLX_OS_WAIT_BUY_PAY'=>array('color'=>'Chocolate','unremovable'=>1,'name'=>$this->l('Waiting buyer to pay')),
 			'BLX_OS_TRADE_CLOSED'=>array('color'=>'LightSalmon','unremovable'=>1,'name'=>$this->l('Trade closed')),
-			'BLX_OS_SUCCESS'=>array('color'=>'LimeGreen','unremovable'=>1,'name'=>$this->l('Pay successful')),
+			'BLX_OS_TRADE_SUCCESS'=>array('color'=>'LimeGreen','unremovable'=>1,'name'=>$this->l('Pay successful')),
 			'BLX_OS_TRADE_PENDING'=>array('color'=>'Olive','unremovable'=>1,'name'=>$this->l('Waiting saler to deposit')),
-			'BLX_OS_FINISHED'=>array('color'=>'Lime','unremovable'=>1,'name'=>$this->l('Trade finished'))
+			'BLX_OS_TRADE_FINISHED'=>array('color'=>'Lime','unremovable'=>1,'name'=>$this->l('Trade finished'))
 		);
 	}
 	
