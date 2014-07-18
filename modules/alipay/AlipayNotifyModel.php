@@ -7,6 +7,45 @@
 
 class AlipayNotifyModel extends ObjectModel{
 	
+	public $id_alipay_notify;
+	public $notify_time;
+	public $notify_type;
+	public $sign_type;
+	public $sign;
+	public $out_trade_no;
+	public $subject;
+	public $payment_type;
+	public $trade_no;
+	public $trade_status;
+	public $gmt_create;
+	public $gmt_payment;
+	public $gmt_close;
+	public $refund_status;
+	public $gmt_refund;
+	public $seller_email;
+	public $buyer_email;
+	public $seller_id;
+	public $buyer_id;
+	public $price;
+	public $total_fee;
+	public $quantity;
+	public $body;
+	public $discount;
+	public $is_total_fee_adjust;
+	public $use_coupon;
+	public $extra_common_param;
+	public $out_channel_type;
+	public $out_channel_amount;
+	public $out_channel_inst;
+	public $business_scene;
+	
+	public $id_shop;
+	public $id_shop_group;
+	//public $id_lang;
+	
+	public $date_add;
+	public $date_upd;
+	
 	public static $definition = array(
 		'table' => 'alipay_notify',
 		'primary' => 'id_alipay_notify',
@@ -42,10 +81,38 @@ class AlipayNotifyModel extends ObjectModel{
 			'out_channel_type'	=>	array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => false, 'size' => 255),
 			'out_channel_amount'=>	array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => false, 'size' => 255),	
 			'out_channel_inst'	=>	array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => false, 'size' => 128),
-			'business_scene'	=>	array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => false, 'size' => 128)
+			'business_scene'	=>	array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => false, 'size' => 128),
+			'id_shop' 			=> 	array('type' => self::TYPE_INT, 'validate' => 'isUnsignedId'),
+			'id_shop_group' 	=> 	array('type' => self::TYPE_INT, 'validate' => 'isUnsignedId'),
+			//'id_lang' 			=> 	array('type' => self::TYPE_INT, 'validate' => 'isUnsignedId', 'copy_post' => false),
+			//'date_add' 			=> 	array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
+			//'date_upd' 			=> 	array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
 			)
 	
 	);
+	
+	
+	public function add($autodate=true, $null_values = TRUE){
+		$this->id_shop = ($this->id_shop) ? $this->id_shop : Context::getContext()->shop->id;
+		$this->id_shop_group = ($this->id_shop_group) ? $this->id_shop_group : Context::getContext()->shop->id_shop_group;
+		//$this->id_lang = ($this->id_lang) ? $this->id_lang : Context::getContext()->language->id;
+		
+		return parent::add($autodate,$null_values);
+	}
+	
+	public function getHistory($id_order=0){
+		$sql = 'SELECT * FROM `'._DB_PREFIX_.'alipay_notify` ';
+		$sql .= 'WHERE 1 '. Shop::addSqlRestriction(Shop::SHARE_CUSTOMER);
+		if($id_order > 0)
+		$sql .= ' AND out_trade_no='.$id_order;
+		
+		$result = Db::getInstance()->executeS($sql);
+		
+		if(!$result)
+			return false;
+			
+		return $result;
+	}
 	
 	public static function createTables(){
 		return self::createNotifyTable();
@@ -61,6 +128,8 @@ class AlipayNotifyModel extends ObjectModel{
 	public static function createNotifyTable(){
 		$sql = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'alipay_notify`(
 			`id_alipay_notify`	int unsigned not null auto_increment,
+			`id_shop` int unsigned not null,
+			`id_shop_group` int unsigned not null,
 			`notify_time` datetime not null,
 			`notify_type` varchar(255) not null,
 			`notify_id` varchar(255) not null,
