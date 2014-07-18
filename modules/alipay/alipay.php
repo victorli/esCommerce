@@ -12,6 +12,7 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 	
+include_once(__FILE__.'/AlipayNotifyModel.php');
 class Alipay extends PaymentModule{
 	
 	const ALIPAY_GATEWAY_NEW = 'https://mapi.alipay.com/gateway.do?';
@@ -109,7 +110,8 @@ class Alipay extends PaymentModule{
 			//!$this->registerHook('paymentReturn') || 
 			!Configuration::updateValue('BLX_ALIPAY_NAME','Alipay') ||
 			!Configuration::updateValue('BLX_ALIPAY_WAY',self::PAY_WAY_PARTNER_TRADE) || 
-			!$this->_addOrderStates()
+			!$this->_addOrderStates() || 
+			!AlipayNotifyModel::createTables()
 			)
 			return false;
 			
@@ -125,7 +127,8 @@ class Alipay extends PaymentModule{
 			!Configuration::deleteByName('BLX_ALIPAY_PARTNER_ID') || 
 			!Configuration::deleteByName('BLX_ALIPAY_SIGN_KEY') || 
 			!Configuration::deleteByName('BLX_ALIPAY_SERVER_IP') || 
-			!$this->_removeOrderStatus()
+			!$this->_removeOrderStatus() || 
+			!AlipayNotifyModel::dropTables()
 		)
 			return false;
 			
