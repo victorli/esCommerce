@@ -12,7 +12,7 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 	
-include_once(__FILE__.'/AlipayNotifyModel.php');
+include_once(dirname(__FILE__).'/AlipayNotifyModel.php');
 class Alipay extends PaymentModule{
 	
 	const ALIPAY_GATEWAY_NEW = 'https://mapi.alipay.com/gateway.do?';
