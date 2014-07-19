@@ -92,6 +92,14 @@ class Alipay extends PaymentModule{
 		
 		return true;
 	}
+	/**
+	 * @return FileLoggerCore 
+	 */
+	public static function Logger(){
+		$logger = new FileLogger();
+		$logger->setFilename(_PS_ROOT_DIR_.'/log/'.date('Ymd').'_alipay.log');
+		return $logger;
+	}
 	
 	private function _removeOrderStatus(){
 		foreach ($this->orderStatus as $state=>$param){

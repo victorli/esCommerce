@@ -56,8 +56,10 @@ class AlipayNotifyModuleFrontController extends ModuleFrontController{
 	
 	public function postProcess(){
 		
-		if(!$this->module->verifyNotify())
-			die($this->module->l('Sorry. System detected your request was dangerous!'));
+		if(!$this->module->verifyNotify()){
+			Alipay::Logger()->logError('Request verify failed. please check your sign or alipay verify.');
+			die('fail');
+		}
 			
 		foreach (array_keys($this->params) as $key){
 			$this->params[$key] = Tools::getValue($key,NULL);
@@ -81,17 +83,22 @@ class AlipayNotifyModuleFrontController extends ModuleFrontController{
 			default: $os = null;
 		}
 		
-		if(is_null($os))
-			die($this->module->l('Unknown order status from alipay:'.$as));
+		if(is_null($os)){
+			Alipay::Logger()->logError('Unknown order status from alipay:'.$as);
+			die('fail');
+		}
 			
 		$order = new Order((int)$this->id_order);
 		if(!Validate::isLoadedObject($order) || empty($this->id_order) || is_null($this->id_order)){
-			die($this->module->l('Invalid order id:'.$this->id_order));
+			Alipay::Logger()->logError('Invalid order id:'.$this->id_order);
+			die('fail');
 		}
 
 		$orderState = new OrderState((int)Configuration::get($os));
-		if(!Validate::isLoadedObject($orderState))
-			die($this->module->l('Unknown order status:'.$os));
+		if(!Validate::isLoadedObject($orderState)){
+			Alipay::Logger()->logError('Unknown order status:'.$os);
+			die('fail');
+		}
 			
 		$order->setCurrentState($orderState->id);
 	}
