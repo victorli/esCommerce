@@ -50,7 +50,6 @@ class AlipayNotifyModel extends ObjectModel{
 		'table' => 'alipay_notify',
 		'primary' => 'id_alipay_notify',
 		'fields' => array(
-			'id_alipay_notify'	=>	array('type' => self::TYPE_INT, 'validate' => 'isUnsignedInt', 'required' => true),
 			'notify_time'		=>	array('type' => self::TYPE_DATE, 'validate' => 'isDate', 'required' => true),
 			'notify_type'		=>	array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => true, 'size' => 255),
 			'notify_id'			=>	array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => true, 'size' => 255),
@@ -92,7 +91,7 @@ class AlipayNotifyModel extends ObjectModel{
 	);
 	
 	
-	public function add($autodate=true, $null_values = TRUE){
+	public function add($autodate=true, $null_values = false){
 		$this->id_shop = ($this->id_shop) ? $this->id_shop : Context::getContext()->shop->id;
 		$this->id_shop_group = ($this->id_shop_group) ? $this->id_shop_group : Context::getContext()->shop->id_shop_group;
 		//$this->id_lang = ($this->id_lang) ? $this->id_lang : Context::getContext()->language->id;
