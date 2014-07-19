@@ -49,7 +49,7 @@ class AlipayNotifyModel extends ObjectModel{
 	public static $definition = array(
 		'table' => 'alipay_notify',
 		'primary' => 'id_alipay_notify',
-		'fileds' => array(
+		'fields' => array(
 			'id_alipay_notify'	=>	array('type' => self::TYPE_INT, 'validate' => 'isUnsignedInt', 'required' => true),
 			'notify_time'		=>	array('type' => self::TYPE_DATE, 'validate' => 'isDate', 'required' => true),
 			'notify_type'		=>	array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => true, 'size' => 255),
