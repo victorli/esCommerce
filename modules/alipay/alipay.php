@@ -24,6 +24,9 @@ class Alipay extends PaymentModule{
 	const PAY_WAY_DIRECT_PAY = 'DIRECT';
 	const INPUT_CHARSET = 'utf-8';
 	
+	const ASYNC_NOTIFY = 'notify';
+	const SYNC_RETURN = 'return';
+	
 	public $orderStatus;
 	
 	public function __construct(){
@@ -437,13 +440,13 @@ class Alipay extends PaymentModule{
 			$url = $url."_input_charset=".$input_charset;
 			
 		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
-		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);//严格认证
-		curl_setopt($curl, CURLOPT_CAINFO,$this->alipay_cacert);//证书地址
-		curl_setopt($curl, CURLOPT_HEADER, 0 ); // 过滤HTTP头
-		curl_setopt($curl,CURLOPT_RETURNTRANSFER, 1);// 显示输出结果
-		curl_setopt($curl,CURLOPT_POST,true); // post传输数据
-		curl_setopt($curl,CURLOPT_POSTFIELDS,$param);// post传输数据
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($curl, CURLOPT_CAINFO,$this->alipay_cacert);
+		curl_setopt($curl, CURLOPT_HEADER, 0 );
+		curl_setopt($curl,CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl,CURLOPT_POST,true);
+		curl_setopt($curl,CURLOPT_POSTFIELDS,$param);
 		$responseText = curl_exec($curl);
 		curl_close($curl);
 		
@@ -452,11 +455,11 @@ class Alipay extends PaymentModule{
 	
 	private function _processHttpRequestGet($url){
 		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_HEADER, 0 ); // 过滤HTTP头
-		curl_setopt($curl,CURLOPT_RETURNTRANSFER, 1);// 显示输出结果
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
-		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);//严格认证
-		curl_setopt($curl, CURLOPT_CAINFO,$this->alipay_cacert);//证书地址
+		curl_setopt($curl, CURLOPT_HEADER, 0 );
+		curl_setopt($curl,CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($curl, CURLOPT_CAINFO,$this->alipay_cacert);
 		$responseText = curl_exec($curl);
 		curl_close($curl);
 		
@@ -472,8 +475,8 @@ class Alipay extends PaymentModule{
 				'service'=>$this->getPaymentService(),
 				'partner'=>Configuration::get('BLX_ALIPAY_PARTNER_ID'),
 				'payment_type'=>$this->getPaymentType(),
-				'notify_url'=>Configuration::get('BLX_ALIPAY_NOTIFY_URL'),
-				'return_url'=>Configuration::get('BLX_ALIPAY_RETURN_URL'),
+				'notify_url'=>$this->context->link->getModuleLink('alipay','notify'),
+				'return_url'=>$this->context->link->getModuleLink('alipay','return'),
 				'seller_email'=>Configuration::get('BLX_ALIPAY_ACCOUNT'),
 				'out_trade_no'=>$order->id_order,
 				'subject'=>$order->name,

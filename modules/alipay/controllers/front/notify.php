@@ -104,11 +104,12 @@ class AlipayNotifyModuleFrontController extends ModuleFrontController{
 	}
 	
 	private function _saveNotifyRecord(){
-		$nofity = new AlipayNotifyModel();
+		$notify = new AlipayNotifyModel();
 		foreach ($this->params as $key=>$value){
-			$nofity->$key = $value;
+			$notify->$key = $value;
 		}
 		
-		$nofity->add();
+		$notify->req_type = Alipay::ASYNC_NOTIFY;
+		$notify->add();
 	}
 }
