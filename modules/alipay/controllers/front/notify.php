@@ -12,6 +12,8 @@ class AlipayNotifyModuleFrontController extends ModuleFrontController{
 	public function init(){
 		parent::init();
 		
+		$this->ajax = true;
+		
 		$this->params = array(
 			'notify_time' => '',
 			'notify_type' => '',
@@ -61,7 +63,7 @@ class AlipayNotifyModuleFrontController extends ModuleFrontController{
 			$this->params[$key] = Tools::getValue($key,NULL);
 		}
 		
-		$this->id_order = $params['out_trade_no'];
+		$this->id_order = $this->params['out_trade_no'];
 		
 		$this->_saveNotifyRecord();
 		$this->_updateOrderStatus();
