@@ -69,6 +69,8 @@ class AlipayNotifyModuleFrontController extends ModuleFrontController{
 		
 		$this->_saveNotifyRecord();
 		$this->_updateOrderStatus();
+		
+		die('success');
 	}
 	
 	private function _updateOrderStatus(){
