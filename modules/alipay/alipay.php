@@ -88,9 +88,9 @@ class Alipay extends PaymentModule{
 				if(!Configuration::updateValue($state,$orderState->id))
 					return false;
 			}
-			
-			return true;
 		}
+		
+		return true;
 	}
 	
 	private function _removeOrderStatus(){
