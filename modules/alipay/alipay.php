@@ -68,12 +68,12 @@ class Alipay extends PaymentModule{
 			
 		//initialize order status
 		$this->orderStatus = array(
-			'BLX_OS_CREATED'=>array('color'=>'Darkred','unremovable'=>1,'name'=>$this->l('Waiting to pay')),
-			'BLX_OS_WAIT_BUY_PAY'=>array('color'=>'Chocolate','unremovable'=>1,'name'=>$this->l('Waiting buyer to pay')),
+			'BLX_OS_CREATED'=>array('color'=>'Darkred','unremovable'=>1,'name'=>$this->l('Waiting to pay'),'send_email'=>true),
+			'BLX_OS_WAIT_BUY_PAY'=>array('color'=>'Chocolate','unremovable'=>1,'name'=>$this->l('Waiting buyer to pay'),'send_email'=>true),
 			'BLX_OS_TRADE_CLOSED'=>array('color'=>'LightSalmon','unremovable'=>1,'name'=>$this->l('Trade closed')),
-			'BLX_OS_TRADE_SUCCESS'=>array('color'=>'LimeGreen','unremovable'=>1,'name'=>$this->l('Pay successful')),
+			'BLX_OS_TRADE_SUCCESS'=>array('color'=>'LimeGreen','unremovable'=>1,'name'=>$this->l('Pay successful'),'invoice'=>true,'paid'=>true),
 			'BLX_OS_TRADE_PENDING'=>array('color'=>'Olive','unremovable'=>1,'name'=>$this->l('Waiting saler to deposit')),
-			'BLX_OS_TRADE_FINISHED'=>array('color'=>'Lime','unremovable'=>1,'name'=>$this->l('Trade finished'))
+			'BLX_OS_TRADE_FINISHED'=>array('color'=>'Lime','unremovable'=>1,'name'=>$this->l('Trade finished'),'invoice'=>true,'send_email'=>true,'paid'=>true)
 		);
 	}
 	
@@ -82,7 +82,10 @@ class Alipay extends PaymentModule{
 			$orderState = new OrderState((int)Configuration::get($state));
 			if(!Validate::isLoadedObject($orderState)){
 				$orderState->color= $param['color'];
-				$orderState->unremovable = $param['unremovable'];
+				$orderState->unremovable = isset($param['unremovable'])? $param['unremovable'] : true;
+				$orderState->send_email = isset($param['send_email'])? $param['send_email'] : false;
+				$orderState->invoice = isset($param['invoice'])? $param['invoice'] : false;
+				$orderState->paid = isset($param['paid'])? $param['paid'] : false;
 				$orderState->name = array();
 				foreach (Language::getLanguages() as $lang)
 					$orderState->name[$lang['id_lang']] = $param['name'];
