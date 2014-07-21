@@ -112,13 +112,12 @@ class AlipayNotifyModel extends ObjectModel{
 		return parent::add(false,false);
 	}
 	
-	public function getHistory($id_order=0){
+	public function getHistory($id_order){
 		$sql = 'SELECT * FROM `'._DB_PREFIX_.'alipay_notify` ';
 		$sql .= 'WHERE 1 '. Shop::addSqlRestriction(Shop::SHARE_CUSTOMER);
-		if($id_order > 0)
 		$sql .= ' AND out_trade_no='.$id_order;
 		
-		$result = Db::getInstance()->executeS($sql);
+		$result = Db::getInstance()->executeS($sql,true);
 		
 		if(!$result)
 			return false;
@@ -181,5 +180,20 @@ class AlipayNotifyModel extends ObjectModel{
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 		
 		return Db::getInstance()->execute($sql);
+	}
+	
+	public static function getAlipayTradeNo($id_order){
+		$sql = 'SELECT * FROM `'._DB_PREFIX_.'alipay_notify` ';
+		$sql .= 'WHERE 1 '. Shop::addSqlRestriction(Shop::SHARE_CUSTOMER);
+		$sql .= ' AND out_trade_no='.$id_order;
+		$sql .= ' AND trade_status=`TRADE_SUCCESS`';
+		$sql .=' ORDER BY `id_alipay_notify` DESC LIMIT 1';
+		
+		$result = Db::getInstance()->executeS($sql,true);
+		
+		if(is_array($result) && count($result) == 1)
+			return $result[0]['trade_no'];
+			
+		return false;
 	}
 }

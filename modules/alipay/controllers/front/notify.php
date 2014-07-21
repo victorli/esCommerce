@@ -68,9 +68,25 @@ class AlipayNotifyModuleFrontController extends ModuleFrontController{
 		$this->id_order = $this->params['out_trade_no'];
 		
 		$this->_saveNotifyRecord();
+		$this->_addOrderPayment();
 		$this->_updateOrderStatus();
 		
 		die('success');
+	}
+	
+	private function _addOrderPayment(){
+		if(in_array(strtoupper($this->params['trade_status']), array('TRADE_SUCCESS','TRADE_FINISHED'))){
+			$order = new Order((int)$this->id_order);
+			if(!Validate::isLoadedObject($order) || empty($this->id_order) || is_null($this->id_order)){
+				Alipay::Logger()->logError('Invalid order id:'.$this->id_order);
+				die('fail');
+			}
+			
+			if(!$order->addOrderPayment($this->params['total_fee'],null,$this->params['trade_no'],null,$this->params['gmt_payment'])){
+				Alipay::Logger()->logError('Error to add order payment or order invoice for order:'.$this->id_order);
+				die('fail');
+			}
+		}
 	}
 	
 	private function _updateOrderStatus(){

@@ -10,6 +10,8 @@ class AlipayRefundModuleAdminController extends ModuleAdminController{
 	var $id_order = 0;
 	var $total_fee = 0;
 	var $message = null;
+	var $refund_fee = 0.0;
+	var $refund_reason = null;
 	
 	public function init(){
 		$this->ajax = true;
@@ -19,29 +21,38 @@ class AlipayRefundModuleAdminController extends ModuleAdminController{
 		$this->id_order = Tools::getValue('id_order',0);
 		$order = new Order((int)$this->id_order);
 		
+		$this->refund_fee = Tools::getValue('refund_fee',false);
+		$this->refund_reason = Tools::getValue('refund_reason',null);
+		
 		if(!Validate::isLoadedObject($order)){
-			$this->context->smarty->assign('message',$this->l('Order:'.$this->id_order.' is not exist.'));
-		}else{
-			$this->context->smarty->assing(array(
-				'id_order' => $this->id_order,
-				'trade_no' => '', //alipay transaction trade no
-				'total_fee' => $this->order->getTotalPaid(),
-				'hides' => array(
-					'service' => '',
-					'partner' => '',
-					'_input_charset' => Alipay::INPUT_CHARSET,
-					'sign_type'	=> Alipay::SIGN_TYPE,
-					'sign' => '',
-					'notify_url' => '',
-					'seller_email' => Configuration::get('BLX_ALIPAY_ACCOUNT'),
-					'seller_user_id' => Configuration::get('BLX_ALIPAY_PARTNER_ID'),
-					'refund_date' => date('Y-m-d H:i:s'),
-					'batch_no' => date('Y-m-d')."D".$this->id_order."T".date("H:i:s"),
-					'batch_num' => 1,
-					'detail_data' => ''
-				)
-			));
+			$this->message[] = $this->l('Order:'.$this->id_order.' is not exist.');
+		}else {
+			if(Tools::isSubmit('refund_fee') && Tools::isSubmit('refund_reason')){
+				$this->total_fee = $order->getTotalPaid();
+				if(!$this->refund_fee || !is_float($this->refund_fee) || $this->refund_fee <=0 || $this->refund_fee >= $this->total_fee)
+					$this->message[] = $this->l('Refund fee must be greater than 0 and small or equal '.$this->total_fee);
+				if(is_null($this->refund_reason) || strlen(trim($this->refund_reason)) == 0)
+					$this->message[] = $this->l('Refund reason is empty.');
+					
+				if(is_null($this->message)){
+					$params = $this->module->getRefundParam($this->id_order,$this->refund_fee,$this->refund_reason);
+					if(!$params)
+						$this->message[] = $this->l('Error to get refund params for post.');
+				}
+				
+				if(is_null($this->message)){
+					$this->context->smarty->assign('gateway',Alipay::ALIPAY_GATEWAY_NEW);
+					$this->context->smarty->assign('params',$params);
+				}
+			}
+			
 		}
-
+		
+		if(!is_null($this->message))
+			$this->context->smarty->assign('messages',$this->message);
+	}
+	
+	public function displayAjax(){
+		$this->smartyOutputContent($this->getTemplatePath().'refund.tpl');
 	}
 }

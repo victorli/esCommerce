@@ -22,6 +22,7 @@ class Alipay extends PaymentModule{
 	const SIGN_TYPE = 'MD5';
 	const PAY_WAY_PARTNER_TRADE = 'PARTNER';
 	const PAY_WAY_DIRECT_PAY = 'DIRECT';
+	const PAY_WAY_DIRECT_PAY_REFUND = 'REFUND';
 	const INPUT_CHARSET = 'utf-8';
 	
 	const ASYNC_NOTIFY = 'notify';
@@ -327,6 +328,7 @@ class Alipay extends PaymentModule{
 		switch ($flag){
 			case self::PAY_WAY_DIRECT_PAY: return "create_direct_pay_by_user";break;
 			case self::PAY_WAY_PARTNER_TRADE: return "create_partner_trade_by_buyer";break;
+			case self::PAY_WAY_DIRECT_PAY_REFUND: return "refund_fastpay_by_platform_pwd";break;
 		}
 		return false;
 	}
@@ -487,6 +489,36 @@ class Alipay extends PaymentModule{
 				'exter_invoke_id'=>Configuration::get('BLX_ALIPAY_SERVER_IP'),
 				'_input_charset'=>self::INPUT_CHARSET
 			)
+		);
+		
+		return $this->_buildRequestParam($param);
+	}
+	
+	public function getRefundParam($id_order, $refund_fee=0, $refund_reason=''){
+		$order = new Order((int)$id_order);
+		$total_fee = $order->getTotalPaid();
+		if($refund_fee <=0 || $refund_fee > $total_fee){
+			self::Logger()->logWarning('Refund fee should be >0 and <='.$total_fee);
+			return false;
+		}
+		
+		$trade_no = AlipayNotifyModel::getAlipayTradeNo($id_order);
+		if($trade_no == false){
+			self::Logger()->logWarning('Unable to get the right trade_no by order id:'.$id_order);
+			return false;
+		}
+		
+		$param = array(
+			'service' => $this->getPaymentService(Alipay::PAY_WAY_DIRECT_PAY_REFUND),
+			'partner' => Configuration::get('BLX_ALIPAY_PARTNER_ID'),
+			'_input_charset' => Alipay::INPUT_CHARSET,
+			'notify_url' => $this->context->link->getModuleLink('alipay','notify'),
+			'seller_email' => Configuration::get('BLX_ALIPAY_ACCOUNT'),
+			'seller_user_id' => Configuration::get('BLX_ALIPAY_PARTNER_ID'),
+			'refund_date' => date('Y-m-d H:i:s'),
+			'batch_no' => date('Y-m-d')."D".$id_order."T".date("H:i:s"),
+			'batch_num' => 1,
+			'detail_data' => $trade_no."^".$refund_fee."^".$refund_reason
 		);
 		
 		return $this->_buildRequestParam($param);

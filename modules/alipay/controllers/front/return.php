@@ -8,11 +8,11 @@ class AlipayReturnModuleFrontController extends ModuleFrontController{
 	
 	var $params = null;
 	var $id_order = null;
+	var $message = null;
+	var $status = null;
 	
 	public function init(){
 		parent::init();
-		
-		$this->ajax = true;
 		
 		$this->params = array(
 			'is_success' => '',
@@ -40,13 +40,25 @@ class AlipayReturnModuleFrontController extends ModuleFrontController{
 	
 	public function initContent(){
 		parent::initContent();
+		
+		if(is_null($this->message)){
+			$this->status = 'ok';
+			$this->context->smarty->assign('total_paid',$this->params['total_fee']);
+		}else{
+			$this->status = 'error';
+			$this->context->smarty->assign('message',$this->message);
+		}	
+		
+		$this->setTemplate('payment_return.tpl');
+		
 	}
 	
 	public function postProcess(){
 		
 		if(!$this->module->verifyNotify()){
 			Alipay::Logger()->logError('Sync return verify failed. please check your sign or alipay verify.');
-			die('fail');
+			$this->message[] = $this->module->l('Sync return verify failed. please check your sign or alipay verify.');
+			return;
 		}
 		
 		foreach (array_keys($this->params) as $key)
@@ -57,19 +69,22 @@ class AlipayReturnModuleFrontController extends ModuleFrontController{
 		$status = strtoupper($this->params['trade_status']);
 		if($status != 'TRADE_FINISHED' && $status != 'TRADE_SUCCESS'){
 			Alipay::Logger()->logInfo('The return trade status should between TRADE_FINISHED and TRADE_SUCCESS, but now is:'.$status);
-			die('fail');
+			$this->message[] = $this->module->l('The return trade status should between TRADE_FINISHED and TRADE_SUCCESS, but now is:'.$status);
+			return;
 		}else{
 			$order = new Order((int)$this->id_order);
 			if(!Validate::isLoadedObject($order) || empty($this->id_order) || is_null($this->id_order)){
 				Alipay::Logger()->logError('Invalid order id:'.$this->id_order);
-				die('fail');
+				$this->message[] = $this->module->l('Invalid order id:'.$this->id_order);
+				return;
 			}
 		
 			$os = 'BLX_OS_'.$status;
 			$orderState = new OrderState((int)Configuration::get($os));
 			if(!Validate::isLoadedObject($orderState)){
 				Alipay::Logger()->logError('Unknown order status:'.$os);
-				die('fail');
+				$this->message[] = $this->module->l('Unknown order status:'.$os);
+				return;
 			}
 			if($order->getCurrentState() != $orderState->id)	
 				$order->setCurrentState($orderState->id);
