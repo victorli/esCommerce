@@ -118,7 +118,43 @@ class AlipayNotifyModuleFrontController extends ModuleFrontController{
 			die('fail');
 		}
 			
-		$order->setCurrentState($orderState->id);
+		$current_order_state = $order->getCurrentOrderState();
+		if($current_order_state->id != $orderState->id){
+			$history = new OrderHistory();
+			$history->id_order = $order->id;
+			$history->id_employee = 0;
+			
+			$use_existings_payment = false;
+			if(!$order->hasInvoice())
+				$use_existings_payment = true;
+				
+			$history->changeIdOrderState((int)$orderState->id, $order, $use_existings_payment);
+			
+			if($orderState->send_email){
+				$templateVars = array();
+				if(!$history->addWithemail(true,$templateVars)){
+					Alipay::Logger()->logError('Error to add order history with email.');
+					die('fail');
+				}
+			}else{
+				if(!$history->add()){
+					Alipay::Logger()->logError('Error to add order history.');
+					die('fail');
+				}
+			}
+			
+			// synchronizes quantities if needed..
+			if (Configuration::get('PS_ADVANCED_STOCK_MANAGEMENT'))
+			{
+				foreach ($order->getProducts() as $product)
+				{
+					if (StockAvailable::dependsOnStock($product['product_id']))
+						StockAvailable::synchronize($product['product_id'], (int)$product['id_shop']);
+				}
+			}
+		}
+		
+		//$order->setCurrentState($orderState->id);
 	}
 	
 	private function _saveNotifyRecord(){
