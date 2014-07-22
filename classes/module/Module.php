@@ -1171,7 +1171,7 @@ abstract class ModuleCore
 			{
 				// Load config.xml
 				libxml_use_internal_errors(true);
-				$xml_module = simplexml_load_file($configFile);
+				$xml_module = @simplexml_load_file($configFile);
 				foreach (libxml_get_errors() as $error)
 					$errors[] = '['.$module.'] '.Tools::displayError('Error found in config file:').' '.htmlentities($error->message);
 				libxml_clear_errors();
