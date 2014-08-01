@@ -77,15 +77,21 @@ class AlipayNotifyModuleFrontController extends ModuleFrontController{
 	private function _addOrderPayment(){
 		if(in_array(strtoupper($this->params['trade_status']), array('TRADE_SUCCESS','TRADE_FINISHED'))){
 			$order = new Order((int)$this->id_order);
+			
 			if(!Validate::isLoadedObject($order) || empty($this->id_order) || is_null($this->id_order)){
 				Alipay::Logger()->logError('Invalid order id:'.$this->id_order);
 				die('fail');
 			}
 			
+			$total_paid = $order->getTotalPaid();
+			if((float)$order->total_paid == (float)$total_paid)
+				return;
 			if(!$order->addOrderPayment($this->params['total_fee'],null,$this->params['trade_no'],null,$this->params['gmt_payment'])){
 				Alipay::Logger()->logError('Error to add order payment or order invoice for order:'.$this->id_order);
 				die('fail');
 			}
+			if(((float)$total_paid + (float)$this->params['total_fee']) > (float($order->total_paid)))
+				Alipay::Logger()->logWarning('Warning: order\'s total fee is '.$order->total_paid.',and has beed paid '.$total_paid.',but new total fee is '.$this->params['total_fee']);
 		}
 	}
 	
