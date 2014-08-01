@@ -26,7 +26,7 @@
 
 class InstallLanguages
 {
-	const DEFAULT_ISO = 'en';
+	const DEFAULT_ISO = 'zh';
 	/**
 	 * @var array List of available languages
 	 */
@@ -54,8 +54,8 @@ class InstallLanguages
 	public function __construct()
 	{
 		// English language is required
-		if (!file_exists(_PS_INSTALL_LANGS_PATH_.'en/language.xml'))
-			throw new PrestashopInstallerException('English language is missing');
+		if (!file_exists(_PS_INSTALL_LANGS_PATH_.'zh/language.xml'))
+			throw new PrestashopInstallerException('Chinese language is missing');
 
 		$this->languages = array(
 			self::DEFAULT_ISO => new InstallLanguage(self::DEFAULT_ISO),
