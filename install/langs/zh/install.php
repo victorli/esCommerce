@@ -131,7 +131,7 @@ return array (
     'Sign-up to the newsletter' => '订阅简讯',
     'eCartx can provide you with guidance on a regular basis by sending you tips on how to optimize the management of your store which will help you grow your business. If you do not wish to receive these tips, please uncheck this box.' => 'eCartx 可以通过发送你使用指导来帮助您优化您的店铺管理。如果您不希望收到这些提示，请取消选择。',
     'Configure your database by filling out the following fields' => '填写以下字段配置数据库',
-    'To use eCartx, you must <a href="http://doc.eCartx.com/display/PS16/Installing+eCartx#InstallingeCartx-Creatingadatabaseforyourshop" target="_blank">create a database</a> to collect all of your store\'s data-related activities.' => '为了正确使用eCartx，您需要<a href="http://doc.eCartx.com/display/PS16/Installing+eCartx#InstallingeCartx-Creatingadatabaseforyourshop" target="_blank">create a database</a>收集您网店的所有项目相关数据。',
+    'To use eCartx, you must create a database to collect all of your store\'s data-related activities.' => '为了正确使用eCartx，您需要创建数据库来存储您网店的所有项目相关数据。',
     'Please complete the fields below in order for eCartx to connect to your database. ' => '请按顺序填写下面的字段，以便让 eCartx 连接到您的数据库。',
     'Database server address' => '数据库服务器地址',
     'The default port is 3306. To use a different port, add the port number at the end of your server\'s address i.e ":4242".' => '默认端口为3306。如要使用不同的端口，请在服务器的地址端口末端添加“：4242”。',
