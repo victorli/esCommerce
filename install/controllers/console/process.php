@@ -120,7 +120,7 @@ class InstallControllerConsoleProcess extends InstallControllerConsole
 					'visitorType' => 1,
 					'source' => 'installer'
 				));
-			Tools::file_get_contents('http://www.prestashop.com/ajax/controller.php?'.$params);
+			Tools::file_get_contents('http://www.ecartx.com/ajax/controller.php?'.$params);
 		}
 
 		if ($this->datas->send_email)

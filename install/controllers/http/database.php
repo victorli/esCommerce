@@ -151,11 +151,11 @@ class InstallControllerHttpDatabase extends InstallControllerHttp
 			else
 			{
 				$this->database_server = 'localhost';
-				$this->database_name = 'prestashop';
+				$this->database_name = 'ecartx';
 				$this->database_login = 'root';
 				$this->database_password = '';
 				$this->database_engine = 'InnoDB';
-				$this->database_prefix = 'ps_';
+				$this->database_prefix = 'ecx_';
 			}
 
 			$this->database_clear = true;
