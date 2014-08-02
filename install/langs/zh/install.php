@@ -142,7 +142,7 @@ return array (
     'Tables prefix' => '表格前缀',
     'Drop existing tables (mode dev)' => '删除现有表格（开发模式）',
     'Test your database connection now!' => '现在测试你的数据库连接吧！',
-    'Next' => '下一个',
+    'Next' => '继续',
     'Back' => '返回',
     'If you need some assistance during the installation process, please call our team at %s and one of our experts will be happy to help.' => '如果您在安装过程中需要一些协助，请致电我们的团队%s，我们的专家将很乐意提供帮助。',
     'Official forum' => '官方论坛',
