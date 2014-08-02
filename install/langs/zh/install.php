@@ -176,7 +176,7 @@ return array (
     'Print my login information' => '打印我的登录信息',
     'Password' => '密码',
     'Display' => '显示',
-    'For security purposes, you must delete the "install" folder.' => '为了保证安全，你必须删除文件夹 “安装” 。',
+    'For security purposes, you must delete the "install/" folder.' => '为了保证安全，你必须删除文件夹 “install/” 。',
     'http://doc.eCartx.com/display/PS16/Installing+eCartx#InstallingeCartx-Completingtheinstallation' => 'http://doc.eCartx.com/display/PS16/Installing+eCartx#InstallingeCartx-Completingtheinstallation',
     'Back Office' => '后台',
     'Manage your store using your Back Office. Manage your orders and customers, add modules, change themes, etc.' => '使用后台管理您的店铺。管理您的订单和客户，添加模块，更改主题等。',

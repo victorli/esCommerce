@@ -36,7 +36,7 @@ var admin = '<?php echo(file_exists('../admin-dev') ? '../admin-dev' : '../admin
 <div id="install_process_success">
 	<div class="clearfix">
 		<h2><?php echo $this->l('Your installation is finished!'); ?></h2>
-		<p><?php echo $this->l('You have just finished installing your shop. Thank you for using PrestaShop!'); ?></p>
+		<p><?php echo $this->l('You have just finished installing your shop. Thank you for using eCartx!'); ?></p>
 		<p><?php echo $this->l('Please remember your login information') ?></p>
 		<table cellpadding="0" cellspacing="0" border="0" id="resultInstall" width="620">
 			<tr class="odd">
@@ -59,8 +59,8 @@ var admin = '<?php echo(file_exists('../admin-dev') ? '../admin-dev' : '../admin
 		</table>
 
 		<h3 class="infosBlock">
-			<?php echo $this->l('For security purposes, you must delete the "install" folder.') ?>
-			<a href="<?php echo $this->l('http://doc.prestashop.com/display/PS16/Installing+PrestaShop#InstallingPrestaShop-Completingtheinstallation') ?>" target="_blank"><img src="theme/img/help.png" /></a>
+			<?php echo $this->l('For security purposes, you must delete the "install/" folder.') ?>
+			<a href="<?php echo $this->l('http://doc.eCartx.com/display/PS16/Installing+eCartx#InstallingeCartx-Completingtheinstallation') ?>" target="_blank"><img src="theme/img/help.png" /></a>
 		</h3>
 
 		<div id="boBlock" class="blockInfoEnd clearfix" onclick="window.open(admin)">
@@ -80,7 +80,7 @@ var admin = '<?php echo(file_exists('../admin-dev') ? '../admin-dev' : '../admin
 
 <div class="sharing">
 	<p><?php echo $this->l('Share your experience with your friends!'); ?></p>
-	<button type="button" class="btn-twitter" onclick="psinstall_twitter_click('<?php echo $this->l('I just built an online store with PrestaShop!'); ?> <?php echo $this->l('Look at this exhilarating experience : http://vimeo.com/89298199'); ?>');">
+	<button type="button" class="btn-twitter" onclick="psinstall_twitter_click('<?php echo $this->l('I just built an online store with eCartx!'); ?> <?php echo $this->l('Look at this exhilarating experience : http://vimeo.com/89298199'); ?>');">
 		<i></i> <?php echo $this->l('Tweet'); ?>
 	</button>
 	<button type="button" class="btn-facebook" onclick="psinstall_facebook_click();">
@@ -97,9 +97,9 @@ var admin = '<?php echo(file_exists('../admin-dev') ? '../admin-dev' : '../admin
 	</button>
 </div>
 
-<?php if (@fsockopen('addons.prestashop.com', 80, $errno, $errst, 3)): ?>
-	<iframe src="https://addons.prestashop.com/psinstall1541.php?version=2&lang=<?php echo $this->language->getLanguageIso() ?>&email=<?php echo $this->session->admin_email ?>&activity=<?php echo $this->session->shop_activity ?>&country=<?php echo $this->session->shop_country ?>" scrolling="no" id="prestastore">
-		<p><a href="http://addons.prestashop.com/" target="_blank"><?php echo $this->l('Check out PrestaShop Addons to add the little something extra to your store!'); ?></a></p>
+<?php if (@fsockopen('addons.eCartx.com', 80, $errno, $errst, 3)): ?>
+	<iframe src="https://addons.eCartx.com/psinstall1541.php?version=2&lang=<?php echo $this->language->getLanguageIso() ?>&email=<?php echo $this->session->admin_email ?>&activity=<?php echo $this->session->shop_activity ?>&country=<?php echo $this->session->shop_country ?>" scrolling="no" id="prestastore">
+		<p><a href="http://addons.eCartx.com/" target="_blank"><?php echo $this->l('Check out eCartx Addons to add the little something extra to your store!'); ?></a></p>
 	</iframe>
 <?php endif; ?>
 

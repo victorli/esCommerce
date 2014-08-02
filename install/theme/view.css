@@ -46,7 +46,7 @@ a {cursor:pointer;}
 #header {
 	padding:6px 16px 16px 16px;
 	height:50px;
-	background:#394049;
+	background:#510c76;
 }
 #loaderSpace{
 		display:none;
@@ -116,7 +116,7 @@ div#phone_help{margin:auto;text-align:center;padding:10px 5px}
       generics styles
 **************************************************************************** */
 body{
-	font:normal 13px/18px Arial, Helvetica, sans-serif;
+	font:normal 13px/18px 'Microsoft Yahei', Arial, Helvetica, sans-serif;
 	color:#333;
 	background:#e1e2e2;
 }
