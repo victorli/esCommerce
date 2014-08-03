@@ -323,7 +323,7 @@ abstract class InstallControllerHttp
 		if ($this->phone === null)
 		{
 			$this->phone = $this->language->getInformation('phone', false);
-			if ($iframe = Tools::file_get_contents('http://api.prestashop.com/iframe/install.php?lang='.$this->language->getLanguageIso(), false, null, 3))
+			if ($iframe = Tools::file_get_contents('http://'._ECX_WEB_API_.'/iframe/install.php?lang='.$this->language->getLanguageIso(), false, null, 3))
 				if (preg_match('/<img.+alt="([^"]+)".*>/Ui', $iframe, $matches) && isset($matches[1]))
 					$this->phone = $matches[1];
 		}

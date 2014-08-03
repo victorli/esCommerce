@@ -196,6 +196,7 @@ class InstallModelInstall extends InstallAbstractModel
 		Configuration::updateGlobalValue('PS_LANG_DEFAULT', $id_lang);
 		Configuration::updateGlobalValue('PS_VERSION_DB', _PS_INSTALL_VERSION_);
 		Configuration::updateGlobalValue('PS_INSTALL_VERSION', _PS_INSTALL_VERSION_);
+		Configuration::updateGlobalValue('ECX_VERSION',_ECX_VERSION_);
 		return true;
 	}
 
@@ -446,7 +447,7 @@ class InstallModelInstall extends InstallAbstractModel
 		$version = str_replace('.', '', _PS_VERSION_);
 		$version = substr($version, 0, 2);
 
-		$localization_file_content = @Tools::file_get_contents('http://api.prestashop.com/localization/'.$version.'/'.$data['shop_country'].'.xml');
+		$localization_file_content = @Tools::file_get_contents('http://'._ECX_WEB_API_.'/localization/'.$version.'/'.$data['shop_country'].'.xml');
 		if (!@simplexml_load_string($localization_file_content))
 			$localization_file_content = false;
 		if (!$localization_file_content)
@@ -673,7 +674,7 @@ class InstallModelInstall extends InstallAbstractModel
 		// try to download fixtures if no low memory mode
 		if ($entity === null)
 		{
-			if (Tools::copy('http://api.prestashop.com/fixtures/'.$data['shop_country'].'/'.$data['shop_activity'].'/fixtures.zip', $zip_file))
+			if (Tools::copy('http://'._ECX_WEB_API_.'/fixtures/'.$data['shop_country'].'/'.$data['shop_activity'].'/fixtures.zip', $zip_file))
 			{
 				Tools::deleteDirectory($temp_dir, true);
 				if (Tools::ZipTest($zip_file))
