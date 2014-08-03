@@ -739,7 +739,7 @@ class LanguageCore extends ObjectModel
 
 		// If the language pack has not been provided, retrieve it from prestashop.com
 		if (!$lang_pack)
-			$lang_pack = Tools::jsonDecode(Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$iso_code));
+			$lang_pack = Tools::jsonDecode(Tools::file_get_contents('http://'._ECX_WEB_MAIN_.'/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$iso_code));
 
 		// If a language pack has been found or provided, prefill the language object with the value
 		if ($lang_pack)
@@ -756,7 +756,7 @@ class LanguageCore extends ObjectModel
 		if (!$lang->validateFields() || !$lang->validateFieldsLang() || !$lang->add(true, false, $only_add))
 			return false;
 
-		$flag = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/flags/jpeg/'.$iso_code.'.jpg');
+		$flag = Tools::file_get_contents('http://'._ECX_WEB_MAIN_.'/download/lang_packs/flags/jpeg/'.$iso_code.'.jpg');
 		if ($flag != null && !preg_match('/<body>/', $flag))
 		{
 			$file = fopen(_PS_ROOT_DIR_.'/img/l/'.(int)$lang->id.'.jpg', 'w');
@@ -832,7 +832,7 @@ class LanguageCore extends ObjectModel
 		$errors = array();
 		$file = _PS_TRANSLATIONS_DIR_.$iso.'.gzip';
 
-		if (!$lang_pack_link = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='.$version.'&iso_lang='.Tools::strtolower($iso)))
+		/*if (!$lang_pack_link = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='.$version.'&iso_lang='.Tools::strtolower($iso)))
 			$errors[] = Tools::displayError('Archive cannot be downloaded from prestashop.com.');
 		elseif (!$lang_pack = Tools::jsonDecode($lang_pack_link))
 			$errors[] = Tools::displayError('Error occurred when language was checked according to your Prestashop version.');
@@ -847,7 +847,7 @@ class LanguageCore extends ObjectModel
 				elseif (!is_writable($file))
 					$errors[] = Tools::displayError('Server does not have permissions for writing.').' ('.$file.')';
 			}
-		
+		*/
 		if (!file_exists($file))
 			$errors[] = Tools::displayError('No language pack is available for your version.');
 		elseif ($install)
