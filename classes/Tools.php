@@ -2968,7 +2968,7 @@ exit;
 		));
 		
 		foreach ($protocols as $protocol)
-			if ($content = Tools::file_get_contents($protocol.'://api.addons.prestashop.com', false, $context))
+			if ($content = Tools::file_get_contents($protocol.'://'._ECX_WEB_ADDON_API_, false, $context))
 				return $content;
 
 		self::$is_addons_up = false;

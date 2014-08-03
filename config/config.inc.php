@@ -25,6 +25,7 @@
 */
 
 require_once(dirname(__FILE__).'/defines.inc.php');
+require_once(dirname(__FILE__).'/ecartx.inc.php');
 $start_time = microtime(true);
 
 /* SSL configuration */

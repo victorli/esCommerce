@@ -80,9 +80,9 @@
 			<?php endif; ?>
 		<?php endforeach; ?>
 	</ol>
-	<?php if (@fsockopen('api.prestashop.com', 80, $errno, $errst, 3)): ?>
+	<?php if (@fsockopen(_ECX_WEB_API_, 80, $errno, $errst, 3)): ?>
 		<iframe scrolling="no" style="height:210px;width:200px;border:none;margin-top:20px" id="iframe_help"
-			src="https://api.prestashop.com/iframe/install.php?step=<?php echo $this->step ?>&lang=<?php echo $this->language->getLanguageIso() ?><?php if (isset($this->session->shop_country)) echo '&country='.$this->session->shop_country; ?>">
+			src="https://<?php echo _ECX_WEB_API_?>/iframe/install.php?step=<?php echo $this->step ?>&lang=<?php echo $this->language->getLanguageIso() ?><?php if (isset($this->session->shop_country)) echo '&country='.$this->session->shop_country; ?>">
 			<p><?php echo $this->l('Contact us!') ?><br /><?php echo $this->getPhone() ?></p>
 		</iframe>
 	<?php endif; ?>
@@ -102,8 +102,8 @@
 	</div>
 	<noscript>
 		<h4 class="errorBlock" style="margin-bottom:10px">
-			<?php echo $this->l('To install PrestaShop, you need to have JavaScript enabled in your browser.') ?>
-			<a href="<?php echo $this->l('http://doc.prestashop.com/display/PS16/What+you+need+to+get+started#HowtoenableJavaScript-HowtoenableJavaScript') ?>" target="_blank">
+			<?php echo $this->l('To install eCartx, you need to have JavaScript enabled in your browser.') ?>
+			<a href="http://<?php echo _ECX_WEB_DOC_ ?>" target="_blank">
 				<img src="theme/img/help.png" style="height:16px;width:16px" />
 			</a>
 		</h4>

@@ -302,7 +302,7 @@ class ThemeConfigurator extends Module
 				'id_employee' => is_object($this->context->employee) ? (int)$this->context->employee->id :
 					Tools::getValue('id_employee'),
 				'advertisement_image' => $ad_image,
-				'advertisement_url' => 'http://addons.prestashop.com/en/205-premium-templates?utm_source=backoffice_configurator',
+				'advertisement_url' => 'http://'._ECX_WEB_ADDON_.'/en/205-premium-templates?utm_source=backoffice_configurator',
 				'advertisement_text' => $this->l('Over 500+ PrestaShop premium templates! Browse now!')
 			));
 

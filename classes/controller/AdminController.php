@@ -1270,7 +1270,7 @@ class AdminControllerCore extends Controller
 			$this->page_header_toolbar_title = array_pop($this->toolbar_title);
 		$this->addPageHeaderToolBarModulesListButton();
 
-		$this->context->smarty->assign('help_link', 'http://escommerce.blx90.com/doc/'.Tools::getValue('controller').'?version='._PS_VERSION_.'&country='.$this->context->country->iso_code);
+		$this->context->smarty->assign('help_link', 'http://'._ECX_WEB_HELP_.'/doc/'.Tools::getValue('controller').'?version='._PS_VERSION_.'&country='.$this->context->country->iso_code);
 	}
 
 	/**
@@ -1925,14 +1925,14 @@ class AdminControllerCore extends Controller
 			'check_url_fopen' => (ini_get('allow_url_fopen') ? 'ok' : 'ko'),
 			'check_openssl' => (extension_loaded('openssl') ? 'ok' : 'ko'),
 			'add_permission' => 1,
-			'addons_register_link' => "//addons.prestashop.com/".$language->iso_code."/login?email=".urlencode($this->context->employee->email)."&firstname=".urlencode($this->context->employee->firstname)."&lastname=".urlencode($this->context->employee->lastname)."&website=".urlencode($this->context->shop->getBaseURL())."&utm_source=back-office&utm_medium=connect-to-addons&utm_campaign=back-office-".$iso_code_caps."#createnow",
-			'addons_forgot_password_link' => "//addons.prestashop.com/".$language->iso_code."/forgot-your-password"
+			'addons_register_link' => "//"._ECX_WEB_ADDON_."/".$language->iso_code."/login?email=".urlencode($this->context->employee->email)."&firstname=".urlencode($this->context->employee->firstname)."&lastname=".urlencode($this->context->employee->lastname)."&website=".urlencode($this->context->shop->getBaseURL())."&utm_source=back-office&utm_medium=connect-to-addons&utm_campaign=back-office-".$iso_code_caps."#createnow",
+			'addons_forgot_password_link' => "//"._ECX_WEB_ADDON_."/".$language->iso_code."/forgot-your-password"
 		));
 		
 		$this->modals[] = array(
 			'modal_id' => "modal_addons_connect",
 			'modal_class' => "modal-md",
-			'modal_title' => '<i class="icon-puzzle-piece"></i> <a target="_blank" href="http://addons.prestashop.com/?utm_source=backoffice_modules">PrestaShop Addons</a>',
+			'modal_title' => '<i class="icon-puzzle-piece"></i> <a target="_blank" href="http://"._ECX_WEB_ADDON_."/?utm_source=backoffice_modules">PrestaShop Addons</a>',
 			'modal_content' => $this->context->smarty->fetch('controllers/modules/login_addons.tpl'),
 		);
 	}
@@ -3323,7 +3323,7 @@ class AdminControllerCore extends Controller
 			<head>
 				<meta charset='UTF-8'>
 				<title>PrestaShop Help</title>
-				<link href='//help.prestashop.com/css/help.css' rel='stylesheet'>
+				<link href='//"._ECX_WEB_HELP_."/css/help.css' rel='stylesheet'>
 				<link href='//fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet'>
 				<script src='"._PS_JS_DIR_."jquery/jquery-1.11.0.min.js'></script>
 				<script src='"._PS_JS_DIR_."jquery/plugins/jquery.storageapi.js'></script>

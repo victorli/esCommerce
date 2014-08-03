@@ -320,7 +320,7 @@ class AdminThemesControllerCore extends AdminController
 					'storeLink' => array(
 						'title' => $this->l('Visit the theme store'),
 						'icon' => 'process-icon-themes',
-						'href' => 'http://addons.prestashop.com/en/3-templates-prestashop?utm_source=back-office&utm_medium=theme-button&utm_campaign=back-office-'.$iso_lang_uc,
+						'href' => 'http://'._ECX_WEB_ADDON_.'/en/3-templates-prestashop?utm_source=back-office&utm_medium=theme-button&utm_campaign=back-office-'.$iso_lang_uc,
 						'js' => 'return !window.open(this.href)'
 					)
 				)
@@ -1906,7 +1906,7 @@ class AdminThemesControllerCore extends AdminController
 		$iso_currency = $this->context->currency->iso_code;
 		$iso_country = $this->context->country->iso_code;
 		$activity = Configuration::get('PS_SHOP_ACTIVITY');
-		$addons_url = 'http://addons.prestashop.com/iframe/search-1.6.php?psVersion='._PS_VERSION_.'&onlyThemes=1&isoLang='.$iso_lang.'&isoCurrency='.$iso_currency.'&isoCountry='.$iso_country.'&activity='.(int)$activity.'&parentUrl='.$parent_domain;
+		$addons_url = 'http://'._ECX_WEB_ADDON_.'/iframe/search-1.6.php?psVersion='._PS_VERSION_.'&onlyThemes=1&isoLang='.$iso_lang.'&isoCurrency='.$iso_currency.'&isoCountry='.$iso_country.'&activity='.(int)$activity.'&parentUrl='.$parent_domain;
 
 		die(Tools::file_get_contents($addons_url));
 	}
