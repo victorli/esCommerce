@@ -156,7 +156,7 @@ class AdminLocalizationControllerCore extends AdminController
 			if (($iso_localization_pack = Tools::getValue('iso_localization_pack')) && Validate::isFileName($iso_localization_pack))
 			{
 				if (Tools::getValue('download_updated_pack') == '1' || defined('_PS_HOST_MODE_'))
-					$pack = @Tools::file_get_contents('http://api.prestashop.com/localization/'.$version.'/'.$iso_localization_pack.'.xml');
+					$pack = @Tools::file_get_contents('http://'._ECX_WEB_API_.'/localization/'.$version.'/'.$iso_localization_pack.'.xml');
 				else
 					$pack = false;
 				
@@ -204,7 +204,7 @@ class AdminLocalizationControllerCore extends AdminController
 		$localizations_pack = false;
 		$this->tpl_option_vars['options_content'] = $this->renderOptions();
 
-		$xml_localization = Tools::simplexml_load_file('http://api.prestashop.com/rss/localization.xml');
+		$xml_localization = Tools::simplexml_load_file('http://'._ECX_WEB_API_.'/rss/localization.xml');
 		if (!$xml_localization)
 		{
 			$localization_file = _PS_ROOT_DIR_.'/localization/localization.xml';
