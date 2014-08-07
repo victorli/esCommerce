@@ -1,163 +1,163 @@
 <?xml version="1.0"?>
 <entity_meta>
   <meta id="404" id_shop="1">
-    <title>404 error</title>
-    <description>This page cannot be found</description>
+    <title>404 错误</title>
+    <description>您所访问的页面不存在</description>
     <keywords/>
     <url_rewrite>page-not-found</url_rewrite>
   </meta>
   <meta id="best-sales" id_shop="1">
-    <title>Best sales</title>
-    <description>Our best sales</description>
+    <title>热销商品</title>
+    <description>最畅销商品</description>
     <keywords/>
     <url_rewrite>best-sales</url_rewrite>
   </meta>
   <meta id="contact" id_shop="1">
-    <title>Contact us</title>
-    <description>Use our form to contact us</description>
+    <title>联系我们</title>
+    <description>填写表格，告诉我们您的需求</description>
     <keywords/>
     <url_rewrite>contact-us</url_rewrite>
   </meta>
   <meta id="index" id_shop="1">
     <title/>
-    <description>Shop powered by PrestaShop</description>
+    <description>Shop powered by eCartx</description>
     <keywords/>
     <url_rewrite/>
   </meta>
   <meta id="manufacturer" id_shop="1">
-    <title>Manufacturers</title>
-    <description>Manufacturers list</description>
+    <title>制造商</title>
+    <description>制造商目录</description>
     <keywords/>
     <url_rewrite>manufacturers</url_rewrite>
   </meta>
   <meta id="new-products" id_shop="1">
-    <title>New products</title>
-    <description>Our new products</description>
+    <title>最近上新</title>
+    <description>我们的最新商品</description>
     <keywords/>
     <url_rewrite>new-products</url_rewrite>
   </meta>
   <meta id="password" id_shop="1">
-    <title>Forgot your password</title>
-    <description>Enter your e-mail address used to register in goal to get e-mail with your new password</description>
+    <title>忘记密码</title>
+    <description>请输入注册时使用的Email地址，来获取新的密码</description>
     <keywords/>
     <url_rewrite>password-recovery</url_rewrite>
   </meta>
   <meta id="prices-drop" id_shop="1">
-    <title>Prices drop</title>
-    <description>Our special products</description>
+    <title>促销商品</title>
+    <description>本店特价商品</description>
     <keywords/>
     <url_rewrite>prices-drop</url_rewrite>
   </meta>
   <meta id="sitemap" id_shop="1">
-    <title>Sitemap</title>
-    <description>Lost ? Find what your are looking for</description>
+    <title>站点地图</title>
+    <description>迷茫 ? 到这里看看吧</description>
     <keywords/>
     <url_rewrite>sitemap</url_rewrite>
   </meta>
   <meta id="supplier" id_shop="1">
-    <title>Suppliers</title>
-    <description>Suppliers list</description>
+    <title>供应商</title>
+    <description>供应商目录</description>
     <keywords/>
     <url_rewrite>supplier</url_rewrite>
   </meta>
   <meta id="address" id_shop="1">
-    <title>Address</title>
+    <title>地址</title>
     <description/>
     <keywords/>
     <url_rewrite>address</url_rewrite>
   </meta>
   <meta id="addresses" id_shop="1">
-    <title>Addresses</title>
+    <title>地址目录</title>
     <description/>
     <keywords/>
     <url_rewrite>addresses</url_rewrite>
   </meta>
   <meta id="authentication" id_shop="1">
-    <title>Login</title>
+    <title>登录</title>
     <description/>
     <keywords/>
     <url_rewrite>login</url_rewrite>
   </meta>
   <meta id="cart" id_shop="1">
-    <title>Cart</title>
+    <title>购物车</title>
     <description/>
     <keywords/>
     <url_rewrite>cart</url_rewrite>
   </meta>
   <meta id="discount" id_shop="1">
-    <title>Discount</title>
+    <title>折扣</title>
     <description/>
     <keywords/>
     <url_rewrite>discount</url_rewrite>
   </meta>
   <meta id="history" id_shop="1">
-    <title>Order history</title>
+    <title>订单列表</title>
     <description/>
     <keywords/>
     <url_rewrite>order-history</url_rewrite>
   </meta>
   <meta id="identity" id_shop="1">
-    <title>Identity</title>
+    <title>身份信息</title>
     <description/>
     <keywords/>
     <url_rewrite>identity</url_rewrite>
   </meta>
   <meta id="my-account" id_shop="1">
-    <title>My account</title>
+    <title>我的帐户</title>
     <description/>
     <keywords/>
     <url_rewrite>my-account</url_rewrite>
   </meta>
   <meta id="order-follow" id_shop="1">
-    <title>Order follow</title>
+    <title>跟踪订单</title>
     <description/>
     <keywords/>
     <url_rewrite>order-follow</url_rewrite>
   </meta>
   <meta id="order-slip" id_shop="1">
-    <title>Order slip</title>
+    <title>订货通知单</title>
     <description/>
     <keywords/>
     <url_rewrite>order-slip</url_rewrite>
   </meta>
   <meta id="order" id_shop="1">
-    <title>Order</title>
+    <title>订单</title>
     <description/>
     <keywords/>
     <url_rewrite>order</url_rewrite>
   </meta>
   <meta id="search" id_shop="1">
-    <title>Search</title>
+    <title>搜索</title>
     <description/>
     <keywords/>
     <url_rewrite>search</url_rewrite>
   </meta>
   <meta id="stores" id_shop="1">
-    <title>Stores</title>
+    <title>店铺</title>
     <description/>
     <keywords/>
     <url_rewrite>stores</url_rewrite>
   </meta>
   <meta id="order-opc" id_shop="1">
-    <title>Order</title>
+    <title>订单</title>
     <description/>
     <keywords/>
     <url_rewrite>quick-order</url_rewrite>
   </meta>
   <meta id="guest-tracking" id_shop="1">
-    <title>Guest tracking</title>
+    <title>游客跟踪</title>
     <description/>
     <keywords/>
     <url_rewrite>guest-tracking</url_rewrite>
   </meta>
   <meta id="order-confirmation" id_shop="1">
-    <title>Order confirmation</title>
+    <title>订单确认</title>
     <description/>
     <keywords/>
     <url_rewrite>order-confirmation</url_rewrite>
   </meta>
   <meta id="products-comparison" id_shop="1">
-    <title>Products Comparison</title>
+    <title>商品比较</title>
     <description/>
     <keywords/>
     <url_rewrite>products-comparison</url_rewrite>

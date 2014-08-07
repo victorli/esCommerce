@@ -1,51 +1,51 @@
 <?xml version="1.0"?>
 <entity_order_state>
   <order_state id="Awaiting_cheque_payment">
-    <name>Awaiting cheque payment</name>
+    <name>等待支票支付</name>
     <template>cheque</template>
   </order_state>
   <order_state id="Payment_accepted">
-    <name>Payment accepted</name>
+    <name>支付完成</name>
     <template>payment</template>
   </order_state>
   <order_state id="Preparation_in_progress">
-    <name>Preparation in progress</name>
+    <name>配货中</name>
     <template>preparation</template>
   </order_state>
   <order_state id="Shipped">
-    <name>Shipped</name>
+    <name>已发货</name>
     <template>shipped</template>
   </order_state>
   <order_state id="Delivered">
-    <name>Delivered</name>
+    <name>已签收</name>
     <template/>
   </order_state>
   <order_state id="Canceled">
-    <name>Canceled</name>
+    <name>已取消</name>
     <template>order_canceled</template>
   </order_state>
   <order_state id="Refund">
-    <name>Refund</name>
+    <name>退货</name>
     <template>refund</template>
   </order_state>
   <order_state id="Payment_error">
-    <name>Payment error</name>
+    <name>支付出错</name>
     <template>payment_error</template>
   </order_state>
   <order_state id="On_backorder">
-    <name>On backorder</name>
+    <name>缺货中</name>
     <template>outofstock</template>
   </order_state>
   <order_state id="Awaiting_bank_wire_payment">
-    <name>Awaiting bank wire payment</name>
+    <name>等待银行电汇支付</name>
     <template>bankwire</template>
   </order_state>
   <order_state id="Awaiting_PayPal_payment">
-    <name>Awaiting PayPal payment</name>
+    <name>等待PayPal支付</name>
     <template/>
   </order_state>
   <order_state id="Payment_remotely_accepted">
-    <name>Remote payment accepted</name>
+    <name>接受远程支付</name>
     <template>payment</template>
   </order_state>
 </entity_order_state>

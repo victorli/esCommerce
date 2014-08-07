@@ -1,27 +1,27 @@
 <?xml version="1.0"?>
 <entity_stock_mvt_reason>
   <stock_mvt_reason id="Increase">
-    <name>Increase</name>
+    <name>增加</name>
   </stock_mvt_reason>
   <stock_mvt_reason id="Decrease">
-    <name>Decrease</name>
+    <name>降低</name>
   </stock_mvt_reason>
   <stock_mvt_reason id="Customer_Order">
-    <name>Customer Order</name>
+    <name>客户订单</name>
   </stock_mvt_reason>
   <stock_mvt_reason id="Regulation_following_an_inventory_of_stock">
-    <name>Regulation following an inventory of stock</name>
+    <name>效准以下库存清单</name>
   </stock_mvt_reason>
   <stock_mvt_reason id="Regulation_following_an_inventory_of_stock_1">
-    <name>Regulation following an inventory of stock</name>
+    <name>效准以下库存清单</name>
   </stock_mvt_reason>
   <stock_mvt_reason id="Transfer_to_another_warehouse">
-    <name>Transfer to another warehouse</name>
+    <name>转移到其它仓库</name>
   </stock_mvt_reason>
   <stock_mvt_reason id="Transfer_from_another_warehouse">
-    <name>Transfer from another warehouse</name>
+    <name>来自其它仓库</name>
   </stock_mvt_reason>
   <stock_mvt_reason id="Supply_Order">
-    <name>Supply Order</name>
+    <name>供货订单</name>
   </stock_mvt_reason>
 </entity_stock_mvt_reason>

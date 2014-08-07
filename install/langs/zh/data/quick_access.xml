@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <entity_quick_access>
-  <quick_access id="Home" name="Home"/>
-  <quick_access id="My_Shop" name="My Shop"/>
-  <quick_access id="New_category" name="New category"/>
-  <quick_access id="New_product" name="New product"/>
-  <quick_access id="New_voucher" name="New voucher"/>
+  <quick_access id="Home" name="首页"/>
+  <quick_access id="My_Shop" name="我的店铺"/>
+  <quick_access id="New_category" name="新增分类"/>
+  <quick_access id="New_product" name="新增商品"/>
+  <quick_access id="New_voucher" name="新增折扣券"/>
 </entity_quick_access>
