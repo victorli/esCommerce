@@ -46,7 +46,7 @@ class TabCore extends ObjectModel
 	/** @var integer hide_host_mode */
 	public $hide_host_mode = false;
 	
-	const TAB_MODULE_LIST_URL = 'api.prestashop.com/xml/tab_modules_list.xml';
+	const TAB_MODULE_LIST_URL = 'api.ecartx.com/xml/tab_modules_list.xml';
 
 	/**
 	 * @see ObjectModel::$definition

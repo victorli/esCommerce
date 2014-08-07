@@ -340,7 +340,7 @@ class ConfigurationTestCore
 			'/img/404.gif',
 			'/js/tools.js',
 			'/js/jquery/plugins/fancybox/jquery.fancybox.js',
-			'/localization/fr.xml',
+			'/localization/cn.xml',
 			'/mails/index.php',
 			'/modules/index.php',
 			'/override/controllers/front/index.php',
