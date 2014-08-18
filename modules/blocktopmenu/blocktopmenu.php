@@ -466,7 +466,6 @@ class Blocktopmenu extends Module
 			switch (substr($item, 0, strlen($value[1])))
 			{
 				case 'CAT':
-					//$this->_menu .= $this->generateCategoriesMenu(Category::getNestedCategories($id, $id_lang, true, $this->user_groups));
 					array_push($this->_menu, $this->generateNativeCategoriesMenu(Category::getNestedCategories($id, $id_lang, true, $this->user_groups)));
 					break;
 
@@ -474,21 +473,21 @@ class Blocktopmenu extends Module
 					$selected = ($this->page_name == 'product' && (Tools::getValue('id_product') == $id)) ? true : false;
 					$product = new Product((int)$id, true, (int)$id_lang);
 					if (!is_null($product->id))
-						array_push($this->_menu, array($product->name => array('link'=>Tools::HtmlEntitiesUTF8($product->getLink()), 'active'=>$selected, 'children'=>false)));
+						array_push($this->_menu, array('name'=>$product->name,'link'=>Tools::HtmlEntitiesUTF8($product->getLink()), 'active'=>$selected, 'children'=>false));
 					break;
 
 				case 'CMS':
 					$selected = ($this->page_name == 'cms' && (Tools::getValue('id_cms') == $id)) ? ' class="sfHover"' : '';
 					$cms = CMS::getLinks((int)$id_lang, array($id));
 					if (count($cms))
-						array_push($this->_menu, array(Tools::safeOutput($cms[0]['meta_title']) => array('link'=>Tools::HtmlEntitiesUTF8($cms[0]['link']), 'active'=>$selected, 'children'=>false)));	
+						array_push($this->_menu, array('name'=>Tools::safeOutput($cms[0]['meta_title']),'link'=>Tools::HtmlEntitiesUTF8($cms[0]['link']), 'active'=>$selected, 'children'=>false));	
 					break;
 
 				case 'CMS_CAT':
 					$category = new CMSCategory((int)$id, (int)$id_lang);
 					if (count($category))
 					{
-						array_push($this->_menu, array($category->name => array('link'=>Tools::HtmlEntitiesUTF8($category->getLink()),'children'=>$this->getCMSNativeMenuItems($category->id))));
+						array_push($this->_menu, array('name'=>$category->name,'link'=>Tools::HtmlEntitiesUTF8($category->getLink()),'children'=>$this->getCMSNativeMenuItems($category->id)));
 					}
 					break;
 
@@ -498,7 +497,7 @@ class Blocktopmenu extends Module
 					$manufacturers = Manufacturer::getManufacturers();
 					foreach ($manufacturers as $key => $manufacturer)
 						$childrens[Tools::safeOutput($manufacturer['name'])] = array('link'=>$link->getManufacturerLink((int)$manufacturer['id_manufacturer'], $manufacturer['link_rewrite']));
-					array_push($this->_menu, array($this->l('All manufacturers') => array('link'=>$link->getPageLink('manufacturer'),'children'=>$childrens)));
+					array_push($this->_menu, array('name'=>$this->l('All manufacturers'),'link'=>$link->getPageLink('manufacturer'),'children'=>$childrens));
 					break;
 
 				case 'MAN':
@@ -511,7 +510,7 @@ class Blocktopmenu extends Module
 						else
 							$manufacturer->link_rewrite = 0;
 						$link = new Link;
-						array_push($this->_menu, array(Tools::safeOutput($manufacturer->name) => array('link'=>Tools::HtmlEntitiesUTF8($link->getManufacturerLink((int)$id, $manufacturer->link_rewrite)),'active'=>$selected)));	
+						array_push($this->_menu, array('name'=>Tools::safeOutput($manufacturer->name),'link'=>Tools::HtmlEntitiesUTF8($link->getManufacturerLink((int)$id, $manufacturer->link_rewrite)),'active'=>$selected));	
 					}
 					break;
 
@@ -521,7 +520,7 @@ class Blocktopmenu extends Module
 					$suppliers = Supplier::getSuppliers();
 					foreach ($suppliers as $key => $supplier)
 						$childrens[Tools::safeOutput($supplier['name'])] = array('link' => $link->getSupplierLink((int)$supplier['id_supplier'], $supplier['link_rewrite']));
-					array_push($this->_menu, array($this->l('All suppliers') => array('link'=>$link->getPageLink('supplier'),'children'=>$childrens)));
+					array_push($this->_menu, array('name'=>$this->l('All suppliers'),'link'=>$link->getPageLink('supplier'),'children'=>$childrens));
 					break;
 
 				case 'SUP':
@@ -530,7 +529,7 @@ class Blocktopmenu extends Module
 					if (!is_null($supplier->id))
 					{
 						$link = new Link;
-						array_push($this->_menu, array($supplier->name => array('link'=>Tools::HtmlEntitiesUTF8($link->getSupplierLink((int)$id, $supplier->link_rewrite)),'active'=>$selected)));
+						array_push($this->_menu, array('name'=>$supplier->name,'link'=>Tools::HtmlEntitiesUTF8($link->getSupplierLink((int)$id, $supplier->link_rewrite)),'active'=>$selected));
 					}
 					break;
 
@@ -540,7 +539,7 @@ class Blocktopmenu extends Module
 					if (Validate::isLoadedObject($shop))
 					{
 						$link = new Link;
-						array_push($this->_menu, array($shop->name => array('link'=>Tools::HtmlEntitiesUTF8($shop->getBaseURL()),'active'=>$selected)));
+						array_push($this->_menu, array('name'=>$shop->name,'link'=>Tools::HtmlEntitiesUTF8($shop->getBaseURL()),'active'=>$selected));
 					}
 					break;
 				case 'LNK':
@@ -552,7 +551,7 @@ class Blocktopmenu extends Module
 							$default_language = Configuration::get('PS_LANG_DEFAULT');
 							$link = MenuTopLinks::get($link[0]['id_linksmenutop'], $default_language, (int)Shop::getContextShopID());
 						}
-						array_push($this->_menu, array(Tools::safeOutput($link[0]['label']) => array('link'=>Tools::HtmlEntitiesUTF8($link[0]['link']),'new_window'=>($link[0]['new_window']))));
+						array_push($this->_menu, array('name'=>Tools::safeOutput($link[0]['label']),'link'=>Tools::HtmlEntitiesUTF8($link[0]['link']),'new_window'=>($link[0]['new_window'])));
 					}
 					break;
 			}
@@ -650,12 +649,13 @@ class Blocktopmenu extends Module
 				$link = $this->context->link->getPageLink('index');
 
 			$active = ($this->page_name == 'category' && (int)Tools::getValue('id_category') == (int)$category['id_category']) ? true : false;
-			$html[$category['name']] = array('link'=>$link,'active'=>$active,'children'=>false);
 				
 			if (isset($category['children']) && !empty($category['children']))
 			{
-				$html[$category['name']]['children'] = $this->generateNativeCategoriesMenu($category['children']);
+				$childrens = $this->generateNativeCategoriesMenu($category['children']);
 			}
+			
+			$html[] = array('name'=>$category['name'],'link'=>$link,'active'=>$active,'children'=>$childrens);
 		}
 
 		return $html;
@@ -663,7 +663,6 @@ class Blocktopmenu extends Module
 	
 	/**
 	 * @deprecated by ecartx and replaced by getCMSNativeMenuItem()
-	 * Enter description here ...
 	 * @param unknown_type $parent
 	 * @param unknown_type $depth
 	 * @param unknown_type $id_lang
@@ -724,7 +723,7 @@ class Blocktopmenu extends Module
 			{
 				$cat = new CMSCategory((int)$category['id_cms_category'], (int)$id_lang);
 				
-				$tmp_menu[$category['name']] = array('link' => Tools::HtmlEntitiesUTF8($cat->getLink()));
+				$tmp_menu[] = array('name'=>$category['name'],'link' => Tools::HtmlEntitiesUTF8($cat->getLink()));
 				$this->getCMSNativeMenuItems($category['id_cms_category'], (int)$depth+1);
 			}
 
@@ -734,9 +733,11 @@ class Blocktopmenu extends Module
 				$links = $cms->getLinks((int)$id_lang, array((int)$cms->id));
 
 				$selected = ($this->page_name == 'cms' && ((int)Tools::getValue('id_cms') == $page['id_cms'])) ? true : false;
-				$tmp_menu[$cms->meta_title] = array('link'=>$links[0]['link'], 'active'=>$selected);
+				$tmp_menu[] = array('name'=>$cms->meta_title, 'link'=>$links[0]['link'], 'active'=>$selected);
 			}
 		}
+		
+		return $tmp_menu;
 	}
 	
 	private function getCMSOptions($parent = 0, $depth = 1, $id_lang = false, $items_to_skip = null)
@@ -775,14 +776,12 @@ class Blocktopmenu extends Module
 		$this->page_name = Dispatcher::getInstance()->getController();
 		if (!$this->isCached('blocktopmenu.tpl', $this->getCacheId()))
 		{
-			if (Tools::isEmpty($this->_menu))
+			if (count($this->_menu) == 0)
 				$this->makeNativeMenu();//makeMenu();
 			$this->smarty->assign('MENU_SEARCH', Configuration::get('MOD_BLOCKTOPMENU_SEARCH'));
 			$this->smarty->assign('MENU', $this->_menu);
 			$this->smarty->assign('this_path', $this->_path);
 		}
-		
-		var_dump($this->_menu);exit;
 
 		$this->context->controller->addJS($this->_path.'js/hoverIntent.js');
 		$this->context->controller->addJS($this->_path.'js/superfish-modified.js');
