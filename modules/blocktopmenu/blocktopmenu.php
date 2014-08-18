@@ -28,7 +28,7 @@ require (dirname(__FILE__).'/menutoplinks.class.php');
 
 class Blocktopmenu extends Module
 {
-	private $_menu = '';
+	private $_menu = array();
 	private $_html = '';
 	private $user_groups;
 
@@ -330,12 +330,17 @@ class Blocktopmenu extends Module
 		return $html.'</select>';
 	}
 
+	/**
+	 * @deprecated by ecartx
+	 * 
+	 * replace by makeNativeMenu()
+	 */
 	private function makeMenu()
 	{
 		$menu_items = $this->getMenuItems();
 		$id_lang = (int)$this->context->language->id;
 		$id_shop = (int)Shop::getContextShopID();
-
+		
 		foreach ($menu_items as $item)
 		{
 			if (!$item)
@@ -442,6 +447,117 @@ class Blocktopmenu extends Module
 			}
 		}
 	}
+	/**
+	 * Make native menu array only, and no html tags
+	 */
+	private function makeNativeMenu(){
+		$menu_items = $this->getMenuItems();
+		$id_lang = (int)$this->context->language->id;
+		$id_shop = (int)Shop::getContextShopID();
+		
+		foreach ($menu_items as $item)
+		{
+			if (!$item)
+				continue;
+
+			preg_match($this->pattern, $item, $value);
+			$id = (int)substr($item, strlen($value[1]), strlen($item));
+
+			switch (substr($item, 0, strlen($value[1])))
+			{
+				case 'CAT':
+					//$this->_menu .= $this->generateCategoriesMenu(Category::getNestedCategories($id, $id_lang, true, $this->user_groups));
+					array_push($this->_menu, $this->generateNativeCategoriesMenu(Category::getNestedCategories($id, $id_lang, true, $this->user_groups)));
+					break;
+
+				case 'PRD':
+					$selected = ($this->page_name == 'product' && (Tools::getValue('id_product') == $id)) ? true : false;
+					$product = new Product((int)$id, true, (int)$id_lang);
+					if (!is_null($product->id))
+						array_push($this->_menu, array($product->name => array('link'=>Tools::HtmlEntitiesUTF8($product->getLink()), 'active'=>$selected, 'children'=>false)));
+					break;
+
+				case 'CMS':
+					$selected = ($this->page_name == 'cms' && (Tools::getValue('id_cms') == $id)) ? ' class="sfHover"' : '';
+					$cms = CMS::getLinks((int)$id_lang, array($id));
+					if (count($cms))
+						array_push($this->_menu, array(Tools::safeOutput($cms[0]['meta_title']) => array('link'=>Tools::HtmlEntitiesUTF8($cms[0]['link']), 'active'=>$selected, 'children'=>false)));	
+					break;
+
+				case 'CMS_CAT':
+					$category = new CMSCategory((int)$id, (int)$id_lang);
+					if (count($category))
+					{
+						array_push($this->_menu, array($category->name => array('link'=>Tools::HtmlEntitiesUTF8($category->getLink()),'children'=>$this->getCMSNativeMenuItems($category->id))));
+					}
+					break;
+
+				// Case to handle the option to show all Manufacturers
+				case 'ALLMAN':
+					$link = new Link;
+					$manufacturers = Manufacturer::getManufacturers();
+					foreach ($manufacturers as $key => $manufacturer)
+						$childrens[Tools::safeOutput($manufacturer['name'])] = array('link'=>$link->getManufacturerLink((int)$manufacturer['id_manufacturer'], $manufacturer['link_rewrite']));
+					array_push($this->_menu, array($this->l('All manufacturers') => array('link'=>$link->getPageLink('manufacturer'),'children'=>$childrens)));
+					break;
+
+				case 'MAN':
+					$selected = ($this->page_name == 'manufacturer' && (Tools::getValue('id_manufacturer') == $id)) ? true : false;
+					$manufacturer = new Manufacturer((int)$id, (int)$id_lang);
+					if (!is_null($manufacturer->id))
+					{
+						if (intval(Configuration::get('PS_REWRITING_SETTINGS')))
+							$manufacturer->link_rewrite = Tools::link_rewrite($manufacturer->name);
+						else
+							$manufacturer->link_rewrite = 0;
+						$link = new Link;
+						array_push($this->_menu, array(Tools::safeOutput($manufacturer->name) => array('link'=>Tools::HtmlEntitiesUTF8($link->getManufacturerLink((int)$id, $manufacturer->link_rewrite)),'active'=>$selected)));	
+					}
+					break;
+
+				// Case to handle the option to show all Suppliers
+				case 'ALLSUP':
+					$link = new Link;
+					$suppliers = Supplier::getSuppliers();
+					foreach ($suppliers as $key => $supplier)
+						$childrens[Tools::safeOutput($supplier['name'])] = array('link' => $link->getSupplierLink((int)$supplier['id_supplier'], $supplier['link_rewrite']));
+					array_push($this->_menu, array($this->l('All suppliers') => array('link'=>$link->getPageLink('supplier'),'children'=>$childrens)));
+					break;
+
+				case 'SUP':
+					$selected = ($this->page_name == 'supplier' && (Tools::getValue('id_supplier') == $id)) ? true : false;
+					$supplier = new Supplier((int)$id, (int)$id_lang);
+					if (!is_null($supplier->id))
+					{
+						$link = new Link;
+						array_push($this->_menu, array($supplier->name => array('link'=>Tools::HtmlEntitiesUTF8($link->getSupplierLink((int)$id, $supplier->link_rewrite)),'active'=>$selected)));
+					}
+					break;
+
+				case 'SHOP':
+					$selected = ($this->page_name == 'index' && ($this->context->shop->id == $id)) ? true : false;
+					$shop = new Shop((int)$id);
+					if (Validate::isLoadedObject($shop))
+					{
+						$link = new Link;
+						array_push($this->_menu, array($shop->name => array('link'=>Tools::HtmlEntitiesUTF8($shop->getBaseURL()),'active'=>$selected)));
+					}
+					break;
+				case 'LNK':
+					$link = MenuTopLinks::get((int)$id, (int)$id_lang, (int)$id_shop);
+					if (count($link))
+					{
+						if (!isset($link[0]['label']) || ($link[0]['label'] == ''))
+						{
+							$default_language = Configuration::get('PS_LANG_DEFAULT');
+							$link = MenuTopLinks::get($link[0]['id_linksmenutop'], $default_language, (int)Shop::getContextShopID());
+						}
+						array_push($this->_menu, array(Tools::safeOutput($link[0]['label']) => array('link'=>Tools::HtmlEntitiesUTF8($link[0]['link']),'new_window'=>($link[0]['new_window']))));
+					}
+					break;
+			}
+		}
+	}
 
 	private function generateCategoriesOption($categories, $items_to_skip = null)
 	{
@@ -463,6 +579,11 @@ class Blocktopmenu extends Module
 		return $html;
 	}
 
+	/**
+	 * @deprecated by ecartx
+	 * and replace by generateNativeCategoriesMenu($cates)
+	 * @param unknown_type $categories
+	 */
 	private function generateCategoriesMenu($categories)
 	{
 		$html = '';
@@ -513,6 +634,40 @@ class Blocktopmenu extends Module
 		return $html;
 	}
 
+	private function generateNativeCategoriesMenu($cates){
+		$html  = array();
+
+		foreach ($cates as $key => $category)
+		{
+			$active = false;
+			
+			if ($category['level_depth'] > 1)
+			{
+				$cat = new Category($category['id_category']);
+				$link = Tools::HtmlEntitiesUTF8($cat->getLink());
+			}
+			else
+				$link = $this->context->link->getPageLink('index');
+
+			$active = ($this->page_name == 'category' && (int)Tools::getValue('id_category') == (int)$category['id_category']) ? true : false;
+			$html[$category['name']] = array('link'=>$link,'active'=>$active,'children'=>false);
+				
+			if (isset($category['children']) && !empty($category['children']))
+			{
+				$html[$category['name']]['children'] = $this->generateNativeCategoriesMenu($category['children']);
+			}
+		}
+
+		return $html;
+	}
+	
+	/**
+	 * @deprecated by ecartx and replaced by getCMSNativeMenuItem()
+	 * Enter description here ...
+	 * @param unknown_type $parent
+	 * @param unknown_type $depth
+	 * @param unknown_type $id_lang
+	 */
 	private function getCMSMenuItems($parent, $depth = 1, $id_lang = false)
 	{
 		$id_lang = $id_lang ? (int)$id_lang : (int)Context::getContext()->language->id;
@@ -552,6 +707,38 @@ class Blocktopmenu extends Module
 		}
 	}
 
+	private function getCMSNativeMenuItems($parent, $depth = 1, $id_lang = false)
+	{
+		$tmp_menu = array();
+		$id_lang = $id_lang ? (int)$id_lang : (int)Context::getContext()->language->id;
+
+		if ($depth > 3)
+			return;
+
+		$categories = $this->getCMSCategories(false, (int)$parent, (int)$id_lang);
+		$pages = $this->getCMSPages((int)$parent);
+
+		if (count($categories) || count($pages))
+		{
+			foreach ($categories as $category)
+			{
+				$cat = new CMSCategory((int)$category['id_cms_category'], (int)$id_lang);
+				
+				$tmp_menu[$category['name']] = array('link' => Tools::HtmlEntitiesUTF8($cat->getLink()));
+				$this->getCMSNativeMenuItems($category['id_cms_category'], (int)$depth+1);
+			}
+
+			foreach ($pages as $page)
+			{
+				$cms = new CMS($page['id_cms'], (int)$id_lang);
+				$links = $cms->getLinks((int)$id_lang, array((int)$cms->id));
+
+				$selected = ($this->page_name == 'cms' && ((int)Tools::getValue('id_cms') == $page['id_cms'])) ? true : false;
+				$tmp_menu[$cms->meta_title] = array('link'=>$links[0]['link'], 'active'=>$selected);
+			}
+		}
+	}
+	
 	private function getCMSOptions($parent = 0, $depth = 1, $id_lang = false, $items_to_skip = null)
 	{
 		$html = '';
@@ -589,11 +776,13 @@ class Blocktopmenu extends Module
 		if (!$this->isCached('blocktopmenu.tpl', $this->getCacheId()))
 		{
 			if (Tools::isEmpty($this->_menu))
-				$this->makeMenu();
+				$this->makeNativeMenu();//makeMenu();
 			$this->smarty->assign('MENU_SEARCH', Configuration::get('MOD_BLOCKTOPMENU_SEARCH'));
 			$this->smarty->assign('MENU', $this->_menu);
 			$this->smarty->assign('this_path', $this->_path);
 		}
+		
+		var_dump($this->_menu);exit;
 
 		$this->context->controller->addJS($this->_path.'js/hoverIntent.js');
 		$this->context->controller->addJS($this->_path.'js/superfish-modified.js');
@@ -930,7 +1119,8 @@ class Blocktopmenu extends Module
 	public function renderChoicesSelect()
 	{
 		$spacer = str_repeat('&nbsp;', $this->spacer_size);
-		$items = $this->getMenuItems();
+		//TODO:: do not filter all selected items
+		$items = array();//$items = $this->getMenuItems();
 
 		$html = '<select multiple="multiple" id="availableItems" style="width: 300px; height: 160px;">';
 		$html .= '<optgroup label="'.$this->l('CMS').'">';
