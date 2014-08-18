@@ -496,7 +496,7 @@ class Blocktopmenu extends Module
 					$link = new Link;
 					$manufacturers = Manufacturer::getManufacturers();
 					foreach ($manufacturers as $key => $manufacturer)
-						$childrens[Tools::safeOutput($manufacturer['name'])] = array('link'=>$link->getManufacturerLink((int)$manufacturer['id_manufacturer'], $manufacturer['link_rewrite']));
+						$childrens[] = array('name'=>Tools::safeOutput($manufacturer['name']),'link'=>$link->getManufacturerLink((int)$manufacturer['id_manufacturer'], $manufacturer['link_rewrite']));
 					array_push($this->_menu, array('name'=>$this->l('All manufacturers'),'link'=>$link->getPageLink('manufacturer'),'children'=>$childrens));
 					break;
 
@@ -519,7 +519,7 @@ class Blocktopmenu extends Module
 					$link = new Link;
 					$suppliers = Supplier::getSuppliers();
 					foreach ($suppliers as $key => $supplier)
-						$childrens[Tools::safeOutput($supplier['name'])] = array('link' => $link->getSupplierLink((int)$supplier['id_supplier'], $supplier['link_rewrite']));
+						$childrens[] = array('name'=>Tools::safeOutput($supplier['name']), 'link' => $link->getSupplierLink((int)$supplier['id_supplier'], $supplier['link_rewrite']));
 					array_push($this->_menu, array('name'=>$this->l('All suppliers'),'link'=>$link->getPageLink('supplier'),'children'=>$childrens));
 					break;
 
@@ -634,7 +634,7 @@ class Blocktopmenu extends Module
 	}
 
 	private function generateNativeCategoriesMenu($cates){
-		$html  = array();
+		$html  = '';
 
 		foreach ($cates as $key => $category)
 		{
@@ -708,7 +708,7 @@ class Blocktopmenu extends Module
 
 	private function getCMSNativeMenuItems($parent, $depth = 1, $id_lang = false)
 	{
-		$tmp_menu = array();
+		$tmp_menu = '';
 		$id_lang = $id_lang ? (int)$id_lang : (int)Context::getContext()->language->id;
 
 		if ($depth > 3)
