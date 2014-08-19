@@ -466,7 +466,7 @@ class Blocktopmenu extends Module
 			switch (substr($item, 0, strlen($value[1])))
 			{
 				case 'CAT':
-					array_push($this->_menu, $this->generateNativeCategoriesMenu(Category::getNestedCategories($id, $id_lang, true, $this->user_groups)));
+					$this->_menu = array_merge($this->_menu, $this->generateNativeCategoriesMenu(Category::getNestedCategories($id, $id_lang, true, $this->user_groups)));
 					break;
 
 				case 'PRD':
@@ -784,10 +784,10 @@ class Blocktopmenu extends Module
 		}
 
 		$this->context->controller->addJS($this->_path.'js/hoverIntent.js');
-		$this->context->controller->addJS($this->_path.'js/superfish-modified.js');
+		$this->context->controller->addJS($this->_path.'js/superfish.js');
 		$this->context->controller->addJS($this->_path.'js/blocktopmenu.js');
 		$this->context->controller->addCSS($this->_path.'css/blocktopmenu.css');
-		$this->context->controller->addCSS($this->_path.'css/superfish-modified.css');
+		$this->context->controller->addCSS($this->_path.'css/superfish/superfish.css');
 
 		$html = $this->display(__FILE__, 'blocktopmenu.tpl', $this->getCacheId());
 		return $html;
