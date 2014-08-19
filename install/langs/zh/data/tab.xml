@@ -15,7 +15,7 @@
   <tab id="Shipping" name="配送管理"/>
   <tab id="Localization" name="本地化"/>
   <tab id="Modules" name="模块管理"/>
-  <tab id="Preferences" name="首先项"/>
+  <tab id="Preferences" name="首选项"/>
   <tab id="Advanced_Parameters" name="高级参数"/>
   <tab id="Administration" name="行政管理"/>
   <tab id="Stats" name="统计中心"/>

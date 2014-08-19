@@ -40,7 +40,7 @@ class Datas
 			'help' => 'language iso code',
 		),
 		'timezone' => array(
-			'default' => 'Europe/Paris',
+			'default' => 'Asia/Shanghai',
 			'alias' => 't',
 		),
 		'http_host' => array(
@@ -68,7 +68,7 @@ class Datas
 		'database_name' => array(
 			'name' => 'db_name',
 			'alias' => 'd',
-			'default' => 'prestashop',
+			'default' => 'ecartx',
 			'validate' => 'isGenericName',
 		),
 		'database_clear' => array(
@@ -127,17 +127,17 @@ class Datas
 		'admin_email' => array(
 			'name' => 'email',
 			'validate' => 'isEmail',
-			'default' => 'pub@prestashop.com'
+			'default' => 'info@ecartx.com'
 		),
 		'show_license' => array(
 			'name' => 'license',
 			'default' => 0,
-			'help' => 'show PrestaShop license'
+			'help' => 'show eCartx license'
 		),
 		'newsletter' => array(
 			'name' => 'newsletter',
 			'default' => 1,
-			'help' => 'get news from PrestaShop',
+			'help' => 'get news from eCartx',
 		),
 		'send_email' => array(
 			'name' => 'send_email',

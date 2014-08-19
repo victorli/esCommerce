@@ -529,7 +529,7 @@ class InstallModelInstall extends InstallAbstractModel
 				'blocksocial',
 				'blockcategories',
 				'blockcurrencies',
-				'blockfacebook',
+				//'blockfacebook',
 				'blocklanguages',
 				'blocklayered',
 				'blockcms',
@@ -550,7 +550,7 @@ class InstallModelInstall extends InstallAbstractModel
 				'blocktopmenu',
 				'blockuserinfo',
 				'blockviewed',
-				'cheque',
+				//'cheque',
 				'dashactivity',
 				'dashtrends',
 				'dashgoals',
@@ -586,6 +586,8 @@ class InstallModelInstall extends InstallAbstractModel
 				'themeconfigurator',
 			);
 		}
+		//TODO:: push ecartx extened modules
+		array_push($modules,'alipay');
 		return $modules;
 	}
 	

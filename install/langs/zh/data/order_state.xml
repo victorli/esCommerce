@@ -45,7 +45,15 @@
     <template/>
   </order_state>
   <order_state id="Payment_remotely_accepted">
-    <name>接受远程支付</name>
+    <name>远程支付完成</name>
     <template>payment</template>
+  </order_state>
+  <order_state id="Awaiting_Alipay_payment">
+    <name>等待支付宝支付</name>
+    <template>alipay</template>
+  </order_state>
+  <order_state id="Finished">
+    <name>交易结束</name>
+    <template/>
   </order_state>
 </entity_order_state>
