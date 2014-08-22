@@ -115,7 +115,7 @@ class Xslider extends Module{
 						'type' 	=> 'text',
 						'label'	=>	$this->l('Name'),
 						'name'	=>	'name',
-						'lang'	=>	true,
+						//'lang'	=>	true,
 						'required'=> true
 					),
 					array(
