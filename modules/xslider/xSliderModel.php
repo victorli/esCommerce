@@ -155,6 +155,18 @@ class xSliderModel extends ObjectModel{
 		return false;
 	}
 	
+	public static function getNameById($id_slider){
+		if(!isset($id_slider))
+			throw new PrestaShopException("id_xslider is empty or invalid.");
+		
+		$sql = new DbQueryCore();
+		$sql->select('x.name');
+		$sql->from('xslider_config','x');
+		$sql->where('x.id_slider='.(int)$id_slider);
+		
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($sql);
+	}
+	
 	public static function getSlides($id=NULL){
 		$sql = new DBQuery();
 		$sql->from('xslider_config','x');

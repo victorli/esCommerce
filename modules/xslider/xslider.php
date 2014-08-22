@@ -75,13 +75,177 @@ class Xslider extends Module{
 	public function getContent(){
 		$output = '';
 		
-		$output .= $this->renderConfigList();
-		$output .= $this->renderItemList();
+		if(Tools::isSubmit('addSlide')){
+			$output .= $this->renderConfigForm();
+		}else{ //list
+			$output .= $this->renderConfigList();
+			$output .= $this->renderItemList();
+		}
 		
 		return $output;
 	}
 	
 	public function renderConfigForm(){
+		$lang = (int)Configuration::get('PS_LANG_DEFAULT');
+		
+		$loaderTypes = array(
+			array(
+				'id_option' => 	'pie',
+				'name'		=>	$this->l('Pie')
+			),
+			array(
+				'id_option'	=>	'bar',
+				'name'		=>	$this->l('Bar')
+			)
+		);
+		
+		$hooks = array();
+		$hs = Hook::getHooks(true);
+		foreach($hs as $h){
+			array_push($hooks, array('id_option' => $h['id_hook'], 'name' => $h['name']));
+		}
+		
+		$fields_form = array(
+			'form' => array(
+				'legend' => array(
+					'title' => 	$this->l('Slide Config Info'),
+					'icon'	=>	'icon-cogs'
+				),
+				'input' => array(
+					array(
+						'type' 	=> 'text',
+						'label'	=>	$this->l('Name'),
+						'name'	=>	'name',
+						'lang'	=>	true,
+						'required'=> true
+					),
+					array(
+						'type'	=>	'text',
+						'label'	=>	$this->l('Width'),
+						'name'	=>	'width',
+						'suffix'=>	'px',
+						'required'=> true	
+					),
+					array(
+						'type'	=>	'text',
+						'label'	=>	$this->l('Height'),
+						'name'	=>	'height',
+						'suffix'=>	'px',
+						'required'=> true	
+					),
+					array(
+						'type'	=>	'select',
+						'label'	=>	$this->l('Loader Type'),
+						'name'	=>	'loader',
+						'required'=> true,
+						'options' => array(
+							'query' => 	$loaderTypes,
+							'id'	=>	'id_option',
+							'name'	=>	'name'
+						)	
+					),
+					array(
+						'type'	=>	'text',
+						'label'	=>	$this->l('Transation speed'),
+						'name'	=>	'time',
+						'suffix'=>	'ms',
+						'required'=> true
+					),
+					array(
+						'type' => 'switch',
+						'label' => $this->l('Show navigation'),
+						'name' => 'navigation',
+						'is_bool' => true,
+						'values' => array(
+							array(
+								'id' => 'active_on',
+								'value' => 1,
+								'label' => $this->l('Yes')
+							),
+							array(
+								'id' => 'active_off',
+								'value' => 0,
+								'label' => $this->l('No')
+							)
+						),
+					),
+					array(
+						'type' => 'switch',
+						'label' => $this->l('Show pagination'),
+						'name' => 'pagination',
+						'is_bool' => true,
+						'values' => array(
+							array(
+								'id' => 'active_on',
+								'value' => 1,
+								'label' => $this->l('Yes')
+							),
+							array(
+								'id' => 'active_off',
+								'value' => 0,
+								'label' => $this->l('No')
+							)
+						),
+					),
+					array(
+						'type' => 'switch',
+						'label' => $this->l('Show thumbnails'),
+						'name' => 'thumbnails',
+						'is_bool' => true,
+						'values' => array(
+							array(
+								'id' => 'active_on',
+								'value' => 1,
+								'label' => $this->l('Yes')
+							),
+							array(
+								'id' => 'active_off',
+								'value' => 0,
+								'label' => $this->l('No')
+							)
+						),
+					),
+					array(
+						'type'	=>	'select',
+						'label'	=>	$this->l('Hook position'),
+						'name'	=>	'id_hook',
+						'required'=> true,
+						'options' => array(
+							'query' => 	$hooks,
+							'id'	=>	'id_option',
+							'name'	=>	'name'
+						)	
+					)
+				)
+			)
+		);
+		
+		$helper = new HelperFormCore();
+		$helper->module = $this;
+		$helper->name_controller = $this->name;
+		$helper->token = Tools::getAdminTokenLite('AdminModules');
+		$helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
+		
+		$helper->default_form_language = $lang;
+		$helper->allow_employee_form_lang = $lang;
+		
+		$helper->title = $this->displayName;
+		$helper->show_toolbar = true;
+		$helper->toolbar_scroll = true;
+		$helper->submit_action = 'submitSlide';
+		
+		$helper->toolbar_btn = array(
+			'save' => array(
+				'desc' => $this->l('Save'),
+				'href' => AdminController::$currentIndex.'&configure='.$this->name.'&save'.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules')
+			),
+			'back' => array(
+				'desc' => $this->l('Back to list'),
+				'href' => AdminController::$currentIndex.'&token='.Tools::getAdminTokenLite('AdminModules')
+			)
+		);
+		
+		return $helper->generateForm($fields_form);
 		
 	}
 	
@@ -112,7 +276,7 @@ class Xslider extends Module{
 		$helper->tpl_delete_link_vars = $tpl_delete_link_vars;
 		
 		$helper->toolbar_btn = array('new_slide' => array(
-									'href'=>AdminController::$currentIndex.'&add_slide&token='.Tools::getAdminTokenLite('AdminModules'),
+									'href'=>AdminController::$currentIndex.'&configure='.$this->name.'&addSlide&token='.Tools::getAdminTokenLite('AdminModules'),
 									'desc' => $this->l('Add new Slide'),
 									'imgclass' => 'new'));
 		$helper->bulk_actions = array('delete' => array(
@@ -130,7 +294,7 @@ class Xslider extends Module{
 	public function renderItemList(){
 		$fields_list = array(
 			'id_xslider_item' => array('title' => $this->l('ID'), 'align' => 'right', 'class' => 'fixed-width-xs'),
-			'id_xslider' => array('title' => $this->l('Slider Name'),'callback' => '', 'callback_object' => ''),
+			'id_xslider' => array('title' => $this->l('Slider Name'),'callback' => 'getNameById', 'callback_object' => 'xSliderModel'),
 			'image'		=>	array('title' => $this->l('Image')),
 			'link'		=>	array('title' => $this->l('Link')),
 			'description'		=>	array('title' => $this->l('Width'),	'align'=>'right', 'orderby'=>false),
