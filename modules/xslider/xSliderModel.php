@@ -92,7 +92,7 @@ class xSliderModel extends ObjectModel{
 				`name`	varchar(255) NOT NULL,
 				`width`  mediumint NOT NULL ,
 				`height`  mediumint NOT NULL ,
-				`fx`  varchar(255) NOT NULL DEFAULT  ,
+				`fx`  varchar(255) NOT NULL ,
 				`barDirection`  varchar(32) NOT NULL ,
 				`barPosition`  varchar(32) NOT NULL ,
 				`loader`  varchar(16) NOT NULL ,
@@ -118,7 +118,7 @@ class xSliderModel extends ObjectModel{
 		$sql = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'xslider_items` (
 				`id_xslider_item`  int NOT NULL AUTO_INCREMENT ,
 				`id_xslider`  int NOT NULL ,
-				`img`  varchar(255) NOT NULL DEFAULT  ,
+				`img`  varchar(255) NOT NULL ,
 				`link`  varchar(255) NULL ,
 				`description`  varchar(255) NOT NULL ,
 				`active`  tinyint(1) NOT NULL DEFAULT 1,
