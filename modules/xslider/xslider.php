@@ -52,7 +52,7 @@ class Xslider extends Module{
 		if(!parent::install() ||
 			!$this->registerHook('displayHeader') ||
 			!$this->registerHook('displayTopColumn') || 
-			!$this->registerHook('actionShopDataDuplication') ||
+			//!$this->registerHook('actionShopDataDuplication') ||
 			!Configuration::updateValue('BLX_XSLIDER_NAME','xSlider') ||
 			!xSliderModel::createTables()
 		){
@@ -129,5 +129,17 @@ class Xslider extends Module{
 	
 	public function renderItemList(){
 		return 'itemlist';
+	}
+	
+	public function hookdisplayHeader($params){
+		return;
+	}
+	
+	public function hookdisplayTopColumn($params){
+		return;
+	}
+	
+	public function hookdisplayTop($params){
+		return $this->hookdisplayTopColumn($params);
 	}
 }
