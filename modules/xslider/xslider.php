@@ -92,7 +92,7 @@ class Xslider extends Module{
 			'name'		=>	array('title' => $this->l('Name'), 'width' => 'auto'),
 			'id_hook'	=>	array('title' => $this->l('Hook'), 'align'=>'center', 'callback' =>'getNameById', 'callback_object' => 'Hook'),
 			'width'		=>	array('title' => $this->l('Width'),	'align'=>'right', 'orderby'=>false),
-			'height'	=>	array('title' => $this->l('Height'), 'align'=>'height', 'orderby'=>false),
+			'height'	=>	array('title' => $this->l('Height'), 'align'=>'right', 'orderby'=>false),
 			'time'		=>	array('title' => $this->l('Time'),'align'=>'right', 'orderby'=>false),
 			'loader'	=>	array('title' => $this->l('Loader'), 'align'=>'center'),
 			'position'	=>	array('title' => $this->l('Position'), 'align'=>'center'),
@@ -107,7 +107,7 @@ class Xslider extends Module{
 		
 		$tpl_delete_link_vars = array();
 		
-		$helper = new HelperListCore();
+		$helper = new HelperList();
 		$helper->tpl_vars = $tpl_list_vars;
 		$helper->tpl_delete_link_vars = $tpl_delete_link_vars;
 		
@@ -128,7 +128,36 @@ class Xslider extends Module{
 	}
 	
 	public function renderItemList(){
-		return 'itemlist';
+		$fields_list = array(
+			'id_xslider_item' => array('title' => $this->l('ID'), 'align' => 'right', 'class' => 'fixed-width-xs'),
+			'id_xslider' => array('title' => $this->l('Slider Name'),'callback' => '', 'callback_object' => ''),
+			'image'		=>	array('title' => $this->l('Image')),
+			'link'		=>	array('title' => $this->l('Link')),
+			'description'		=>	array('title' => $this->l('Width'),	'align'=>'right', 'orderby'=>false),
+			'active'	=>	array('title' => $this->l('Height'), 'align'=>'center', 'orderby'=>false, 'active'=>'status','type'=>'bool','class'=>'fixed-width-sm')
+		);
+		
+		$list = xSliderModel::getSlideItems();
+		
+		$tpl_list_vars['icon'] = 'icon-list-ul';
+		$tpl_list_vars['title'] = $this->l('Slide Items List');
+		
+		$tpl_delete_link_vars = array();
+		
+		$helper = new HelperList();
+		$helper->tpl_vars = $tpl_list_vars;
+		$helper->tpl_delete_link_vars = $tpl_delete_link_vars;
+		
+		//$helper->toolbar_btn = array('new_slide' => array(
+		//							'href'=>AdminController::$currentIndex.'&add_slide&token='.Tools::getAdminTokenLite('AdminModules'),
+		//							'desc' => $this->l('Add new Slide'),
+		//							'imgclass' => 'new'));
+		$helper->bulk_actions = array('delete' => array(
+									'text' => $this->l('Delete Selected'), 
+									'confirm'=>$this->l('Are you sure to delete selected items?'),
+									'icon'=>'icon-trash'));
+		
+		return $helper->generateList($list,$fields_list);
 	}
 	
 	public function hookdisplayHeader($params){

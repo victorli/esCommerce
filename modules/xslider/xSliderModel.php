@@ -118,7 +118,7 @@ class xSliderModel extends ObjectModel{
 		$sql = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'xslider_items` (
 				`id_xslider_item`  int NOT NULL AUTO_INCREMENT ,
 				`id_xslider`  int NOT NULL ,
-				`img`  varchar(255) NOT NULL ,
+				`image`  varchar(255) NOT NULL ,
 				`link`  varchar(255) NULL ,
 				`description`  varchar(255) NOT NULL ,
 				`active`  tinyint(1) NOT NULL DEFAULT 1,
@@ -160,7 +160,16 @@ class xSliderModel extends ObjectModel{
 		$sql->from('xslider_config','x');
 		if (isset($id) && is_numeric($id))
 			$sql->where('x.id_xslider='.(int)$id);
-		$sql->orderBy('date_add DESC');
+		$sql->orderBy('x.id_xslider DESC');
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
+	}
+	
+	public static function getSlideItems($id_xslider=null){
+		$sql = new DBQuery();
+		$sql->from('xslider_items','x');
+		if (isset($id_xslider) && is_numeric($id_xslider))
+			$sql->where('x.id_xslider='.(int)$id_xslider);
+		$sql->orderBy('x.id_xslider DESC');
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
 	}
 }
