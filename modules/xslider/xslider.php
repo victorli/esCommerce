@@ -105,8 +105,7 @@ class Xslider extends Module{
 			array_push($hooks, array('id_option' => $h['id_hook'], 'name' => $h['name']));
 		}
 		
-		$fields_form = array(
-			'form' => array(
+		$fields_form[0]['form'] = array(
 				'legend' => array(
 					'title' => 	$this->l('Slide Config Info'),
 					'icon'	=>	'icon-cogs'
@@ -216,11 +215,14 @@ class Xslider extends Module{
 							'name'	=>	'name'
 						)	
 					)
-				)
+				),
+			'submit' => array(
+				'title' => $this->l('Save'),
+				'class' => 'button'
 			)
 		);
 		
-		$helper = new HelperFormCore();
+		$helper = new HelperForm();
 		$helper->module = $this;
 		$helper->name_controller = $this->name;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
