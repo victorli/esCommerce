@@ -111,6 +111,7 @@ class Xslider extends Module{
 		$helper->tpl_vars = $tpl_list_vars;
 		$helper->tpl_delete_link_vars = $tpl_delete_link_vars;
 		
+		$helper->show_toolbar = true;
 		$helper->toolbar_btn = array('new_slide' => array(
 									'href'=>AdminController::$currentIndex.'&add_slide&token='.Tools::getAdminTokenLite('AdminModules'),
 									'desc' => $this->l('Add new Slide'),
