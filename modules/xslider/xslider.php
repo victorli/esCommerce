@@ -102,6 +102,8 @@ class Xslider extends Module{
 		$hooks = array();
 		$hs = Hook::getHooks(true);
 		foreach($hs as $h){
+			if(strcmp(substr($h['name'], 0, 7),'display') !== 0)
+				continue;
 			array_push($hooks, array('id_option' => $h['id_hook'], 'name' => $h['name']));
 		}
 		
