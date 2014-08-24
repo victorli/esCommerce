@@ -75,7 +75,33 @@ class Xslider extends Module{
 	public function getContent(){
 		$output = '';
 		
-		if(Tools::isSubmit('addSlide')){
+		if(Tools::isSubmit('submitSlide')){
+			$xslider = new xSliderModel();
+			if(Tools::getValue('id_xslider') && (int)Tools::getValue('id_xslider') != 0)
+				$xslider->id_xslider = (int)Tools::getValue('id_xslider');
+			$xslider->name = Tools::getValue('name');
+			$xslider->width = (int)Tools::getValue('width');
+			$xslider->height = (int)Tools::getValue('height');
+			$xslider->loader = Tools::getValue('loader');
+			if($xslider->loader == 'pie')
+				$xslider->piePosition = Tools::getValue('piePosition');
+			else 
+				$xslider->barPosition = Tools::getValue('barPosition');
+			$xslider->time = (int)Tools::getValue('time');
+			$xslider->navigation = (int)Tools::getValue('navigation');
+			$xslider->pagination = (int)Tools::getValue('pagination');
+			$xslider->thumbnails = (int)Tools::getValue('thumbnails');
+			$xslider->id_hook = (int)Tools::getValue('id_hook');
+			
+			if($xslider->add(true,false)){
+				$output .= $this->displayConfirmation($this->l('Add slide successfully.'));
+				return $output.$this->renderConfigList();
+			}else{ 
+				$output .= $this->displayError($this->l('Invalid ip address'));
+				return $output.$this->renderConfigForm();
+			}
+			
+		}elseif(Tools::isSubmit('addSlide')){
 			$output .= $this->headerHTML();
 			$output .= $this->renderConfigForm();
 		}else{ //list
