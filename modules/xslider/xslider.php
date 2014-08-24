@@ -104,7 +104,7 @@ class Xslider extends Module{
 						}
 					});
 				});
-				';
+				</script>';
 		
 		return $html;
 	}
