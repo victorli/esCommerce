@@ -76,6 +76,7 @@ class Xslider extends Module{
 		$output = '';
 		
 		if(Tools::isSubmit('addSlide')){
+			$output .= $this->headerHTML();
 			$output .= $this->renderConfigForm();
 		}else{ //list
 			$output .= $this->renderConfigList();
@@ -83,6 +84,29 @@ class Xslider extends Module{
 		}
 		
 		return $output;
+	}
+	
+	protected function headerHTML(){
+		if(Tools::getValue('controller') != 'AdminModules' && Tools::getValue('configure') != $this->name)
+			return;
+			
+		$html = '<script type="text/javascript">
+				$(function(){
+					$("#barPosition").hide();
+					
+					$("#loader").change(function(){
+						if($(this).val() == "bar"){
+							$("#barPosition").show();
+							$("#piePosition").hide();
+						}else{
+							$("#barPosition").hide();
+							$("#piePosition").show();
+						}
+					});
+				});
+				';
+		
+		return $html;
 	}
 	
 	public function renderConfigForm(){
