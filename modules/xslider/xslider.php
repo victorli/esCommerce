@@ -361,14 +361,14 @@ class Xslider extends Module{
 	public function renderConfigList(){
 		
 		$fields_list = array(
-			'id_xslider' => array('title' => $this->l('ID'), 'align' => 'right', 'class' => 'fixed-width-xs'),
+			'id_xslider' => array('title' => $this->l('ID'), 'align' => 'right'),
 			'name'		=>	array('title' => $this->l('Name'), 'width' => 'auto'),
 			'id_hook'	=>	array('title' => $this->l('Hook'), 'align'=>'center', 'callback' =>'getNameById', 'callback_object' => 'Hook'),
-			'width'		=>	array('title' => $this->l('Width'),	'align'=>'right', 'orderby'=>false),
-			'height'	=>	array('title' => $this->l('Height'), 'align'=>'right', 'orderby'=>false),
-			'time'		=>	array('title' => $this->l('Time'),'align'=>'right', 'orderby'=>false),
+			'width'		=>	array('title' => $this->l('Width(px)'),	'align'=>'right', 'orderby'=>false),
+			'height'	=>	array('title' => $this->l('Height(px)'), 'align'=>'right', 'orderby'=>false),
+			'time'		=>	array('title' => $this->l('Time(ms)'),'align'=>'right', 'orderby'=>false),
 			'loader'	=>	array('title' => $this->l('Loader'), 'align'=>'center'),
-			'position'	=>	array('title' => $this->l('Position'), 'align'=>'center'),
+			'navigation'=>	array('title' => $this->l('Navigation'), 'align'=>'center'),
 			'pagination'=>	array('title' => $this->l('Pagination'), 'class'=>'fixed-width-sm','active'=>'status','align'=>'center', 'type'=>'bool','orderby'=>false),
 			'thumbnails'=>	array('title' => $this->l('Thumbnails'), 'class'=>'fixed-width-sm','active'=>'status','align'=>'center', 'type'=>'bool','orderby'=>false)	
 		);
