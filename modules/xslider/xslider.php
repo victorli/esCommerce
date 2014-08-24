@@ -107,6 +107,36 @@ class Xslider extends Module{
 			array_push($hooks, array('id_option' => $h['id_hook'], 'name' => $h['name']));
 		}
 		
+		$barPos = array(
+			array(
+				'id_option' => 	'top',
+				'name'		=>	$this->l('Top')
+			),
+			array(
+				'id_option'	=>	'bottom',
+				'name'		=>	$this->l('Bottom')
+			)
+		);
+		
+		$piePos = array(
+			array(
+				'id_option' => 	'rightTop',
+				'name'		=>	$this->l('rightTop')
+			),
+			array(
+				'id_option'	=>	'leftTop',
+				'name'		=>	$this->l('leftTop')
+			),
+			array(
+				'id_option' => 	'leftBottom',
+				'name'		=>	$this->l('leftBottom')
+			),
+			array(
+				'id_option'	=>	'rightBottom',
+				'name'		=>	$this->l('rightBottom')
+			)
+		);
+		
 		$fields_form[0]['form'] = array(
 				'legend' => array(
 					'title' => 	$this->l('Slide Config Info'),
@@ -141,6 +171,28 @@ class Xslider extends Module{
 						'required'=> true,
 						'options' => array(
 							'query' => 	$loaderTypes,
+							'id'	=>	'id_option',
+							'name'	=>	'name'
+						)	
+					),
+					array(
+						'type'	=>	'select',
+						'label'	=>	$this->l('Pie Position'),
+						'name'	=>	'piePosition',
+						'required'=> true,
+						'options' => array(
+							'query' => 	$piePos,
+							'id'	=>	'id_option',
+							'name'	=>	'name'
+						)	
+					),
+					array(
+						'type'	=>	'select',
+						'label'	=>	$this->l('Bar Position'),
+						'name'	=>	'barPosition',
+						'required'=> true,
+						'options' => array(
+							'query' => 	$barPos,
 							'id'	=>	'id_option',
 							'name'	=>	'name'
 						)	

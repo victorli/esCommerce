@@ -24,14 +24,14 @@ class xSliderModel extends ObjectModel{
 	public $width;
 	public $height;
 	public $fx = 'random';
-	public $barDirection = 'leftToRight';
-	public $barPosition = 'bottom';
+	public $barDirection = 'leftToRight'; 
+	public $barPosition = 'bottom'; //top or bottom
 	public $loader = 'pie';//or bar
 	public $navigation = true;
 	public $overlayer = true;
 	public $pagination = true;
 	public $playPause = true;
-	public $piePosition = 'rightTop';
+	public $piePosition = 'rightTop'; //'rightTop', 'leftTop', 'leftBottom', 'rightBottom'
 	public $thumbnails = false;
 	public $time = 700;
 	//distinct by hook position
