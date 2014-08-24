@@ -92,18 +92,18 @@ class Xslider extends Module{
 			
 		$html = '<script type="text/javascript">
 				$(function(){
-					var barBox = $("#barPosition").parent().parent();
-					var pieBox = $("#piePosition").parent().parent();
+					var $barBox = $("#barPosition").parent().parent();
+					var $pieBox = $("#piePosition").parent().parent();
 					
-					$(barBox).hide();
+					$barBox.hide();
 					
 					$("#loader").change(function(){
 						if($(this).val() == "bar"){
-							$(barBox).show();
-							$(pieBox).hide();
+							$barBox.show();
+							$pieBox.hide();
 						}else{
-							$(barBpx).hide();
-							$(pieBox).show();
+							$barBox.hide();
+							$pieBox.show();
 						}
 					});
 				});
