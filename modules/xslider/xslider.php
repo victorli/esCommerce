@@ -343,7 +343,7 @@ class Xslider extends Module{
 		$helper = new HelperForm();
 		$helper->module = $this;
 		$helper->identifier = 'id_xslider';
-		$helper->form_id = $form_id;
+		$helper->id = $form_id;
 		$helper->name_controller = $this->name;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
 		$helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
