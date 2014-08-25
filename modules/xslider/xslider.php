@@ -536,8 +536,8 @@ class Xslider extends Module{
 			}
 		}else{
 			foreach ($item_filter as $if){
-				if(Tools::getIsset($this->tableItem.'Filter_'.$if))
-					array_push($filter, 'x.'.$if.'=`'.Tools::getValue($this->tableItem.'Filter_'.$if.'`') && !empty(Tools::getValue($this->tableItem.'Filter_'.$if)));
+				if(Tools::getIsset($this->tableItem.'Filter_'.$if) && !empty(Tools::getValue($this->tableItem.'Filter_'.$if)))
+					array_push($filter, 'x.'.$if.'=`'.Tools::getValue($this->tableItem.'Filter_'.$if.'`'));
 			}
 		}
 		
