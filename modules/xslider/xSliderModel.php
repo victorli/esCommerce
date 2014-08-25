@@ -187,14 +187,14 @@ class xSliderModel extends ObjectModel{
 	
 	public static function deleteByIds($ids){
 		if (is_array($ids)){
-			$where = 'x.id_xslider in('.implode(',', $ids).')';
+			$where = 'id_xslider in('.implode(',', $ids).')';
 		}else{
-			$where = 'x.id_xslider = '.$ids;
+			$where = 'id_xslider = '.$ids;
 		}
 		
 		//clear xslider_config
-		if(Db::getInstance()->delete('xslider_config as x', $where)){
-			if(Db::getInstance()->delete('xslider_items as x', $where)){
+		if(Db::getInstance()->delete('xslider_config', $where)){
+			if(Db::getInstance()->delete('xslider_items', $where)){
 				return true;
 			}else{
 				return false;
