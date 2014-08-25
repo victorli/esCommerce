@@ -531,13 +531,13 @@ class Xslider extends Module{
 		$item_filter = array('id_xslider_item','id_xslider');
 		if($type == 'config'){
 			foreach($config_filter as $cf){
-				if(Tools::getIsset($this->tableConfig.'Filter_'.$cf))
+				if(Tools::getIsset($this->tableConfig.'Filter_'.$cf) && !empty(Tools::getValue($this->tableConfig.'Filter_'.$cf)))
 					array_push($filter, 'x.'.$cf.'=`'.Tools::getValue($this->tableConfig.'Filter_'.$cf).'`');
 			}
 		}else{
 			foreach ($item_filter as $if){
 				if(Tools::getIsset($this->tableItem.'Filter_'.$if))
-					array_push($filter, 'x.'.$if.'=`'.Tools::getValue($this->tableItem.'Filter_'.$if.'`'));
+					array_push($filter, 'x.'.$if.'=`'.Tools::getValue($this->tableItem.'Filter_'.$if.'`') && !empty(Tools::getValue($this->tableItem.'Filter_'.$if)));
 			}
 		}
 		
