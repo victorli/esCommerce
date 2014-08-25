@@ -415,8 +415,7 @@ class Xslider extends Module{
 			'thumbnails'=>	array('title' => $this->l('Thumbnails'), 'class'=>'fixed-width-sm','active'=>'status','align'=>'center', 'type'=>'bool','orderby'=>false)	
 		);
 		
-		$filter = $this->_getFilter();
-		$list = xSliderModel::getSlides($filter, Tools::getValue($this->tableConfig.'Orderby',null), Tools::getValue($this->tableConfig.'Orderway',null));
+		$list = xSliderModel::getSlides($this->_getFilter(), Tools::getValue($this->tableConfig.'Orderby',null), Tools::getValue($this->tableConfig.'Orderway',null));
 		
 		$tpl_list_vars['icon'] = 'icon-list-ul';
 		$tpl_list_vars['title'] = $this->l('Slide Config List');
@@ -523,12 +522,12 @@ class Xslider extends Module{
 		$item_filter = array();
 		if($type == 'config'){
 			foreach($config_filter as $cf){
-				if(isset(Tools::getValue($this->tableConfig.'_'.cf,null)))
+				if(isset(Tools::getValue($this->tableConfig.'_'.$cf,null)) && Tools::getValue($this->tableConfig.'_'.$cf))
 					array_push($filter, 'x.'.$cf.'=`'.Tools::getValue($this->tableConfig.'_'.$cf).'`');
 			}
 		}else{
 			foreach ($item_filter as $if){
-				if(isset(Tools::getValue($this->tableItem.'_'.$if,null)))
+				if(isset(Tools::getValue($this->tableItem.'_'.$if,null)) && Tools::getValue($this->tableItem.'_'.$if))
 					array_push($filter, 'x.'.$if.'=`'.Tools::getValue($this->tableItem.'_'.$if.'`'));
 			}
 		}
