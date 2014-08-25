@@ -74,6 +74,15 @@ class Xslider extends Module{
 		return true;
 	}
 	
+	/**
+	 * @return FileLoggerCore 
+	 */
+	public static function Logger(){
+		$logger = new FileLogger();
+		$logger->setFilename(_PS_ROOT_DIR_.'/log/'.date('Ymd').'_xslider.log');
+		return $logger;
+	}
+	
 	public function getContent(){
 		$output = '';
 		
@@ -518,17 +527,17 @@ class Xslider extends Module{
 	
 	private function _getFilter($type='config'){
 		$filter = array();
-		$config_filter = array('id_xslider','name','id_hook','loader');
+		$config_filter = array('id_xslider','name','id_hook','loader','width','height','time','navigation','pagination','thumbnails');
 		$item_filter = array('id_xslider_item','id_xslider');
 		if($type == 'config'){
 			foreach($config_filter as $cf){
-				if(Tools::getIsset($this->tableConfig.'_'.$cf))
-					array_push($filter, 'x.'.$cf.'=`'.Tools::getValue($this->tableConfig.'_'.$cf).'`');
+				if(Tools::getIsset($this->tableConfig.'Filter_'.$cf))
+					array_push($filter, 'x.'.$cf.'=`'.Tools::getValue($this->tableConfig.'Filter_'.$cf).'`');
 			}
 		}else{
 			foreach ($item_filter as $if){
-				if(Tools::getIsset($this->tableItem.'_'.$if))
-					array_push($filter, 'x.'.$if.'=`'.Tools::getValue($this->tableItem.'_'.$if.'`'));
+				if(Tools::getIsset($this->tableItem.'Filter_'.$if))
+					array_push($filter, 'x.'.$if.'=`'.Tools::getValue($this->tableItem.'Filter_'.$if.'`'));
 			}
 		}
 		
