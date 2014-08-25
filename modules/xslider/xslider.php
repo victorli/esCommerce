@@ -393,6 +393,8 @@ class Xslider extends Module{
 									'confirm'=>$this->l('Are you sure to delete selected items?'),
 									'icon'=>'icon-trash'));
 		
+		$helper->actions = array('edit','delete');
+		
 		return $helper->generateList($list,$fields_list);
 	}
 	
