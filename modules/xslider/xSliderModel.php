@@ -173,7 +173,7 @@ class xSliderModel extends ObjectModel{
 		if (isset($id) && is_numeric($id))
 			$sql->where('x.id_xslider='.(int)$id);
 		$sql->orderBy('x.id_xslider DESC');
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
+		return isset($id) ? Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql) : Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
 	}
 	
 	public static function getSlideItems($id_xslider=null){

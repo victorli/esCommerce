@@ -141,6 +141,17 @@ class Xslider extends Module{
 	public function renderConfigForm(){
 		$lang = (int)Configuration::get('PS_LANG_DEFAULT');
 		
+		$form_id = 0;
+		$id_xslider = Tools::getValue('id_xslider',null);
+		$xslider = null;
+		if(isset($id_xslider)){
+			$xslider = xSliderModel::getSlides($id_xslider);
+			if(is_array($xslider) && count($xslider)>1)
+				$form_id = $id_xslider;
+			else 
+				$xslider = null;
+		}
+		
 		$loaderTypes = array(
 			array(
 				'id_option' => 	'pie',
@@ -331,6 +342,8 @@ class Xslider extends Module{
 		
 		$helper = new HelperForm();
 		$helper->module = $this;
+		$helper->identifier = 'id_xslider';
+		$helper->form_id = $form_id;
 		$helper->name_controller = $this->name;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
 		$helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
@@ -353,6 +366,8 @@ class Xslider extends Module{
 				'href' => AdminController::$currentIndex.'&token='.Tools::getAdminTokenLite('AdminModules')
 			)
 		);
+		
+		$helper->fields_value = $xslider;
 		
 		return $helper->generateForm($fields_form);
 		
