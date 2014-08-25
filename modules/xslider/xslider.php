@@ -137,6 +137,23 @@ class Xslider extends Module{
 		}elseif(Tools::isSubmit('submitFilterButton'.$this->tableConfig)){//filter
 			$output .= $this->renderConfigList();
 			$output .= $this->renderItemList();
+		}elseif(Tools::isSubmit('navigationSlider') || Tools::isSubmit('paginationSlider') || Tools::isSubmit('thumbnailsSlider')){
+			$field = '';
+			if(Tools::getIsset('navigationSlider')) $field = 'navigation';
+			elseif(Tools::getIsset('paginationSlider')) $field = 'pagination';
+			elseif(Tools::getIsset('thumbnailsSlider')) $field = 'thumbnails';
+			$id_xslider = Tools::getValue('id_xslider');
+			$enabled = Tools::getValue('enabled',1);
+			
+			if(xSliderModel::updateSlider(array($field=>!$enabled),'id_xslider='.$id_xslider)){
+				$output .= $this->l('Update '.$field.' successfully.');
+			}else{
+				$output .= $this->l('Fail to update '.$field);
+			}
+			
+			$output .= $this->renderConfigList();
+			$output .= $this->renderItemList();
+			
 		}else{ //list
 			$output .= $this->renderConfigList();
 			$output .= $this->renderItemList();
@@ -419,9 +436,9 @@ class Xslider extends Module{
 			'height'	=>	array('title' => $this->l('Height(px)'), 'align'=>'right', 'orderby'=>false),
 			'time'		=>	array('title' => $this->l('Time(ms)'),'align'=>'right', 'orderby'=>false),
 			'loader'	=>	array('title' => $this->l('Loader'), 'align'=>'center'),
-			'navigation'=>	array('title' => $this->l('Navigation'), 'class'=>'fixed-width-sm','active'=>'status','align'=>'center', 'type'=>'bool','orderby'=>false),
-			'pagination'=>	array('title' => $this->l('Pagination'), 'class'=>'fixed-width-sm','active'=>'status','align'=>'center', 'type'=>'bool','orderby'=>false),
-			'thumbnails'=>	array('title' => $this->l('Thumbnails'), 'class'=>'fixed-width-sm','active'=>'status','align'=>'center', 'type'=>'bool','orderby'=>false)	
+			'navigation'=>	array('title' => $this->l('Navigation'), 'class'=>'fixed-width-sm','active'=>'navigation','align'=>'center', 'type'=>'bool','orderby'=>false),
+			'pagination'=>	array('title' => $this->l('Pagination'), 'class'=>'fixed-width-sm','active'=>'pagination','align'=>'center', 'type'=>'bool','orderby'=>false),
+			'thumbnails'=>	array('title' => $this->l('Thumbnails'), 'class'=>'fixed-width-sm','active'=>'thumbnails','align'=>'center', 'type'=>'bool','orderby'=>false)	
 		);
 		
 		$list = xSliderModel::getSliders($this->_getFilter(), Tools::getValue($this->tableConfig.'Orderby',null), Tools::getValue($this->tableConfig.'Orderway',null));
@@ -438,6 +455,7 @@ class Xslider extends Module{
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
 		$helper->table = $this->tableConfig;
 		$helper->listTotal = count($list);
+		$helper->no_link = true;
 		
 		$helper->tpl_vars = $tpl_list_vars;
 		$helper->tpl_delete_link_vars = $tpl_delete_link_vars;
@@ -523,6 +541,16 @@ class Xslider extends Module{
 		));
 
 		return $this->display(__FILE__,'/helper/list_action_delete.tpl');
+	}
+	
+	public function displayEnableLink($token, $id, $value, $active, $id_category = null, $id_product = null, $ajax = false)
+	{
+		$this->context->smarty->assign(array(
+			'ajax' => $ajax,
+			'enabled' => (bool)$value,
+			'url_enable' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&'.$active.'Slider&id_xslider='.$id.'&token='.Tools::getAdminTokenLite('AdminModules').'&enabled='.$value),
+		));
+		return $this->display(__FILE__,'/helper/list_action_enable.tpl');
 	}
 	
 	private function _getFilter($type='config'){

@@ -185,6 +185,10 @@ class xSliderModel extends ObjectModel{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
 	}
 	
+	public static function updateSlider($data = array(), $where){
+		return Db::getInstance()->update('xslider_config', $data, $where);
+	}
+	
 	public static function getSliderItems($id_xslider=null){
 		$sql = new DBQuery();
 		$sql->from('xslider_items','x');
