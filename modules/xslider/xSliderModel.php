@@ -184,4 +184,8 @@ class xSliderModel extends ObjectModel{
 		$sql->orderBy('x.id_xslider DESC');
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
 	}
+	
+	public static function deleteByIds($ids){
+		
+	}
 }

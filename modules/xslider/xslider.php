@@ -103,7 +103,20 @@ class Xslider extends Module{
 			
 		}elseif(Tools::isSubmit('addSlide')){
 			$output .= $this->renderConfigForm();
-		}elseif(Tools::isSubmit('delSlide')){
+		}elseif(Tools::isSubmit('delSlide') || Tools::isSubmit('submitBulkdeleteSlide')){//delete
+			if(Tools::getValue('id_xslider') && is_numeric(Tools::getValue('id_xslider'))){
+				$output .= xSliderModel::deleteByIds(Tools::getValue('id_xslider'));
+			}else{
+				$ids = Tools::getValue('SlideBox');
+				if(!is_array($ids) || count($ids) < 1){
+					$output .= $this->displayError($this->l('Please choose one item at least.'));
+				}else{
+					$output .= xSliderModel::deleteByIds($ids);
+				}
+			}
+			return $output.$this->renderConfigList().$this->renderItemList();
+			
+		}elseif(Tools::isSubmit('submitFilterButtonSlide')){//filter
 			
 		}else{ //list
 			$output .= $this->renderConfigList();
@@ -414,13 +427,10 @@ class Xslider extends Module{
 									'href'=>AdminController::$currentIndex.'&configure='.$this->name.'&addSlide&token='.Tools::getAdminTokenLite('AdminModules'),
 									'desc' => $this->l('Add new Slide'),
 									'imgclass' => 'new'));
-		if(defined('_ECX_VERSION_')){
-			$helper->bulk_actions = array('delete' => array(
-									'text' => $this->l('Delete Selected'), 
-									'confirm'=>$this->l('Are you sure to delete selected items?'),
-									'icon'=>'icon-trash'));
-			$helper->action = AdminController::$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules');
-		}
+		$helper->bulk_actions = array('delete' => array(
+								'text' => $this->l('Delete Selected'), 
+								'confirm'=>$this->l('Are you sure to delete selected items?'),
+								'icon'=>'icon-trash'));
 		
 		$helper->actions = array('edit','delete');
 		
