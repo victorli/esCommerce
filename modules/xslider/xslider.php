@@ -78,7 +78,7 @@ class Xslider extends Module{
 		if(Tools::isSubmit('submitSlide')){
 			$xslider = new xSliderModel();
 			if(Tools::getValue('id_xslider') && (int)Tools::getValue('id_xslider') != 0)
-				$xslider->id_xslider = (int)Tools::getValue('id_xslider');
+				$xslider->id = (int)Tools::getValue('id_xslider');
 			$xslider->name = Tools::getValue('name');
 			$xslider->width = (int)Tools::getValue('width');
 			$xslider->height = (int)Tools::getValue('height');
@@ -93,16 +93,15 @@ class Xslider extends Module{
 			$xslider->thumbnails = (int)Tools::getValue('thumbnails');
 			$xslider->id_hook = (int)Tools::getValue('id_hook');
 			
-			if($xslider->add(true,false)){
-				$output .= $this->displayConfirmation($this->l('Add slide successfully.'));
-				return $output.$this->renderConfigList();
+			if($xslider->save(false,true)){
+				$output .= $this->displayConfirmation($this->l('Add/Update slide successfully.'));
+				return $output.$this->renderConfigList().$this->renderItemList();
 			}else{ 
-				$output .= $this->displayError($this->l('Invalid ip address'));
+				$output .= $this->displayError($this->l('Error to Add/Update slide.'));
 				return $output.$this->renderConfigForm();
 			}
 			
 		}elseif(Tools::isSubmit('addSlide')){
-			$output .= $this->headerHTML();
 			$output .= $this->renderConfigForm();
 		}else{ //list
 			$output .= $this->renderConfigList();
@@ -112,7 +111,7 @@ class Xslider extends Module{
 		return $output;
 	}
 	
-	protected function headerHTML(){
+	protected function headerHTML($lt='pie'){
 		if(Tools::getValue('controller') != 'AdminModules' && Tools::getValue('configure') != $this->name)
 			return;
 			
@@ -120,20 +119,23 @@ class Xslider extends Module{
 				$(function(){
 					var $barBox = $("#barPosition").parent().parent();
 					var $pieBox = $("#piePosition").parent().parent();
+				';
+		if($lt == 'pie')						
+			$html .= '$barBox.hide();';
+		else 
+			$html .= '$pieBox.hide();';
 					
-					$barBox.hide();
-					
-					$("#loader").change(function(){
-						if($(this).val() == "bar"){
-							$barBox.show();
-							$pieBox.hide();
-						}else{
-							$barBox.hide();
-							$pieBox.show();
-						}
-					});
+		$html .= '$("#loader").change(function(){
+					if($(this).val() == "bar"){
+						$barBox.show();
+						$pieBox.hide();
+					}else{
+						$barBox.hide();
+						$pieBox.show();
+					}
 				});
-				</script>';
+			});
+			</script>';
 		
 		return $html;
 	}
@@ -368,8 +370,8 @@ class Xslider extends Module{
 		);
 		
 		$helper->fields_value = $xslider;
-		
-		return $helper->generateForm($fields_form);
+		$lt = isset($xslider['loader']) ? $xslider['loader'] : 'pie';
+		return $this->headerHTML($lt). $helper->generateForm($fields_form);
 		
 	}
 	
