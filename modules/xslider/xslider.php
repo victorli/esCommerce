@@ -421,7 +421,7 @@ class Xslider extends Module{
 		$helper->identifier = 'id_xslider';
 		$helper->currentIndex = AdminController::$currentIndex;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
-		$helper->table = 'Slide';
+		$helper->table = 'xslider_config';
 		$helper->list_total = count($list);
 		
 		$helper->tpl_vars = $tpl_list_vars;
@@ -507,7 +507,7 @@ class Xslider extends Module{
 			'id' => $id
 		));
 
-		return $this->display(__FILE__,'/helper/list_delete_edit.tpl');
+		return $this->display(__FILE__,'/helper/list_action_delete.tpl');
 	}
 
 }
