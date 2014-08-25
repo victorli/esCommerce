@@ -110,7 +110,7 @@ class Xslider extends Module{
 				else 
 					$output .= $this->displayError($this->l('Fail to remove slide.'));
 			}else{
-				$ids = Tools::getValue('SlideBox');
+				$ids = Tools::getValue('xslider_configBox');
 				if(!is_array($ids) || count($ids) < 1){
 					$output .= $this->displayError($this->l('Please choose one item at least.'));
 				}else{
