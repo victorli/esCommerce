@@ -32,6 +32,8 @@ class Xslider extends Module{
 		$this->ecx_versions_compliancy = array('min'=>'1.1.0');
 		$this->bootstrap = true;
 		
+		$this->tableConfig = 'xSliderConfig';
+		$this->tableItem = 'xSliderItem';
 		//configurations
 		
 		parent::__construct();
@@ -75,7 +77,7 @@ class Xslider extends Module{
 	public function getContent(){
 		$output = '';
 		
-		if(Tools::isSubmit('submitSlide')){
+		if(Tools::isSubmit('submitSlider')){
 			$xslider = new xSliderModel();
 			if(Tools::getValue('id_xslider') && (int)Tools::getValue('id_xslider') != 0)
 				$xslider->id = (int)Tools::getValue('id_xslider');
@@ -101,16 +103,16 @@ class Xslider extends Module{
 				return $output.$this->renderConfigForm();
 			}
 			
-		}elseif(Tools::isSubmit('addSlide')){
+		}elseif(Tools::isSubmit('addSlider')){
 			$output .= $this->renderConfigForm();
-		}elseif(Tools::isSubmit('delSlide') || Tools::isSubmit('submitBulkdeletexslider_config')){//delete
+		}elseif(Tools::isSubmit('delSlider') || Tools::isSubmit('submitBulkdelete'.$this->tableConfig)){//delete
 			if(Tools::getValue('id_xslider') && is_numeric(Tools::getValue('id_xslider'))){
 				if(xSliderModel::deleteByIds(Tools::getValue('id_xslider')))
 					$output .= 	$this->displayConfirmation($this->l('Remove slide successfully.'));
 				else 
 					$output .= $this->displayError($this->l('Fail to remove slide.'));
 			}else{
-				$ids = Tools::getValue('xslider_configBox');
+				$ids = Tools::getValue($this->tableConfig.'Box');
 				if(!is_array($ids) || count($ids) < 1){
 					$output .= $this->displayError($this->l('Please choose one item at least.'));
 				}else{
@@ -123,8 +125,9 @@ class Xslider extends Module{
 			}
 			return $output.$this->renderConfigList().$this->renderItemList();
 			
-		}elseif(Tools::isSubmit('submitFilterButtonSlide')){//filter
-			
+		}elseif(Tools::isSubmit('submitFilterButton'.$this->tableConfig)){//filter
+			$output .= $this->renderConfigList();
+			$output .= $this->renderItemList();
 		}else{ //list
 			$output .= $this->renderConfigList();
 			$output .= $this->renderItemList();
@@ -378,9 +381,9 @@ class Xslider extends Module{
 		$helper->title = $this->displayName;
 		$helper->show_toolbar = true;
 		$helper->toolbar_scroll = true;
-		$helper->submit_action = 'submitSlide';
+		$helper->submit_action = 'submitSlider';
 		
-		$helper->toolbar_btn = array(
+		/*$helper->toolbar_btn = array(
 			'save' => array(
 				'desc' => $this->l('Save'),
 				'href' => AdminController::$currentIndex.'&configure='.$this->name.'&save'.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules')
@@ -389,7 +392,7 @@ class Xslider extends Module{
 				'desc' => $this->l('Back to list'),
 				'href' => AdminController::$currentIndex.'&token='.Tools::getAdminTokenLite('AdminModules')
 			)
-		);
+		);*/
 		
 		$helper->fields_value = $xslider;
 		$lt = isset($xslider['loader']) ? $xslider['loader'] : 'pie';
@@ -412,7 +415,7 @@ class Xslider extends Module{
 			'thumbnails'=>	array('title' => $this->l('Thumbnails'), 'class'=>'fixed-width-sm','active'=>'status','align'=>'center', 'type'=>'bool','orderby'=>false)	
 		);
 		
-		$list = xSliderModel::getSlides();
+		$list = xSliderModel::getSlides($this->_getFilter(), Tools::getValue($this->tableConfig.'Orderby',null), Tools::getValue($this->tableConfig.'Orderway',null));
 		
 		$tpl_list_vars['icon'] = 'icon-list-ul';
 		$tpl_list_vars['title'] = $this->l('Slide Config List');
@@ -424,15 +427,15 @@ class Xslider extends Module{
 		$helper->identifier = 'id_xslider';
 		$helper->currentIndex = AdminController::$currentIndex;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
-		$helper->table = 'xslider_config';
-		$helper->list_total = count($list);
+		$helper->table = $this->tableConfig;
+		$helper->listTotal = count($list);
 		
 		$helper->tpl_vars = $tpl_list_vars;
 		$helper->tpl_delete_link_vars = $tpl_delete_link_vars;
 		
 		$helper->toolbar_btn = array('new_slide' => array(
-									'href'=>AdminController::$currentIndex.'&configure='.$this->name.'&addSlide&token='.Tools::getAdminTokenLite('AdminModules'),
-									'desc' => $this->l('Add new Slide'),
+									'href'=>AdminController::$currentIndex.'&configure='.$this->name.'&addSlider&token='.Tools::getAdminTokenLite('AdminModules'),
+									'desc' => $this->l('Add new Slider'),
 									'imgclass' => 'new'));
 		$helper->bulk_actions = array('delete' => array(
 								'text' => $this->l('Delete Selected'), 
@@ -495,7 +498,7 @@ class Xslider extends Module{
 	
 	public function displayEditLink($token = null, $id, $name = null){
 		$this->context->smarty->assign(array(
-			'href' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&addSlide&id_xslider='.$id.'&token='.Tools::getAdminTokenLite('AdminModules')),
+			'href' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&addSlider&id_xslider='.$id.'&token='.Tools::getAdminTokenLite('AdminModules')),
 			'action' => $this->l('Edit','Helper'),
 			'id' => $id
 		));
@@ -505,12 +508,34 @@ class Xslider extends Module{
 	
 	public function displayDeleteLink($token = null, $id, $name = null){
 		$this->context->smarty->assign(array(
-			'href' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&delSlide&id_xslider='.$id.'&token='.Tools::getAdminTokenLite('AdminModules')),
+			'href' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&delSlider&id_xslider='.$id.'&token='.Tools::getAdminTokenLite('AdminModules')),
 			'action' => $this->l('Edit','Helper'),
 			'id' => $id
 		));
 
 		return $this->display(__FILE__,'/helper/list_action_delete.tpl');
+	}
+	
+	private function _getFilter($type='config'){
+		$filter = array();
+		$config_filter = array('id_xslider','name','id_hook','loader');
+		$item_filter = array();
+		if($type == 'config'){
+			foreach($config_filter as $cf){
+				if(isset(Tools::getValue($this->tableConfig.'_'.cf,null)))
+					array_push($filter, 'x.'.$cf.'=`'.Tools::getValue($this->tableConfig.'_'.$cf).'`');
+			}
+		}else{
+			foreach ($item_filter as $if){
+				if(isset(Tools::getValue($this->tableItem.'_'.$if,null)))
+					array_push($filter, 'x.'.$if.'=`'.Tools::getValue($this->tableItem.'_'.$if.'`'));
+			}
+		}
+		
+		if(count($filter))
+			return implode(' AND ', $filter);
+			
+		return null;
 	}
 
 }

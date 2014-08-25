@@ -167,12 +167,13 @@ class xSliderModel extends ObjectModel{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($sql);
 	}
 	
-	public static function getSlides($id=NULL){
+	public static function getSlides($filter=null, $orderBy='id_xslider', $orderWay='DESC'){
 		$sql = new DBQuery();
 		$sql->from('xslider_config','x');
-		if (isset($id) && is_numeric($id))
-			$sql->where('x.id_xslider='.(int)$id);
-		$sql->orderBy('x.id_xslider DESC');
+		if(isset($filter))
+			$sql->where($filter);
+		$sql->orderBy('x.'.(isset($orderBy)? $orderBy : 'id_xslider').' '.(isset($orderWay) ? $orderWay : 'DESC'));
+		
 		return isset($id) ? Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql) : Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
 	}
 	
