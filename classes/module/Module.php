@@ -1170,6 +1170,7 @@ abstract class ModuleCore
 			if ($useConfig && $xml_exist && !$needNewConfigFile)
 			{
 				// Load config.xml
+				libxml_clear_errors();
 				libxml_use_internal_errors(true);
 				$xml_module = @simplexml_load_file($configFile);
 				foreach (libxml_get_errors() as $error)

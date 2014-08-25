@@ -92,7 +92,7 @@ class HookCore extends ObjectModel
 	/**
 	 * Return Hooks List
 	 *
-	 * @param bool $position
+	 * @param bool $position if true only get displayHooks
 	 * @return array Hooks List
 	 */
 	public static function getHooks($position = false)
