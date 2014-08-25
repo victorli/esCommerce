@@ -90,6 +90,9 @@ class HelperListCore extends Helper
 
 	/** @var array list of required actions for each list row */
 	public $actions = array();
+	
+	/** @var added by ecartx to use outside specified action */
+	public $action = null;
 
 	/** @var array list of row ids associated with a given action for witch this action have to not be available */
 	public $list_skip_actions = array();
@@ -525,7 +528,10 @@ class HelperListCore extends Helper
 		if (Tools::getIsset($this->table.'Orderby'))
 			$order = '&'.$this->table.'Orderby='.urlencode($this->orderBy).'&'.$this->table.'Orderway='.urlencode(strtolower($this->orderWay));
 
-		$action = $this->currentIndex.$identifier.'&token='.$token.'#'.$this->list_id;
+		//$action = $this->currentIndex.$identifier.'&token='.$token.'#'.$this->list_id;
+		//TODO:: try to use specified action url by ecartx
+		if(!isset($this->action))
+			$this->action = $this->currentIndex.$identifier.'&token='.$token.'#'.$this->list_id;
 
 		/* Determine current page number */
 		$page = (int)Tools::getValue('submitFilter'.$this->list_id);
@@ -634,7 +640,7 @@ class HelperListCore extends Helper
 			'show_filters' => ((count($this->_list) > 1 && $has_search_field) || $has_value ),
 			'filters_has_value' => $has_value,
 			'currentIndex' => $this->currentIndex,
-			'action' => $action,
+			'action' => $this->action,
 			'is_order_position' => $this->position_identifier && $this->orderBy == 'position',
 			'order_way' => $this->orderWay,
 			'order_by' => $this->orderBy,
