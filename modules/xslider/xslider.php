@@ -414,12 +414,12 @@ class Xslider extends Module{
 									'href'=>AdminController::$currentIndex.'&configure='.$this->name.'&addSlide&token='.Tools::getAdminTokenLite('AdminModules'),
 									'desc' => $this->l('Add new Slide'),
 									'imgclass' => 'new'));
-		if(defined(_ECX_VERSION_)){
+		if(defined('_ECX_VERSION_')){
 			$helper->bulk_actions = array('delete' => array(
 									'text' => $this->l('Delete Selected'), 
 									'confirm'=>$this->l('Are you sure to delete selected items?'),
 									'icon'=>'icon-trash'));
-			$helper->action = AdminController::$currentIndex.'&configure='.$this->name.'&delSlides&token='.Tools::getAdminTokenLite('AdminModules');
+			$helper->action = AdminController::$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules');
 		}
 		
 		$helper->actions = array('edit','delete');
