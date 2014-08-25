@@ -450,5 +450,17 @@ class Xslider extends Module{
 	public function hookdisplayTop($params){
 		return $this->hookdisplayTopColumn($params);
 	}
+	
+	public function displayEditLink($token = null, $id, $name = null){
+		$tpl = $this->createTemplate('list_action_edit.tpl');
+		
+		$tpl->assign(array(
+			'href' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&addSlide&id_xslider='.$id.'&token='.Tools::getAdminTokenLite('AdminModules')),
+			'action' => $this->l('Edit','Helper'),
+			'id' => $id
+		));
+
+		return $tpl->fetch();
+	}
 
 }
