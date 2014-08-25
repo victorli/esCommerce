@@ -181,7 +181,7 @@ class Xslider extends Module{
 		$id_xslider = Tools::getValue('id_xslider',null);
 		$xslider = null;
 		if(isset($id_xslider)){
-			$xslider = xSliderModel::getSlides($id_xslider);
+			$xslider = xSliderModel::getSliderById($id_xslider);
 			if(is_array($xslider) && count($xslider)>1)
 				$form_id = $id_xslider;
 			else 
@@ -424,7 +424,7 @@ class Xslider extends Module{
 			'thumbnails'=>	array('title' => $this->l('Thumbnails'), 'class'=>'fixed-width-sm','active'=>'status','align'=>'center', 'type'=>'bool','orderby'=>false)	
 		);
 		
-		$list = xSliderModel::getSlides($this->_getFilter(), Tools::getValue($this->tableConfig.'Orderby',null), Tools::getValue($this->tableConfig.'Orderway',null));
+		$list = xSliderModel::getSliders($this->_getFilter(), Tools::getValue($this->tableConfig.'Orderby',null), Tools::getValue($this->tableConfig.'Orderway',null));
 		
 		$tpl_list_vars['icon'] = 'icon-list-ul';
 		$tpl_list_vars['title'] = $this->l('Slide Config List');
@@ -470,7 +470,7 @@ class Xslider extends Module{
 			'active'	=>	array('title' => $this->l('Height'), 'align'=>'center', 'orderby'=>false, 'active'=>'status','type'=>'bool','class'=>'fixed-width-sm')
 		);
 		
-		$list = xSliderModel::getSlideItems();
+		$list = xSliderModel::getSliderItems();
 		
 		$tpl_list_vars['icon'] = 'icon-list-ul';
 		$tpl_list_vars['title'] = $this->l('Slide Items List');
@@ -531,13 +531,15 @@ class Xslider extends Module{
 		$item_filter = array('id_xslider_item','id_xslider');
 		if($type == 'config'){
 			foreach($config_filter as $cf){
-				if(Tools::getIsset($this->tableConfig.'Filter_'.$cf) && !empty(Tools::getValue($this->tableConfig.'Filter_'.$cf)))
-					array_push($filter, 'x.'.$cf.'=`'.Tools::getValue($this->tableConfig.'Filter_'.$cf).'`');
+				$v = Tools::getValue($this->tableConfig.'Filter_'.$cf);
+				if(Tools::getIsset($this->tableConfig.'Filter_'.$cf) && !empty($v))
+					array_push($filter, 'x.'.$cf.'=\''.Tools::getValue($this->tableConfig.'Filter_'.$cf).'\'');
 			}
 		}else{
 			foreach ($item_filter as $if){
-				if(Tools::getIsset($this->tableItem.'Filter_'.$if) && !empty(Tools::getValue($this->tableItem.'Filter_'.$if)))
-					array_push($filter, 'x.'.$if.'=`'.Tools::getValue($this->tableItem.'Filter_'.$if.'`'));
+				$v = Tools::getValue($this->tableItem.'Filter_'.$if);
+				if(Tools::getIsset($this->tableItem.'Filter_'.$if) && !empty($v))
+					array_push($filter, 'x.'.$if.'=\''.Tools::getValue($this->tableItem.'Filter_'.$if.'\''));
 			}
 		}
 		
