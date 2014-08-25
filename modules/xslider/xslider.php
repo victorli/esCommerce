@@ -103,6 +103,8 @@ class Xslider extends Module{
 			
 		}elseif(Tools::isSubmit('addSlide')){
 			$output .= $this->renderConfigForm();
+		}elseif(Tools::isSubmit('delSlide')){
+			
 		}else{ //list
 			$output .= $this->renderConfigList();
 			$output .= $this->renderItemList();
@@ -403,6 +405,8 @@ class Xslider extends Module{
 		$helper->currentIndex = AdminController::$currentIndex;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
 		$helper->table = 'Slide';
+		$helper->list_total = count($list);
+		
 		$helper->tpl_vars = $tpl_list_vars;
 		$helper->tpl_delete_link_vars = $tpl_delete_link_vars;
 		
@@ -410,10 +414,13 @@ class Xslider extends Module{
 									'href'=>AdminController::$currentIndex.'&configure='.$this->name.'&addSlide&token='.Tools::getAdminTokenLite('AdminModules'),
 									'desc' => $this->l('Add new Slide'),
 									'imgclass' => 'new'));
-		$helper->bulk_actions = array('delete' => array(
+		if(defined(_ECX_VERSION_)){
+			$helper->bulk_actions = array('delete' => array(
 									'text' => $this->l('Delete Selected'), 
 									'confirm'=>$this->l('Are you sure to delete selected items?'),
 									'icon'=>'icon-trash'));
+			$helper->action = AdminController::$currentIndex.'&configure='.$this->name.'&delSlides&token='.Tools::getAdminTokenLite('AdminModules');
+		}
 		
 		$helper->actions = array('edit','delete');
 		
@@ -470,8 +477,6 @@ class Xslider extends Module{
 	}
 	
 	public function displayEditLink($token = null, $id, $name = null){
-		//$tpl = $this->createTemplate('list_action_edit.tpl');
-		
 		$this->context->smarty->assign(array(
 			'href' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&addSlide&id_xslider='.$id.'&token='.Tools::getAdminTokenLite('AdminModules')),
 			'action' => $this->l('Edit','Helper'),
@@ -479,6 +484,16 @@ class Xslider extends Module{
 		));
 
 		return $this->display(__FILE__,'/helper/list_action_edit.tpl');
+	}
+	
+	public function displayDeleteLink($token = null, $id, $name = null){
+		$this->context->smarty->assign(array(
+			'href' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&delSlide&id_xslider='.$id.'&token='.Tools::getAdminTokenLite('AdminModules')),
+			'action' => $this->l('Edit','Helper'),
+			'id' => $id
+		));
+
+		return $this->display(__FILE__,'/helper/list_delete_edit.tpl');
 	}
 
 }
