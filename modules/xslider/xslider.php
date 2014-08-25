@@ -381,6 +381,7 @@ class Xslider extends Module{
 		$tpl_delete_link_vars = array();
 		
 		$helper = new HelperList();
+		$helper->identifier = 'id_xslider';
 		$helper->tpl_vars = $tpl_list_vars;
 		$helper->tpl_delete_link_vars = $tpl_delete_link_vars;
 		
@@ -446,4 +447,5 @@ class Xslider extends Module{
 	public function hookdisplayTop($params){
 		return $this->hookdisplayTopColumn($params);
 	}
+
 }
