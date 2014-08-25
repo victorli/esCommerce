@@ -111,7 +111,11 @@ class Xslider extends Module{
 				if(!is_array($ids) || count($ids) < 1){
 					$output .= $this->displayError($this->l('Please choose one item at least.'));
 				}else{
-					$output .= xSliderModel::deleteByIds($ids);
+					if(xSliderModel::deleteByIds($ids)){
+						$output .= $this->displayConfirmation($this->l('Remove slide successfully.'));
+					}else{
+						$output .= $this->displayError($this->l('Fail to remove slide.'));
+					}
 				}
 			}
 			return $output.$this->renderConfigList().$this->renderItemList();
