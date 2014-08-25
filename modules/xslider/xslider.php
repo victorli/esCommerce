@@ -105,7 +105,10 @@ class Xslider extends Module{
 			$output .= $this->renderConfigForm();
 		}elseif(Tools::isSubmit('delSlide') || Tools::isSubmit('submitBulkdeleteSlide')){//delete
 			if(Tools::getValue('id_xslider') && is_numeric(Tools::getValue('id_xslider'))){
-				$output .= xSliderModel::deleteByIds(Tools::getValue('id_xslider'));
+				if(xSliderModel::deleteByIds(Tools::getValue('id_xslider')))
+					$output .= 	$this->displayConfirmation($this->l('Remove slide successfully.'));
+				else 
+					$output .= $this->displayError($this->l('Fail to remove slide.'));
 			}else{
 				$ids = Tools::getValue('SlideBox');
 				if(!is_array($ids) || count($ids) < 1){
