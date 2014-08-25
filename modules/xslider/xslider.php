@@ -381,6 +381,7 @@ class Xslider extends Module{
 		$tpl_delete_link_vars = array();
 		
 		$helper = new HelperList();
+		$helper->module = $this;
 		$helper->identifier = 'id_xslider';
 		$helper->currentIndex = AdminController::$currentIndex;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
