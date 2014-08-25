@@ -415,7 +415,8 @@ class Xslider extends Module{
 			'thumbnails'=>	array('title' => $this->l('Thumbnails'), 'class'=>'fixed-width-sm','active'=>'status','align'=>'center', 'type'=>'bool','orderby'=>false)	
 		);
 		
-		$list = xSliderModel::getSlides($this->_getFilter(), Tools::getValue($this->tableConfig.'Orderby',null), Tools::getValue($this->tableConfig.'Orderway',null));
+		$filter = $this->_getFilter();
+		$list = xSliderModel::getSlides($filter, Tools::getValue($this->tableConfig.'Orderby',null), Tools::getValue($this->tableConfig.'Orderway',null));
 		
 		$tpl_list_vars['icon'] = 'icon-list-ul';
 		$tpl_list_vars['title'] = $this->l('Slide Config List');
