@@ -455,8 +455,8 @@ class Xslider extends Module{
 		$fields_list = array(
 			'id_xslider_item' => array('title' => $this->l('ID'), 'align' => 'right', 'class' => 'fixed-width-xs'),
 			'id_xslider' => array('title' => $this->l('Slider Name'),'callback' => 'getNameById', 'callback_object' => 'xSliderModel'),
-			'image'		=>	array('title' => $this->l('Image')),
-			'link'		=>	array('title' => $this->l('Link')),
+			'image'		=>	array('title' => $this->l('Image'),'orderby'=>false),
+			'link'		=>	array('title' => $this->l('Link'),'orderby'=>false),
 			'description'		=>	array('title' => $this->l('Width'),	'align'=>'right', 'orderby'=>false),
 			'active'	=>	array('title' => $this->l('Height'), 'align'=>'center', 'orderby'=>false, 'active'=>'status','type'=>'bool','class'=>'fixed-width-sm')
 		);
@@ -519,15 +519,15 @@ class Xslider extends Module{
 	private function _getFilter($type='config'){
 		$filter = array();
 		$config_filter = array('id_xslider','name','id_hook','loader');
-		$item_filter = array();
+		$item_filter = array('id_xslider_item','id_xslider');
 		if($type == 'config'){
 			foreach($config_filter as $cf){
-				if(isset(Tools::getValue($this->tableConfig.'_'.$cf,null)) && Tools::getValue($this->tableConfig.'_'.$cf))
+				if(Tools::getIsset($this->tableConfig.'_'.$cf))
 					array_push($filter, 'x.'.$cf.'=`'.Tools::getValue($this->tableConfig.'_'.$cf).'`');
 			}
 		}else{
 			foreach ($item_filter as $if){
-				if(isset(Tools::getValue($this->tableItem.'_'.$if,null)) && Tools::getValue($this->tableItem.'_'.$if))
+				if(Tools::getIsset($this->tableItem.'_'.$if))
 					array_push($filter, 'x.'.$if.'=`'.Tools::getValue($this->tableItem.'_'.$if.'`'));
 			}
 		}
