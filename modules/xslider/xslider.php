@@ -236,6 +236,8 @@ class Xslider extends Module{
 				$output .= $this->displayError($this->l('Fail to update status.'));
 			}
 			
+			$output .= $this->renderConfigForm();
+			
 		}else{ //default config list
 			$output .= $this->renderConfigList();
 		}
