@@ -516,7 +516,7 @@ class Xslider extends Module{
 				),
 				'input' => array(
 					array(
-						'type' 	=> 'file_lang',
+						'type' 	=> 'file',
 						'label'	=>	$this->l('Select a picture'),
 						'name'	=>	'image',
 						'required'=> true
