@@ -685,7 +685,7 @@ class Xslider extends Module{
 		$helper = new HelperList();
 		$helper->module = $this;
 		$helper->identifier = 'id_xslider_item';
-		$helper->currentIndex = AdminController::$currentIndex.'&id_xsldier='.$id_xslider;
+		$helper->currentIndex = AdminController::$currentIndex.'&id_xslider='.$id_xslider;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
 		$helper->table = $this->tableItem;
 		$helper->listTotal = count($list);
