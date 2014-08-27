@@ -216,6 +216,15 @@ class xSliderModel extends ObjectModel{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
 	}
 	
+	public static function getIdSliderByIdSliderItem($id){
+		$sql = new DBQueryCore();
+		$sql->select('x.id_xslider');
+		$sql->from('xslider_items','x');
+		$sql->where('x.id_xslider_item='.$id);
+		
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($sql);
+	}
+	
 	public static function deleteByIds($ids){
 		if (is_array($ids)){
 			$where = 'id_xslider in('.implode(',', $ids).')';

@@ -528,11 +528,17 @@ class Xslider extends Module{
 		$lang = (int)Configuration::get('PS_LANG_DEFAULT');
 		
 		$id_xslider = Tools::getValue('id_xslider',null);
-		if(!$id_xslider)
-			return $this->displayError($this->l('id_xslider is empty.'));
-		
 		$id_xslider_item = Tools::getValue('id_xslider_item',null);
-
+		if(!$id_xslider){
+			if($id_xslider_item){//edit old item
+				if(!$id_xslider = xSliderModel::getIdSliderByIdSliderItem($id_xslider_item)){
+					return $this->displayError($this->l('wired error occurred,your id_xslider_item does not valid.'));
+				}
+			}else{
+				return $this->displayError($this->l('id_xslider is empty.'));
+			}
+		}
+		
 		$identifier = 'id_xslider_item';
 		$form_id = $id_xslider_item;
 		
