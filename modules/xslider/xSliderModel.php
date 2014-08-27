@@ -167,7 +167,7 @@ class xSliderModel extends ObjectModel{
 				
 				$sql .=" where id_xslider_item=".$data['id_xslider_item'];
 				return Db::getInstance()->execute($sql);*/
-				return Db::getInstance()->update('xslider_items', $data, 'id_xslider_item='.$data['id_slider_item']);
+				return Db::getInstance()->update('xslider_items', $data, 'id_xslider_item='.$data['id_xslider_item']);
 			}else 
 				return Db::getInstance()->insert('xslider_items',$data,false,true,Db::REPLACE);
 		}
