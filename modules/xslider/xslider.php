@@ -659,7 +659,7 @@ class Xslider extends Module{
 			$id_xslider = xSliderModel::getIdSliderByIdSliderItem($id_xslider_item);
 		}
 		if(!$id_xslider){
-			if(isset(Tools::getValue('id_xslider_item')))
+			if(Tools::getValue('id_xslider_item'))
 				$id_xslider = xSliderModel::getIdSliderByIdSliderItem((int)Tools::getValue('id_xslider_item'));
 			else
 				return '';// output empty when added one new slider
