@@ -119,20 +119,47 @@ class Xslider extends Module{
 		}elseif(Tools::isSubmit('submitSliderItem')){
 			$xslider = new xSliderModel((int)Tools::getValue('id_xslider'));
 			if($xslider instanceof ObjectModel){
-				$data = array('id_xslider_item'=>(int)Tools::getValue('id_xslider_item'),
-								'id_xslider'=>(int)Tools::getValue('id_xslider'),
-								'image'=>Tools::getValue('image'),
-								'description'=>Tools::getValue('description'),
-								'link' => Tools::getValue('link'),
-								'active'=>(int)Tools::getValue('active'));
-				if(!xSliderModel::saveItem($data))
-					$output .= $this->displayError($this->l('Error to save slider item for '.$xslider->id));
-				else 
-					$output .= $this->displayInformation($this->l('Add/Update slider item successfully.'));	
 				
-				$output .= $this->renderConfigForm($xslider->id);
+				//Uploads image and save slider item
+				$type = Tools::strtolower(Tools::substr(strrchr($_FILES['image']['name'], '.'), 1));
+				$imagesize = @getimagesize($_FILES['image']['tmp_name']);
+				if(isset($_FILES['image']) && 
+				   isset($_FILES['image']['tmp_name']) &&
+				   !empty($_FILES['image']['tmp_name']) && 
+				   !empty($imagesize) && 
+				   in_array(Tools::strtolower(Tools::substr(strrchr($imagesize['mime'], '/'), 1)), array('jpg','gif','jpeg','png')) &&
+				   in_array($type, array('jpg','gif','jpeg','png'))){
+					
+				   	$temp_name = tempnam(_PS_TMP_IMG_DIR_, 'ECX');
+				   	$salt = sha1(microtime());
+				   	
+				   	if($error = ImageManager::validateUpload($_FILES['name']))
+				   		$errors[] = $error;
+				   	elseif((!$temp_name || !move_uploaded_file($_FILES['image']['tmp_name'], $temp_name)))
+				   		$errors[] = $this->displayError($this->l('Something system error occurred.'));
+				   	elseif(!ImageManager::resize($temp_name, dirname(__FILE__).'/images/'.$salt.'_'.$xslider->id.'_'.$_FILES['image']['name'],null,null,$type))
+				   		$errors[] = $this->displayError($this->l('An error occurred during uploding the image.'));
+				   	if(isset($temp_name))
+				   		@unlink($temp_name);
+				}
+				if(count($errors)){
+					$output .= implode('<br>', $errors) . $this->renderItemForm();
+				}else{
+					$data = array('id_xslider_item'=>(int)Tools::getValue('id_xslider_item'),
+									'id_xslider'=>(int)Tools::getValue('id_xslider'),
+									'image'=>$salt.'_'.(int)Tools::getValue('id_xslider').'_'.$_FILES['image']['name'],
+									'description'=>Tools::getValue('description'),
+									'link' => Tools::getValue('link'),
+									'active'=>(int)Tools::getValue('active'));
+					if(!xSliderModel::saveItem($data))
+						$output .= $this->displayError($this->l('Error to save slider item for '.$xslider->id));
+					else 
+						$output .= $this->displayConfirmation($this->l('Add/Update slider item successfully.'));	
+					
+					$output .= $this->renderConfigForm($xslider->id);
+				}
 			}else{
-				$output .= $this->displayInformation($this->l('Unknown xslider id:'.Tools::getValue('id_xslider')));
+				$output .= $this->displayConfirmation($this->l('Unknown xslider id:'.Tools::getValue('id_xslider')));
 				$output .= $this->renderConfigList();
 			}
 		}elseif(Tools::isSubmit('delSlider') || Tools::isSubmit('submitBulkdelete'.$this->tableConfig)){//delete
@@ -511,7 +538,7 @@ class Xslider extends Module{
 		
 		$fields_form[0]['form'] = array(
 				'legend' => array(
-					'title' => 	$this->l('Slide Item List'),
+					'title' => 	$this->l('Slide Item'),
 					'icon'	=>	'icon-cogs'
 				),
 				'input' => array(
@@ -519,7 +546,8 @@ class Xslider extends Module{
 						'type' 	=> 'file',
 						'label'	=>	$this->l('Select a picture'),
 						'name'	=>	'image',
-						'required'=> true
+						'required'=> true,
+						'desc' => $this->l(sprintf('Max image size %s', ini_get('upload_max_filesize')))
 					),
 					array(
 						'type' => 'text',
@@ -586,11 +614,11 @@ class Xslider extends Module{
 		
 		$fields_list = array(
 			'id_xslider_item' => array('title' => $this->l('ID'), 'align' => 'right', 'class' => 'fixed-width-xs'),
-			'id_xslider' => array('title' => $this->l('Slider Name'),'callback' => 'getNameById', 'callback_object' => 'xSliderModel'),
+			//'id_xslider' => array('title' => $this->l('Slider Name'),'callback' => 'getNameById', 'callback_object' => 'xSliderModel'),
 			'image'		=>	array('title' => $this->l('Image'),'orderby'=>false),
 			'link'		=>	array('title' => $this->l('Link'),'orderby'=>false),
-			'description'		=>	array('title' => $this->l('Width'),	'align'=>'right', 'orderby'=>false),
-			'active'	=>	array('title' => $this->l('Height'), 'align'=>'center', 'orderby'=>false, 'active'=>'status','type'=>'bool','class'=>'fixed-width-sm')
+			'description'		=>	array('title' => $this->l('Description'),	'align'=>'right', 'orderby'=>false),
+			'active'	=>	array('title' => $this->l('Active'), 'align'=>'center', 'orderby'=>false, 'active'=>'status','type'=>'bool','class'=>'fixed-width-sm')
 		);
 		
 		$list = xSliderModel::getSliderItems($id_xslider);
