@@ -155,6 +155,14 @@ class xSliderModel extends ObjectModel{
 		return false;
 	}
 	
+	public static function saveItem($data){
+		if(is_array($data) && count($data)){
+			return Db::getInstance()->insert('xslider_items',$data,false,true,Db::REPLACE);
+		}
+		
+		return false;
+	}
+	
 	public static function getNameById($id_slider){
 		if(!isset($id_slider))
 			throw new PrestaShopException("id_xslider is empty or invalid.");
@@ -196,6 +204,16 @@ class xSliderModel extends ObjectModel{
 			$sql->where('x.id_xslider='.(int)$id_xslider);
 		$sql->orderBy('x.id_xslider DESC');
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
+	}
+	
+	public static function getSliderItemById($id_xslider_item){
+		if(!$id_xslider_item || !is_numeric($id_xslider_item))
+			return false;
+		$sql = new DBQuery();
+		$sql->from('xslider_items','x');
+		$sql->where('x.id_xslider_item='.$id_xslider_item);
+		
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
 	}
 	
 	public static function deleteByIds($ids){
