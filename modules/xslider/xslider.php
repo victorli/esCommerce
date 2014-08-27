@@ -133,8 +133,8 @@ class Xslider extends Module{
 				   	$temp_name = tempnam(_PS_TMP_IMG_DIR_, 'ECX');
 				   	$salt = sha1(microtime());
 				   	
-				   	if($error = ImageManager::validateUpload($_FILES['name']))
-				   		$errors[] = $error;
+				   	if($error = ImageManager::validateUpload($_FILES['image']))
+				   		$errors[] = $this->displayError($error);
 				   	elseif((!$temp_name || !move_uploaded_file($_FILES['image']['tmp_name'], $temp_name)))
 				   		$errors[] = $this->displayError($this->l('Something system error occurred.'));
 				   	elseif(!ImageManager::resize($temp_name, dirname(__FILE__).'/images/'.$salt.'_'.$xslider->id.'_'.$_FILES['image']['name'],null,null,$type))
