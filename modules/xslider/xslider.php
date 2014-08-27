@@ -283,6 +283,9 @@ class Xslider extends Module{
 		$id_xslider = $id;
 		if(is_null($id_xslider))
 			$id_xslider = Tools::getValue('id_xslider',null);
+			
+		if(!$id_xslider && Tools::getValue('id_xslider_item'))
+			$id_xslider = xSliderModel::getIdSliderByIdSliderItem((int)Tools::getValue('id_xslider_item'));
 		
 		$xslider = null;
 		if(isset($id_xslider)){
