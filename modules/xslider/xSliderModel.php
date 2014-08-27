@@ -197,6 +197,10 @@ class xSliderModel extends ObjectModel{
 		return Db::getInstance()->update('xslider_config', $data, $where);
 	}
 	
+	public static function updateSliderItem($data = array(), $where){
+		return Db::getInstance()->update('xslider_items', $data, $where);
+	}
+	
 	public static function getSliderItems($id_xslider=null){
 		$sql = new DBQuery();
 		$sql->from('xslider_items','x');
@@ -242,5 +246,20 @@ class xSliderModel extends ObjectModel{
 		}
 		
 		return false;
+	}
+	
+	public static function deleteItemByIds($ids){
+		if (is_array($ids)){
+			$where = 'id_xslider_item in('.implode(',', $ids).')';
+		}else{
+			$where = 'id_xslider_item = '.$ids;
+		}
+		
+		//clear item from xslider_item
+		if(Db::getInstance()->delete('xslider_items', $where)){
+			return true;
+		}else{
+			return false;
+		}
 	}
 }

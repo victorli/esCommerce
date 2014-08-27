@@ -121,6 +121,7 @@ class Xslider extends Module{
 			if($xslider instanceof ObjectModel){
 				
 				//Uploads image and save slider item
+				$omit = false;
 				$type = Tools::strtolower(Tools::substr(strrchr($_FILES['image']['name'], '.'), 1));
 				$imagesize = @getimagesize($_FILES['image']['tmp_name']);
 				if(isset($_FILES['image']) && 
@@ -141,16 +142,24 @@ class Xslider extends Module{
 				   		$errors[] = $this->displayError($this->l('An error occurred during uploding the image.'));
 				   	if(isset($temp_name))
 				   		@unlink($temp_name);
+				}else{//no picture speicified
+					if(!Tools::getValue('id_xsldier_item')){//we think user edit an old item but not specified an imapge
+						$omit = true;
+					}else{
+						$errors[] = $this->displayError($this->l('Please choose one image first.'));
+					}
 				}
 				if(count($errors)){
 					$output .= implode('<br>', $errors) . $this->renderItemForm();
 				}else{
 					$data = array('id_xslider_item'=>(int)Tools::getValue('id_xslider_item'),
 									'id_xslider'=>(int)Tools::getValue('id_xslider'),
-									'image'=>$salt.'_'.(int)Tools::getValue('id_xslider').'_'.$_FILES['image']['name'],
 									'description'=>Tools::getValue('description'),
 									'link' => Tools::getValue('link'),
 									'active'=>(int)Tools::getValue('active'));
+					if(!$omit){
+						$data['image'] = $salt.'_'.(int)Tools::getValue('id_xslider').'_'.$_FILES['image']['name'];
+					}
 					if(!xSliderModel::saveItem($data))
 						$output .= $this->displayError($this->l('Error to save slider item for '.$xslider->id));
 					else 
@@ -162,7 +171,7 @@ class Xslider extends Module{
 				$output .= $this->displayConfirmation($this->l('Unknown xslider id:'.Tools::getValue('id_xslider')));
 				$output .= $this->renderConfigList();
 			}
-		}elseif(Tools::isSubmit('delSlider') || Tools::isSubmit('submitBulkdelete'.$this->tableConfig)){//delete
+		}elseif(Tools::isSubmit('delSlider') || Tools::isSubmit('submitBulkdelete'.$this->tableConfig)){//delete config
 			if(Tools::getValue('id_xslider') && is_numeric(Tools::getValue('id_xslider'))){
 				if(xSliderModel::deleteByIds(Tools::getValue('id_xslider')))
 					$output .= 	$this->displayConfirmation($this->l('Remove slide successfully.'));
@@ -182,6 +191,25 @@ class Xslider extends Module{
 			}
 			$output .= $this->renderConfigList();
 			
+		}elseif(Tools::isSubmit('delSliderItem') || Tools::isSubmit('submitBulkdelete'.$this->tableItem)){
+			if(Tools::getValue('id_xslider_item') && is_numeric(Tools::getValue('id_xslider_item'))){
+				if(xSliderModel::deleteItemByIds(Tools::getValue('id_xslider_item')))
+					$output .= 	$this->displayConfirmation($this->l('Remove slider item successfully.'));
+				else 
+					$output .= $this->displayError($this->l('Fail to remove slider item.'));
+			}else{
+				$ids = Tools::getValue($this->tableItem.'Box');
+				if(!is_array($ids) || count($ids) < 1){
+					$output .= $this->displayError($this->l('Please choose one item at least.'));
+				}else{
+					if(xSliderModel::deleteItemByIds($ids)){
+						$output .= $this->displayConfirmation($this->l('Remove slider item successfully.'));
+					}else{
+						$output .= $this->displayError($this->l('Fail to remove slider item.'));
+					}
+				}
+			}
+			$output .= $this->renderConfigForm((int)Tools::getValue('id_xslider'));
 		}elseif(Tools::isSubmit('submitFilterButton'.$this->tableConfig)){//filter
 			$output .= $this->renderConfigList();
 		}elseif(Tools::isSubmit('navigationSlider') || Tools::isSubmit('paginationSlider') || Tools::isSubmit('thumbnailsSlider')){
@@ -199,6 +227,15 @@ class Xslider extends Module{
 			}
 			
 			$output .= $this->renderConfigList();			
+		}elseif(Tools::isSubmit('itemStatusSlider')){ //change slider item's active status
+			$id_xslider_item = Tools::getValue('id_xslider');//using the same identifier with slider config
+			$enabled = Tools::getValue('enabled',1);
+			if(xSliderModel::updateSliderItem(array('active'=>!$enabled),'id_xslider_item='.$id_xslider_item)){
+				$output .= $this->displayConfirmation($this->l('Update status successfully.'));
+			}else{
+				$output .= $this->displayError($this->l('Fail to update status.'));
+			}
+			
 		}else{ //default config list
 			$output .= $this->renderConfigList();
 		}
@@ -623,7 +660,7 @@ class Xslider extends Module{
 			'image'		=>	array('title' => $this->l('Image'),'orderby'=>false, 'callback' =>'getThumbnail', 'callback_object' => $this),
 			'link'		=>	array('title' => $this->l('Link'),'orderby'=>false),
 			'description'		=>	array('title' => $this->l('Description'),	'align'=>'right', 'orderby'=>false),
-			'active'	=>	array('title' => $this->l('Active'), 'align'=>'center', 'orderby'=>false, 'active'=>'status','type'=>'bool','class'=>'fixed-width-sm')
+			'active'	=>	array('title' => $this->l('Active'), 'align'=>'center', 'orderby'=>false, 'active'=>'itemStatus','type'=>'bool','class'=>'fixed-width-sm')
 		);
 		
 		$list = xSliderModel::getSliderItems($id_xslider);
@@ -636,7 +673,7 @@ class Xslider extends Module{
 		$helper = new HelperList();
 		$helper->module = $this;
 		$helper->identifier = 'id_xslider_item';
-		$helper->currentIndex = AdminController::$currentIndex;
+		$helper->currentIndex = AdminController::$currentIndex.'&id_xsldier='.$id_xslider;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
 		$helper->table = $this->tableItem;
 		$helper->listTotal = count($list);
@@ -721,7 +758,7 @@ class Xslider extends Module{
 	public function displayDeleteItemLink($token = null, $id, $name = null){
 		$this->context->smarty->assign(array(
 			'href' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&delSliderItem&id_xslider_item='.$id.'&token='.Tools::getAdminTokenLite('AdminModules')),
-			'action' => $this->l('Edit','Helper'),
+			'action' => $this->l('Delete','Helper'),
 			'id' => $id
 		));
 
