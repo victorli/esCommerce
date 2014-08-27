@@ -654,8 +654,16 @@ class Xslider extends Module{
 	public function renderItemList(){
 		
 		$id_xslider = Tools::getValue('id_xslider',null);
-		if(!$id_xslider)
-			return '';// output empty when added one new slider
+		if(Tools::isSubmit('itemStatusSlider')){
+			$id_xslider_item = Tools::getValue('id_xslider');
+			$id_xslider = xSliderModel::getIdSliderByIdSliderItem($id_xslider_item);
+		}
+		if(!$id_xslider){
+			if(isset(Tools::getValue('id_xslider_item')))
+				$id_xslider = xSliderModel::getIdSliderByIdSliderItem((int)Tools::getValue('id_xslider_item'));
+			else
+				return '';// output empty when added one new slider
+		}
 		
 		$fields_list = array(
 			'id_xslider_item' => array('title' => $this->l('ID'), 'align' => 'right', 'class' => 'fixed-width-xs'),
