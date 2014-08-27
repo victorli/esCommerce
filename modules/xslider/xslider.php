@@ -614,8 +614,7 @@ class Xslider extends Module{
 		
 		$fields_list = array(
 			'id_xslider_item' => array('title' => $this->l('ID'), 'align' => 'right', 'class' => 'fixed-width-xs'),
-			//'id_xslider' => array('title' => $this->l('Slider Name'),'callback' => 'getNameById', 'callback_object' => 'xSliderModel'),
-			'image'		=>	array('title' => $this->l('Image'),'orderby'=>false),
+			'image'		=>	array('title' => $this->l('Image'),'orderby'=>false, 'callback' =>'getThumbnail', 'callback_object' => $this),
 			'link'		=>	array('title' => $this->l('Link'),'orderby'=>false),
 			'description'		=>	array('title' => $this->l('Description'),	'align'=>'right', 'orderby'=>false),
 			'active'	=>	array('title' => $this->l('Active'), 'align'=>'center', 'orderby'=>false, 'active'=>'status','type'=>'bool','class'=>'fixed-width-sm')
@@ -636,6 +635,7 @@ class Xslider extends Module{
 		$helper->table = $this->tableItem;
 		$helper->listTotal = count($list);
 		$helper->no_link = true;
+		$helper->simple_header = true;
 		
 		$helper->tpl_vars = $tpl_list_vars;
 		$helper->tpl_delete_link_vars = $tpl_delete_link_vars;
@@ -754,6 +754,10 @@ class Xslider extends Module{
 			return implode(' AND ', $filter);
 			
 		return null;
+	}
+	
+	public function getThumbnail($imgname){
+		return ImageManager::thumbnail($this->local_path.'images/'.$imgname,'xslider_mini_'.$imgname);
 	}
 
 }
