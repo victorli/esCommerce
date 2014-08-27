@@ -197,6 +197,8 @@ class Xslider extends Module{
 					$output .= 	$this->displayConfirmation($this->l('Remove slider item successfully.'));
 				else 
 					$output .= $this->displayError($this->l('Fail to remove slider item.'));
+					
+				$output .= $this->renderConfigForm(xSliderModel::getIdSliderByIdSliderItem((int)Tools::getValue('id_xslider_item')));
 			}else{
 				$ids = Tools::getValue($this->tableItem.'Box');
 				if(!is_array($ids) || count($ids) < 1){
@@ -208,8 +210,8 @@ class Xslider extends Module{
 						$output .= $this->displayError($this->l('Fail to remove slider item.'));
 					}
 				}
+				$output .= $this->renderConfigForm();
 			}
-			$output .= $this->renderConfigForm(xSliderModel::getIdSliderByIdSliderItem((int)Tools::getValue('id_xslider_item')));
 		}elseif(Tools::isSubmit('submitFilterButton'.$this->tableConfig)){//filter
 			$output .= $this->renderConfigList();
 		}elseif(Tools::isSubmit('navigationSlider') || Tools::isSubmit('paginationSlider') || Tools::isSubmit('thumbnailsSlider')){
