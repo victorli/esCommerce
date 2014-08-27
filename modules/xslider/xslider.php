@@ -209,7 +209,7 @@ class Xslider extends Module{
 					}
 				}
 			}
-			$output .= $this->renderConfigForm((int)Tools::getValue('id_xslider'));
+			$output .= $this->renderConfigForm(xSliderModel::getIdSliderByIdSliderItem((int)Tools::getValue('id_xslider_item')));
 		}elseif(Tools::isSubmit('submitFilterButton'.$this->tableConfig)){//filter
 			$output .= $this->renderConfigList();
 		}elseif(Tools::isSubmit('navigationSlider') || Tools::isSubmit('paginationSlider') || Tools::isSubmit('thumbnailsSlider')){
@@ -236,7 +236,7 @@ class Xslider extends Module{
 				$output .= $this->displayError($this->l('Fail to update status.'));
 			}
 			
-			$output .= $this->renderConfigForm();
+			$output .= $this->renderConfigForm(xSliderModel::getIdSliderByIdSliderItem((int)$id_xslider_item));
 			
 		}else{ //default config list
 			$output .= $this->renderConfigList();
