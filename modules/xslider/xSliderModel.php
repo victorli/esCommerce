@@ -157,7 +157,10 @@ class xSliderModel extends ObjectModel{
 	
 	public static function saveItem($data){
 		if(is_array($data) && count($data)){
-			return Db::getInstance()->insert('xslider_items',$data,false,true,Db::REPLACE);
+			if(isset($data['id_xslider_id']) && $data['id_xslider_id'])
+				return Db::getInstance()->update('xslider_items', $data);
+			else 
+				return Db::getInstance()->insert('xslider_items',$data,false,true,Db::REPLACE);
 		}
 		
 		return false;
