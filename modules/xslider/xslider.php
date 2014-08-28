@@ -486,7 +486,8 @@ class Xslider extends Module{
 				'back'=>array(
 					'href'=>Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules')),
 					'icon'=>'process-icon-back',
-					'title'=>$this->l('Back')
+					'title'=>$this->l('Back'),
+					'style'=>'float:right'
 				)
 			)
 		);
