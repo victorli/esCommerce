@@ -481,6 +481,13 @@ class Xslider extends Module{
 			'submit' => array(
 				'title' => $this->l('Save'),
 				'class' => 'button'
+			),
+			'buttons' => array(
+				'back'=>array(
+					'href'=>Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules')),
+					'icon'=>'process-icon-back',
+					'title'=>$this->l('Back')
+				)
 			)
 		);
 		
@@ -502,13 +509,13 @@ class Xslider extends Module{
 		$helper->toolbar_scroll = true;
 		$helper->submit_action = 'submitSlider';
 		
-		$helper->toolbar_btn = array(
+		/*$helper->toolbar_btn = array(
 			'back' => array(
 				'desc' => $this->l('Back to list'),
 				'href' => AdminController::$currentIndex.'&token='.Tools::getAdminTokenLite('AdminModules').'&configure='.$this->name,
 				'icon' => 'icon-backward'
 			)
-		);
+		);*/
 		
 		$helper->fields_value = $xslider;
 		$lt = isset($xslider['loader']) ? $xslider['loader'] : 'pie';
