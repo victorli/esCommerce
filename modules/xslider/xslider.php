@@ -630,6 +630,14 @@ class Xslider extends Module{
 				'submit' => array(
 					'title' => $this->l('Save'),
 					'class' => 'button'
+				),
+				'buttons' => array(
+					'cancel' => array(
+						'title'=>$this->l('Cancel','Helper'),
+						'js'=>'window.history.back()',
+						'icon' => 'process-icon-cancel',
+						'style'=>'float:right'
+					)
 				)
 			);
 			
@@ -645,8 +653,8 @@ class Xslider extends Module{
 		$helper->allow_employee_form_lang = $lang;
 		
 		$helper->title = $this->displayName;
-		$helper->show_cancel_button = true;
-		$helper->back_url = $helper->currentIndex.'&token='.$helper->token;
+		//$helper->show_cancel_button = true;
+		//$helper->back_url = $helper->currentIndex.'&token='.$helper->token;
 		//$helper->show_toolbar = true;
 		//$helper->toolbar_scroll = true;
 		$helper->submit_action = 'submitSliderItem';
