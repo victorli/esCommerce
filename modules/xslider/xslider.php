@@ -502,16 +502,13 @@ class Xslider extends Module{
 		$helper->toolbar_scroll = true;
 		$helper->submit_action = 'submitSlider';
 		
-		/*$helper->toolbar_btn = array(
-			'save' => array(
-				'desc' => $this->l('Save'),
-				'href' => AdminController::$currentIndex.'&configure='.$this->name.'&save'.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules')
-			),
+		$helper->toolbar_btn = array(
 			'back' => array(
 				'desc' => $this->l('Back to list'),
-				'href' => AdminController::$currentIndex.'&token='.Tools::getAdminTokenLite('AdminModules')
+				'href' => AdminController::$currentIndex.'&token='.Tools::getAdminTokenLite('AdminModules').'&configure='.$this->name,
+				'icon' => 'icon-backward'
 			)
-		);*/
+		);
 		
 		$helper->fields_value = $xslider;
 		$lt = isset($xslider['loader']) ? $xslider['loader'] : 'pie';
@@ -640,6 +637,8 @@ class Xslider extends Module{
 		$helper->allow_employee_form_lang = $lang;
 		
 		$helper->title = $this->displayName;
+		$helper->show_cancel_button = true;
+		$helper->back_url = $helper->currentIndex;
 		//$helper->show_toolbar = true;
 		//$helper->toolbar_scroll = true;
 		$helper->submit_action = 'submitSliderItem';
@@ -752,7 +751,7 @@ class Xslider extends Module{
 			$href .= 'delSliderItem&id_xslider_item='.$id;
 		$this->context->smarty->assign(array(
 			'href' => Tools::safeOutput($href),
-			'action' => $this->l('Edit','Helper'),
+			'action' => $this->l('Delete','Helper'),
 			'id' => $id
 		));
 
