@@ -761,7 +761,7 @@ class Xslider extends Module{
 		if($this->context->cookie->xslider_list_type == 'config')
 			$href .= $active.'Slider&id_xslider='.$id;
 		elseif($this->context->cookie->xslider_list_type == 'item')
-			$href .= $active.'SliderItem&id_xslider_item='.$id;
+			$href .= $active.'SliderItem&id_xslider_item='.$id.'&id_xslider='.$this->context->cookie->id_xslider;
 		$this->context->smarty->assign(array(
 			'ajax' => $ajax,
 			'enabled' => (bool)$value,
