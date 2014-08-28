@@ -291,6 +291,9 @@ class Xslider extends Module{
 			}
 		}
 		
+		if(is_null($xslider))
+			$this->context->cookie->id_xslider = null;
+		
 		$loaderTypes = array(
 			array(
 				'id_option' => 	'pie',
