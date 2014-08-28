@@ -646,7 +646,7 @@ class Xslider extends Module{
 		
 		$helper->title = $this->displayName;
 		$helper->show_cancel_button = true;
-		//$helper->back_url = $helper->currentIndex;
+		$helper->back_url = $helper->currentIndex.'&token='.$helper->token;
 		//$helper->show_toolbar = true;
 		//$helper->toolbar_scroll = true;
 		$helper->submit_action = 'submitSliderItem';
