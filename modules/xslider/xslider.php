@@ -280,19 +280,17 @@ class Xslider extends Module{
 		
 		$form_id = 0;
 		$id_xslider = Tools::getValue('id_xslider',null);
+		if(is_null($id_xslider))
+			$id_xslider = $this->context->cookie->id_xslider;
 		$xslider = null;
 		if(isset($id_xslider) && $id_xslider && is_numeric($id_xslider)){
 			$xslider = xSliderModel::getSliderById($id_xslider);
 			if(is_array($xslider) && count($xslider)>1){
 				$form_id = $id_xslider;
-				$this->context->cookie->id_xslider = $id_xslider;
 			}else{ 
 				$xslider = null;
 			}
 		}
-		
-		if(is_null($xslider))
-			$this->context->cookie->id_xslider = null;
 		
 		$loaderTypes = array(
 			array(
@@ -520,6 +518,7 @@ class Xslider extends Module{
 	public function renderConfigList(){
 		//using cookie to save current list type
 		$this->context->cookie->xslider_list_type = 'config';
+		$this->context->cookie->id_xslider = null;
 		
 		$fields_list = array(
 			'id_xslider' => array('title' => $this->l('ID'), 'align' => 'right'),
