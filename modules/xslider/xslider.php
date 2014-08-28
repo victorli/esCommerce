@@ -280,13 +280,12 @@ class Xslider extends Module{
 		
 		$form_id = 0;
 		$id_xslider = Tools::getValue('id_xslider',null);
-		if(is_null($id_xslider))
-			$id_xslider = $this->context->cookie->id_xslider;
 		$xslider = null;
 		if(isset($id_xslider) && $id_xslider && is_numeric($id_xslider)){
 			$xslider = xSliderModel::getSliderById($id_xslider);
 			if(is_array($xslider) && count($xslider)>1){
 				$form_id = $id_xslider;
+				$this->context->cookie->id_xslider = $id_xslider;
 			}else{ 
 				$xslider = null;
 			}
