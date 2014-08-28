@@ -113,7 +113,7 @@ class Xslider extends Module{
 				$output .= $this->displayError($this->l('Error to Add/Update slide.'));
 			}
 			
-			$output .= $this->renderConfigForm().$this->renderItemList();
+			$output .= $this->renderConfigForm();
 			
 		}elseif(Tools::isSubmit('addSliderItem')){
 			$output .= $this->renderItemForm();
@@ -629,7 +629,7 @@ class Xslider extends Module{
 		$helper->id = $form_id;
 		$helper->name_controller = $this->name;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
-		$helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
+		$helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name.'&id_xslider='.$this->context->cookie->id_xslider;
 		
 		$helper->default_form_language = $lang;
 		$helper->allow_employee_form_lang = $lang;
