@@ -229,7 +229,7 @@ class Xslider extends Module{
 			}
 			
 			$output .= $this->renderConfigList();			
-		}elseif(Tools::isSubmit('itemStatusSlider')){ //change slider item's active status
+		}elseif(Tools::isSubmit('statusSliderItem')){ //change slider item's active status
 			$id_xslider_item = Tools::getValue('id_xslider_item');
 			if(xSliderModel::updateSliderItem(array('active'=>!$enabled),'id_xslider_item='.$id_xslider_item)){
 				$output .= $this->displayConfirmation($this->l('Update status successfully.'));
@@ -660,7 +660,7 @@ class Xslider extends Module{
 			'image'		=>	array('title' => $this->l('Image'),'orderby'=>false, 'callback' =>'getThumbnail', 'callback_object' => $this),
 			'link'		=>	array('title' => $this->l('Link'),'orderby'=>false),
 			'description'		=>	array('title' => $this->l('Description'),	'align'=>'right', 'orderby'=>false),
-			'active'	=>	array('title' => $this->l('Active'), 'align'=>'center', 'orderby'=>false, 'active'=>'itemStatus','type'=>'bool','class'=>'fixed-width-sm')
+			'active'	=>	array('title' => $this->l('Active'), 'align'=>'center', 'orderby'=>false, 'active'=>'status','type'=>'bool','class'=>'fixed-width-sm')
 		);
 		
 		$list = xSliderModel::getSliderItems($id_xslider);
