@@ -108,18 +108,18 @@ class Xslider extends Module{
 			
 			if($xslider->save(false,true)){
 				$output .= $this->displayConfirmation($this->l('Add/Update slide successfully.'));
+				$this->context->cookie->id_xslider = $xslider->id;
 			}else{ 
 				$output .= $this->displayError($this->l('Error to Add/Update slide.'));
 			}
 			
-			$output .= $this->renderConfigForm($xslider->id_xslider).$this->renderItemList();
+			$output .= $this->renderConfigForm().$this->renderItemList();
 			
 		}elseif(Tools::isSubmit('addSliderItem')){
 			$output .= $this->renderItemForm();
 		}elseif(Tools::isSubmit('submitSliderItem')){
-			$xslider = new xSliderModel((int)Tools::getValue('id_xslider'));
+			$xslider = new xSliderModel((int)$this->context->cookie->id_xslider);
 			if($xslider instanceof ObjectModel){
-				
 				//Uploads image and save slider item
 				$omit = false;
 				$type = Tools::strtolower(Tools::substr(strrchr($_FILES['image']['name'], '.'), 1));
@@ -143,7 +143,7 @@ class Xslider extends Module{
 				   	if(isset($temp_name))
 				   		@unlink($temp_name);
 				}else{//no picture speicified
-					if(!Tools::getValue('id_xsldier_item')){//we think user edit an old item but not specified an imapge
+					if(Tools::getValue('id_xsldier_item')){//we think user edit an old item but not specified an imapge
 						$omit = true;
 					}else{
 						$errors[] = $this->displayError($this->l('Please choose one image first.'));
@@ -158,17 +158,17 @@ class Xslider extends Module{
 									'link' => Tools::getValue('link'),
 									'active'=>(int)Tools::getValue('active'));
 					if(!$omit){
-						$data['image'] = $salt.'_'.(int)Tools::getValue('id_xslider').'_'.$_FILES['image']['name'];
+						$data['image'] = $salt.'_'.(int)$xslider->id.'_'.$_FILES['image']['name'];
 					}
 					if(!xSliderModel::saveItem($data))
 						$output .= $this->displayError($this->l('Error to save slider item for '.$xslider->id));
 					else 
 						$output .= $this->displayConfirmation($this->l('Add/Update slider item successfully.'));	
 					
-					$output .= $this->renderConfigForm($xslider->id);
+					$output .= $this->renderConfigForm();
 				}
 			}else{
-				$output .= $this->displayConfirmation($this->l('Unknown xslider id:'.Tools::getValue('id_xslider')));
+				$output .= $this->displayConfirmation($this->l('Unknown xslider id:'.$this->context->cookie->id_xslider));
 				$output .= $this->renderConfigList();
 			}
 		}elseif(Tools::isSubmit('delSlider') || Tools::isSubmit('submitBulkdelete'.$this->tableConfig)){//delete config
@@ -198,7 +198,7 @@ class Xslider extends Module{
 				else 
 					$output .= $this->displayError($this->l('Fail to remove slider item.'));
 					
-				$output .= $this->renderConfigForm(xSliderModel::getIdSliderByIdSliderItem((int)Tools::getValue('id_xslider_item')));
+				$output .= $this->renderConfigForm();
 			}else{
 				$ids = Tools::getValue($this->tableItem.'Box');
 				if(!is_array($ids) || count($ids) < 1){
@@ -230,15 +230,14 @@ class Xslider extends Module{
 			
 			$output .= $this->renderConfigList();			
 		}elseif(Tools::isSubmit('itemStatusSlider')){ //change slider item's active status
-			$id_xslider_item = Tools::getValue('id_xslider');//using the same identifier with slider config
-			$enabled = Tools::getValue('enabled',1);
+			$id_xslider_item = Tools::getValue('id_xslider_item');
 			if(xSliderModel::updateSliderItem(array('active'=>!$enabled),'id_xslider_item='.$id_xslider_item)){
 				$output .= $this->displayConfirmation($this->l('Update status successfully.'));
 			}else{
 				$output .= $this->displayError($this->l('Fail to update status.'));
 			}
 			
-			$output .= $this->renderConfigForm(xSliderModel::getIdSliderByIdSliderItem((int)$id_xslider_item));
+			$output .= $this->renderConfigForm();
 			
 		}else{ //default config list
 			$output .= $this->renderConfigList();
@@ -276,24 +275,21 @@ class Xslider extends Module{
 		return $html;
 	}
 	
-	public function renderConfigForm($id=null){
+	public function renderConfigForm(){
 		$lang = (int)Configuration::get('PS_LANG_DEFAULT');
 		
 		$form_id = 0;
-		$id_xslider = $id;
+		$id_xslider = Tools::getValue('id_xslider',null);
 		if(is_null($id_xslider))
-			$id_xslider = Tools::getValue('id_xslider',null);
-			
-		if(!$id_xslider && Tools::getValue('id_xslider_item'))
-			$id_xslider = xSliderModel::getIdSliderByIdSliderItem((int)Tools::getValue('id_xslider_item'));
-		
+			$id_xslider = $this->context->cookie->id_xslider;
 		$xslider = null;
-		if(isset($id_xslider)){
+		if(isset($id_xslider) && $id_xslider && is_numeric($id_xslider)){
 			$xslider = xSliderModel::getSliderById($id_xslider);
-			if(is_array($xslider) && count($xslider)>1)
+			if(is_array($xslider) && count($xslider)>1){
 				$form_id = $id_xslider;
-			else 
+			}else{ 
 				$xslider = null;
+			}
 		}
 		
 		$loaderTypes = array(
@@ -520,6 +516,8 @@ class Xslider extends Module{
 	}
 	
 	public function renderConfigList(){
+		//using cookie to save current list type
+		$this->context->cookie->xslider_list_type = 'config';
 		
 		$fields_list = array(
 			'id_xslider' => array('title' => $this->l('ID'), 'align' => 'right'),
@@ -571,18 +569,7 @@ class Xslider extends Module{
 		
 		$lang = (int)Configuration::get('PS_LANG_DEFAULT');
 		
-		$id_xslider = Tools::getValue('id_xslider',null);
 		$id_xslider_item = Tools::getValue('id_xslider_item',null);
-		if(!$id_xslider){
-			if($id_xslider_item){//edit old item
-				if(!$id_xslider = xSliderModel::getIdSliderByIdSliderItem($id_xslider_item)){
-					return $this->displayError($this->l('wired error occurred,your id_xslider_item does not valid.'));
-				}
-			}else{
-				return $this->displayError($this->l('id_xslider is empty.'));
-			}
-		}
-		
 		$identifier = 'id_xslider_item';
 		$form_id = $id_xslider_item;
 		
@@ -642,7 +629,7 @@ class Xslider extends Module{
 		$helper->id = $form_id;
 		$helper->name_controller = $this->name;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
-		$helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name.'&id_xslider='.$id_xslider;
+		$helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
 		
 		$helper->default_form_language = $lang;
 		$helper->allow_employee_form_lang = $lang;
@@ -657,19 +644,16 @@ class Xslider extends Module{
 	}
 	
 	public function renderItemList(){
-		
+		$this->context->cookie->xslider_list_type = 'item';
+
 		$id_xslider = Tools::getValue('id_xslider',null);
-		if(Tools::isSubmit('itemStatusSlider')){
-			$id_xslider_item = Tools::getValue('id_xslider');
-			$id_xslider = xSliderModel::getIdSliderByIdSliderItem($id_xslider_item);
-		}
-		if(!$id_xslider){
-			if(Tools::getValue('id_xslider_item'))
-				$id_xslider = xSliderModel::getIdSliderByIdSliderItem((int)Tools::getValue('id_xslider_item'));
-			else
-				return '';// output empty when added one new slider
+		if(!$id_xslider || is_null($id_xslider)){
+			$id_xslider = $this->context->cookie->id_xslider;
 		}
 		
+		if(is_null($id_xslider) || !$id_xslider || !is_numeric($id_xslider))
+			return '';// we think just add one new slider config
+			
 		$fields_list = array(
 			'id_xslider_item' => array('title' => $this->l('ID'), 'align' => 'right', 'class' => 'fixed-width-xs'),
 			'image'		=>	array('title' => $this->l('Image'),'orderby'=>false, 'callback' =>'getThumbnail', 'callback_object' => $this),
@@ -707,7 +691,7 @@ class Xslider extends Module{
 								'confirm'=>$this->l('Are you sure to delete selected items?'),
 								'icon'=>'icon-trash'));
 		
-		$helper->actions = array('editItem','deleteItem');
+		$helper->actions = array('edit','delete');
 		
 		return $helper->generateList($list,$fields_list);
 	}
@@ -741,18 +725,13 @@ class Xslider extends Module{
 	}
 	
 	public function displayEditLink($token = null, $id, $name = null){
+		$href = AdminController::$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&';
+		if($this->context->cookie->xslider_list_type == 'config')
+			$href .= 'addSlider&id_xslider='.$id;
+		elseif($this->context->cookie->xslider_list_type == 'item')
+			$href .= 'addSliderItem&id_xslider_item='.$id;
 		$this->context->smarty->assign(array(
-			'href' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&addSlider&id_xslider='.$id.'&token='.Tools::getAdminTokenLite('AdminModules')),
-			'action' => $this->l('Edit','Helper'),
-			'id' => $id
-		));
-
-		return $this->display(__FILE__,'/helper/list_action_edit.tpl');
-	}
-	
-	public function displayEditItemLink($token = null, $id, $name = null){
-		$this->context->smarty->assign(array(
-			'href' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&addSliderItem&id_xslider_item='.$id.'&token='.Tools::getAdminTokenLite('AdminModules')),
+			'href' => Tools::safeOutput($href),
 			'action' => $this->l('Edit','Helper'),
 			'id' => $id
 		));
@@ -761,19 +740,14 @@ class Xslider extends Module{
 	}
 	
 	public function displayDeleteLink($token = null, $id, $name = null){
+		$href = AdminController::$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&';
+		if($this->context->cookie->xslider_list_type == 'config')
+			$href .= 'delSlider&id_xslider='.$id;
+		elseif($this->context->cookie->xslider_list_type == 'item')
+			$href .= 'delSliderItem&id_xslider_item='.$id;
 		$this->context->smarty->assign(array(
-			'href' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&delSlider&id_xslider='.$id.'&token='.Tools::getAdminTokenLite('AdminModules')),
+			'href' => Tools::safeOutput($href),
 			'action' => $this->l('Edit','Helper'),
-			'id' => $id
-		));
-
-		return $this->display(__FILE__,'/helper/list_action_delete.tpl');
-	}
-	
-	public function displayDeleteItemLink($token = null, $id, $name = null){
-		$this->context->smarty->assign(array(
-			'href' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&delSliderItem&id_xslider_item='.$id.'&token='.Tools::getAdminTokenLite('AdminModules')),
-			'action' => $this->l('Delete','Helper'),
 			'id' => $id
 		));
 
@@ -782,10 +756,15 @@ class Xslider extends Module{
 	
 	public function displayEnableLink($token, $id, $value, $active, $id_category = null, $id_product = null, $ajax = false)
 	{
+		$href = AdminController::$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&enabled='.$value.'&';
+		if($this->context->cookie->xslider_list_type == 'config')
+			$href .= $active.'Slider&id_xslider='.$id;
+		elseif($this->context->cookie->xslider_list_type == 'item')
+			$href .= $active.'SliderItem&id_xslider_item='.$id;
 		$this->context->smarty->assign(array(
 			'ajax' => $ajax,
 			'enabled' => (bool)$value,
-			'url_enable' => Tools::safeOutput(AdminController::$currentIndex.'&configure='.$this->name.'&'.$active.'Slider&id_xslider='.$id.'&token='.Tools::getAdminTokenLite('AdminModules').'&enabled='.$value),
+			'url_enable' => Tools::safeOutput($href),
 		));
 		return $this->display(__FILE__,'/helper/list_action_enable.tpl');
 	}
