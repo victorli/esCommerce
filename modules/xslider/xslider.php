@@ -143,7 +143,7 @@ class Xslider extends Module{
 				   	if(isset($temp_name))
 				   		@unlink($temp_name);
 				}else{//no picture speicified
-					if(Tools::getValue('id_xsldier_item')){//we think user edit an old item but not specified an imapge
+					if(Tools::getValue('id_xslider_item')){//we think user edit an old item but not specified an imapge
 						$omit = true;
 					}else{
 						$errors[] = $this->displayError($this->l('Please choose one image first.'));
@@ -231,6 +231,7 @@ class Xslider extends Module{
 			$output .= $this->renderConfigList();			
 		}elseif(Tools::isSubmit('statusSliderItem')){ //change slider item's active status
 			$id_xslider_item = Tools::getValue('id_xslider_item');
+			$enabled = (int)Tools::getValue('enabled',1);
 			if(xSliderModel::updateSliderItem(array('active'=>!$enabled),'id_xslider_item='.$id_xslider_item)){
 				$output .= $this->displayConfirmation($this->l('Update status successfully.'));
 			}else{
