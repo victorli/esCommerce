@@ -153,7 +153,7 @@ class Xslider extends Module{
 					$output .= implode('<br>', $errors) . $this->renderItemForm();
 				}else{
 					$data = array('id_xslider_item'=>(int)Tools::getValue('id_xslider_item'),
-									'id_xslider'=>(int)Tools::getValue('id_xslider'),
+									'id_xslider'=>$xslider->id,
 									'description'=>Tools::getValue('description'),
 									'link' => Tools::getValue('link'),
 									'active'=>(int)Tools::getValue('active'));
