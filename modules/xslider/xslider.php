@@ -715,12 +715,30 @@ class Xslider extends Module{
 		return $helper->generateList($list,$fields_list);
 	}
 	
-	public function hookdisplayHeader($params){
-		return;
+	private function _prepareHook(){
+		//add js and css
+		$this->context->controller->addCSS($this->_path.'css/camera.css');
+		$this->context->controller->addCSS($this->_path.'css/xslider.css');
+		$this->context->controller->addJS($this->_path.'js/camera.min.js');
+		$this->context->controller->addJS($this->_path.'js/jquery.mobile.customized.min.js');
 	}
 	
-	public function hookdisplayTopColumn($params){
+	/*public function hookdisplayHeader($params){
 		return;
+	}*/
+	
+	public function hookdisplayTopColumn($params){
+		$hook_id = Hook::getIdByName('displayTopColumn');
+		$xsliders = xSliderModel::getSlidersByHook($hook_id);
+		
+		$this->_prepareHook();
+		
+		$this->context->smarty->assign(
+			array(
+				'xsliders' => $xsliders
+			)
+		);
+		return $this->display(__FILE__,'xslider.tpl');
 	}
 	
 	public function hookdisplayTop($params){

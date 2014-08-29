@@ -144,6 +144,13 @@ class xSliderModel extends ObjectModel{
 		return parent::add($autodate,false);
 	}
 	
+	public function save($null_values=false, $autodate=true){
+		$this->id_shop = ($this->id_shop) ? $this->id_shop : Context::getContext()->shop->id;
+		$this->id_shop_group = ($this->id_shop_group) ? $this->id_shop_group : Context::getContext()->shop->id_shop_group;
+		
+		return parent::save($null_values,$autodate);
+	}
+	
 	public function saveItems(){
 		if(!isset($this->id_xslider) || !is_numeric($this->id_xslider))
 			throw new PrestaShopException("id_xslider is empty or invalid.");
@@ -158,15 +165,6 @@ class xSliderModel extends ObjectModel{
 	public static function saveItem($data){
 		if(is_array($data) && count($data)){
 			if(isset($data['id_xslider_item']) && $data['id_xslider_item']){
-				/*$sql = "update "._DB_PREFIX_."xslider_items set ".
-						"description='".$data['description']."',".
-						"link='".$data['link']."',".
-						"active=".$data['active'];
-				if(isset($data['image']))
-					$sql .=",image='".$data['image']."' ";
-				
-				$sql .=" where id_xslider_item=".$data['id_xslider_item'];
-				return Db::getInstance()->execute($sql);*/
 				return Db::getInstance()->update('xslider_items', $data, 'id_xslider_item='.$data['id_xslider_item']);
 			}else 
 				return Db::getInstance()->insert('xslider_items',$data,false,true,Db::REPLACE);
@@ -213,11 +211,13 @@ class xSliderModel extends ObjectModel{
 		return Db::getInstance()->update('xslider_items', $data, $where);
 	}
 	
-	public static function getSliderItems($id_xslider=null){
+	public static function getSliderItems($id_xslider=null, $active=false){
 		$sql = new DBQuery();
 		$sql->from('xslider_items','x');
 		if (isset($id_xslider) && is_numeric($id_xslider))
 			$sql->where('x.id_xslider='.(int)$id_xslider);
+		if($active)
+			$sql->where('x.active=1');
 		$sql->orderBy('x.id_xslider DESC');
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
 	}
@@ -273,5 +273,28 @@ class xSliderModel extends ObjectModel{
 		}else{
 			return false;
 		}
+	}
+	
+	public static function getSlidersByHook($hook_id){
+		$sql = new DbQuery();
+		$sql->from('xslider_config','x')
+			->where('x.id_hook='.$hook_id)
+			->where('x.id_shop='.Context::getContext()->shop->id)
+			->orderBy('x.id_xslider DESC');
+		
+		$rets = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
+		if($rets && is_array($rets)){
+			foreach($rets as $key => &$row){
+				$items = self::getSliderItems($row['id_xslider'],true);
+				foreach($items as &$item){
+					$imgname = $item['image'];
+					$item['image'] = $this->_path.'images/'.$imgname;
+					$item['thumb'] = _PS_IMG_DIR_.'tmp/xslider_mini_'.$imgname;
+				}
+				$row['items'] = $items;
+			}
+		}
+		
+		return $rets;
 	}
 }
