@@ -726,8 +726,8 @@ class Xslider extends Module{
 	private function _prepareCameraJsScript($xsliders){
 		$js = '<script type="text/javascript">'.
 			  '$(function(){';
-		foreach($xsliders as $key => $xslider){
-			$js .='$("#xslider_'.$key.'").camera({'.
+		foreach($xsliders as $xslider){
+			$js .='$("#xslider_'.$xslider['id_xslider'].'").camera({'.
 				  'height:"'.$xslider['height'].'px",'.
 				  'fx:"'.$xslider['fx'].'",'.
 				  'loader:"'.$xslider['loader'].'",'.
