@@ -743,6 +743,7 @@ class Xslider extends Module{
 	
 	private function _prepareCameraJsScript($xsliders){
 		$js = '<script type="text/javascript">'.
+			  'var autoplay="";'. //using to fixed camera's video autoplay bug
 			  '$(function(){';
 		foreach($xsliders as $xslider){
 			$js .='$("#xslider-'.$xslider['id_xslider'].'").camera({'.
@@ -757,7 +758,8 @@ class Xslider extends Module{
 				  'playPause:'.$xslider['playPause'].','.
 				  'piePosition:"'.$xslider['piePosition'].'",'.
 				  'thumbnails:'.$xslider['thumbnails'].	','.
-				  'time:'.$xslider['time'].	
+				  'time:'.$xslider['time'].	','.
+				  'imagePath:"'.$this->_path.'images/"'.
 				  '})';
 		}
 		$js .="});</script>";
