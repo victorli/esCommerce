@@ -284,14 +284,9 @@ class xSliderModel extends ObjectModel{
 		
 		$rets = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
 		if($rets && is_array($rets)){
-			foreach($rets as $key => &$row){
+			foreach($rets as $key => $row){
 				$items = self::getSliderItems($row['id_xslider'],true);
-				foreach($items as &$item){
-					$imgname = $item['image'];
-					$item['image'] = $this->_path.'images/'.$imgname;
-					$item['thumb'] = _PS_IMG_DIR_.'tmp/xslider_mini_'.$imgname;
-				}
-				$row['items'] = $items;
+				$rets[$key]['items'] = $items;
 			}
 		}
 		
