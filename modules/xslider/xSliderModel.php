@@ -120,6 +120,7 @@ class xSliderModel extends ObjectModel{
 				`id_xslider`  int NOT NULL ,
 				`image`  varchar(255) NOT NULL ,
 				`link`  varchar(255) NULL ,
+				`link_type` varchar(16) NOT NULL,
 				`description`  varchar(255) NOT NULL ,
 				`active`  tinyint(1) NOT NULL DEFAULT 1,
 				`date_upd`  timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,

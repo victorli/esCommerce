@@ -583,6 +583,11 @@ class Xslider extends Module{
 		$identifier = 'id_xslider_item';
 		$form_id = $id_xslider_item;
 		
+		$linkTypes = array(
+			array('id_option' => 'image','name' => $this->l('Image')),
+			array('id_option' => 'video','name' => $this->l('Video'))
+		);
+		
 		$fields_form[0]['form'] = array(
 				'legend' => array(
 					'title' => 	$this->l('Slide Item'),
@@ -607,6 +612,17 @@ class Xslider extends Module{
 						'label' => $this->l('Link'),
 						'name' => 'link',
 						'required' => false
+					),
+					array(
+						'type' => 'select',
+						'label' => $this->l('Link Type'),
+						'name' => 'link_type',
+						'required'=> true,
+						'options' => array(
+							'query' => 	$linkTypes,
+							'id'	=>	'id_option',
+							'name'	=>	'name'
+						)	
 					),
 					array(
 						'type' => 'switch',
@@ -674,9 +690,10 @@ class Xslider extends Module{
 			return '';// we think just add one new slider config
 			
 		$fields_list = array(
-			'id_xslider_item' => array('title' => $this->l('ID'), 'align' => 'right', 'class' => 'fixed-width-xs'),
+			'id_xslider_item' => array('title' => $this->l('ID'), 'align' => 'right', 'class' => 'fixed-width-xs','orderby'=>false),
 			'image'		=>	array('title' => $this->l('Image'),'orderby'=>false, 'callback' =>'getThumbnail', 'callback_object' => $this),
 			'link'		=>	array('title' => $this->l('Link'),'orderby'=>false),
+			'link_type'	=>	array('title' => $this->l('Link Type'),'align'=>'center','orderby'=>false),
 			'description'		=>	array('title' => $this->l('Description'),	'align'=>'right', 'orderby'=>false),
 			'active'	=>	array('title' => $this->l('Active'), 'align'=>'center', 'orderby'=>false, 'active'=>'status','type'=>'bool','class'=>'fixed-width-sm')
 		);
