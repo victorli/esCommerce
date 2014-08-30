@@ -43,7 +43,7 @@
 {/foreach}
 
 <script type="text/javascript">
-{foreach from=$xsliders key=key item=slider}
+{foreach from=$xsliders key=key item=xslider}
 	var xWidth_{$key} = {$xslider.$key.width};
 	var xHeight_{$key} = {$xslider.$key.height};
 	var xFx_{$key} = {$xslider.$key.fx};

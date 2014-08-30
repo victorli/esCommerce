@@ -737,7 +737,7 @@ class Xslider extends Module{
 			array(
 				'xsliders' => $xsliders,
 				'mod_path' => $this->_path,
-				'thumb_path' => $this->context->link->getMediaLink(_PS_IMG_DIR_.'/tmp/')
+				'thumb_path' => $this->context->link->getMediaLink('img/tmp/')
 			)
 		);
 		return $this->display(__FILE__,'xslider.tpl');
