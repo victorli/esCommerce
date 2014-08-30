@@ -156,6 +156,7 @@ class Xslider extends Module{
 									'id_xslider'=>$xslider->id,
 									'description'=>Tools::getValue('description'),
 									'link' => Tools::getValue('link'),
+									'link_type' => Tools::getValue('link_type'),
 									'active'=>(int)Tools::getValue('active'));
 					if(!$omit){
 						$data['image'] = $salt.'_'.(int)$xslider->id.'_'.$_FILES['image']['name'];
