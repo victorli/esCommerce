@@ -21,17 +21,11 @@
 {foreach from=$xsliders key=key item=xslider}
 	<div class="camera_wrap camera_azure_skin" id="xslider-{$xslider.id_xslider}">
 	{foreach from=$xslider.items item=item}
-		{if $item.href}
-		<a href="{$item.href}" target="_blank">
-		{/if}
-		<div data-thumb="{$thumb_path}xslider_mini_{$item.image}" data-src="{$mod_path}images/{$item.image}">
+		<div data-thumb="{$thumb_path}xslider_mini_{$item.image}" data-src="{$mod_path}images/{$item.image}" data-link="{$item.href}">
         	<div class="camera_caption fadeFromBottom">
             	{$item.description}
             </div>
        	</div>
-       	{if $item.href}
-       	</a>
-       	{/if}
     {/foreach}
 	</div>
 {/foreach}
