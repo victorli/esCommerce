@@ -724,25 +724,25 @@ class Xslider extends Module{
 	}
 	
 	private function _prepareCameraJsScript($xsliders){
-		$js = '<script type="text/javascript">\r\n'.
-			  '$(function(){\r\n';
+		$js = '<script type="text/javascript">'.
+			  '$(function(){';
 		foreach($xsliders as $key => $xslider){
 			$js .='$("#xslider_'.$key.'").camera({'.
-				  '\r\nheight:'.$xslider['height'].
-				  '\r\nfx:'.$xslider['fx'].
-				  '\r\nloader:'.$xslider['loader'].
-				  '\r\nbarPosition:'.$xslider['barPosition'].
-			 	  '\r\nbarDirection:'.$xslider['barDirection'].
-				  '\r\nnavigation:'.$xslider['navigation'].
-				  '\r\noverlayer:'.$xslider['overlayer'].
-				  '\r\npagination:'.$xslider['pagination'].
-				  '\r\nplayPause:'.$xslider['playPause'].
-				  '\r\npiePosition:'.$xslider['piePosition'].
-				  '\r\nthumbnails:'.$xslider['thumbnails'].	
-				  '\r\ntime:'.$xslider['time'].	
-				  '})\r\n';
+				  'height:'.$xslider['height'].
+				  'fx:'.$xslider['fx'].
+				  'loader:'.$xslider['loader'].
+				  'barPosition:'.$xslider['barPosition'].
+			 	  'barDirection:'.$xslider['barDirection'].
+				  'navigation:'.$xslider['navigation'].
+				  'overlayer:'.$xslider['overlayer'].
+				  'pagination:'.$xslider['pagination'].
+				  'playPause:'.$xslider['playPause'].
+				  'piePosition:'.$xslider['piePosition'].
+				  'thumbnails:'.$xslider['thumbnails'].	
+				  'time:'.$xslider['time'].	
+				  '})';
 		}
-		$js .="});\r\n</script>";
+		$js .="});</script>";
 		
 		return $js;
 	}
