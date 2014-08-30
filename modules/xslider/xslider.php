@@ -735,7 +735,9 @@ class Xslider extends Module{
 		
 		$this->context->smarty->assign(
 			array(
-				'xsliders' => $xsliders
+				'xsliders' => $xsliders,
+				'mod_path' => $this->_path,
+				'thumb_path' => $this->context->link->getMediaLink(_PS_IMG_DIR_.'/tmp/')
 			)
 		);
 		return $this->display(__FILE__,'xslider.tpl');
