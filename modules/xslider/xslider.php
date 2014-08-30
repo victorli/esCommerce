@@ -728,17 +728,17 @@ class Xslider extends Module{
 			  '$(function(){';
 		foreach($xsliders as $key => $xslider){
 			$js .='$("#xslider_'.$key.'").camera({'.
-				  'height:'.$xslider['height'].
-				  'fx:'.$xslider['fx'].
-				  'loader:'.$xslider['loader'].
-				  'barPosition:'.$xslider['barPosition'].
-			 	  'barDirection:'.$xslider['barDirection'].
-				  'navigation:'.$xslider['navigation'].
-				  'overlayer:'.$xslider['overlayer'].
-				  'pagination:'.$xslider['pagination'].
-				  'playPause:'.$xslider['playPause'].
-				  'piePosition:'.$xslider['piePosition'].
-				  'thumbnails:'.$xslider['thumbnails'].	
+				  'height:'.$xslider['height'].','.
+				  'fx:'.$xslider['fx'].','.
+				  'loader:'.$xslider['loader'].','.
+				  'barPosition:'.$xslider['barPosition'].','.
+			 	  'barDirection:'.$xslider['barDirection'].','.
+				  'navigation:'.$xslider['navigation'].','.
+				  'overlayer:'.$xslider['overlayer'].','.
+				  'pagination:'.$xslider['pagination'].','.
+				  'playPause:'.$xslider['playPause'].','.
+				  'piePosition:'.$xslider['piePosition'].','.
+				  'thumbnails:'.$xslider['thumbnails'].	','.
 				  'time:'.$xslider['time'].	
 				  '})';
 		}
