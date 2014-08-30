@@ -723,6 +723,30 @@ class Xslider extends Module{
 		$this->context->controller->addJS($this->_path.'js/jquery.mobile.customized.min.js');
 	}
 	
+	private function _prepareCameraJsScript($xsliders){
+		$js = '<script type="text/javascript">\r\n'.
+			  '$(function(){\r\n';
+		foreach($xsliders as $key => $xslider){
+			$js .='$("#xslider_'.$key.'").camera({'.
+				  '\r\nheight:'.$xslider['height'].
+				  '\r\nfx:'.$xslider['fx'].
+				  '\r\nloader:'.$xslider['loader'].
+				  '\r\nbarPosition:'.$xslider['barPosition'].
+			 	  '\r\nbarDirection:'.$xslider['barDirection'].
+				  '\r\nnavigation:'.$xslider['navigation'].
+				  '\r\noverlayer:'.$xslider['overlayer'].
+				  '\r\npagination:'.$xslider['pagination'].
+				  '\r\nplayPause:'.$xslider['playPause'].
+				  '\r\npiePosition:'.$xslider['piePosition'].
+				  '\r\nthumbnails:'.$xslider['thumbnails'].	
+				  '\r\ntime:'.$xslider['time'].	
+				  '})\r\n';
+		}
+		$js .="});\r\n</script>";
+		
+		return $js;
+	}
+	
 	/*public function hookdisplayHeader($params){
 		return;
 	}*/
@@ -737,7 +761,8 @@ class Xslider extends Module{
 			array(
 				'xsliders' => $xsliders,
 				'mod_path' => $this->_path,
-				'thumb_path' => $this->context->link->getMediaLink('img/tmp/')
+				'thumb_path' => $this->context->link->getMediaLink('img/tmp/'),
+				'js'	=>	$this->_prepareCameraJsScript($xsliders)
 			)
 		);
 		return $this->display(__FILE__,'xslider.tpl');

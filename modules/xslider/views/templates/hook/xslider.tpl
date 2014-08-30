@@ -18,12 +18,6 @@
 */
 *}
 
-{if isset($xsliders)}
-<script type="text/javascript">
-	var numSliders = {$xsliders|count};
-</script>	
-{/if}
-
 {foreach from=$xsliders key=key item=xslider}
 	<div class="camera_wrap camera_azure_skin" id="xslider-{$xslider.id_xslider}">
 	{foreach from=$xslider.items item=item}
@@ -42,40 +36,4 @@
 	</div>
 {/foreach}
 
-<script type="text/javascript">
-{foreach from=$xsliders key=key item=xslider}
-	var xWidth_{$key} = {$xslider.$key.width};
-	var xHeight_{$key} = {$xslider.$key.height};
-	var xFx_{$key} = {$xslider.$key.fx};
-	var xBD_{$key} = {$xslider.$key.barDirection};
-	var xBP_{$key} = {$xslider.$key.barPosition};
-	var xLoader_{$key} = {$xslider.$key.loader};
-	var xNavigation_{$key} = {$xslider.$key.navigation};
-	var xOL_{$key} = {$xslider.$key.overlayer};
-	var xPagination_{$key} = {$xslider.$key.pagination};
-	var xPP_{$key} = {$xslider.$key.playPause};
-	var xPPn_{$key} = {$xslider.$key.piePosition};
-	var xThumb_{$key} = {$xslider.$key.thumbnails};
-	var xTime_{$key} = {$xslider.$key.time};
-{/foreach}
-{literal}
-jQuery(function(){
-	for(var i=0; i<numSliders; i++){
-		$("#xslider-"+i).camera({
-			height		: 	this['xHeight_'+i],
-			fx			:	this['xFx_'+i],
-			loader		:	this['xLoader_'+i],
-			barPosition	:	this['xBP_'+i],
-			barDirection:	this['xBD_'+i],
-			navigation	:	this['xNavigation_'+i],
-			overlayer	:	this['xOL_'+i],
-			pagination	:	this['xPagination_'+i],
-			playPause	:	this['xPP_'+i],
-			piePosition	:	this['xPPn_'+i],
-			thumbnails	:	this['xThumb_'+i],
-			time		:	this['xTime_'+i]
-		});	
-	}
-});
-{/literal}
-</script>
+{$js}
