@@ -727,7 +727,7 @@ class Xslider extends Module{
 		$js = '<script type="text/javascript">'.
 			  '$(function(){';
 		foreach($xsliders as $xslider){
-			$js .='$("#xslider_'.$xslider['id_xslider'].'").camera({'.
+			$js .='$("#xslider-'.$xslider['id_xslider'].'").camera({'.
 				  'height:"'.$xslider['height'].'px",'.
 				  'fx:"'.$xslider['fx'].'",'.
 				  'loader:"'.$xslider['loader'].'",'.
@@ -759,7 +759,7 @@ class Xslider extends Module{
 			array(
 				'xsliders' => $xsliders,
 				'mod_path' => $this->_path,
-				'thumb_path' => $this->context->link->getMediaLink('img/tmp/'),
+				'thumb_path' => $this->context->link->getMediaLink('/img/tmp/'),
 				'js'	=>	$this->_prepareCameraJsScript($xsliders)
 			)
 		);
