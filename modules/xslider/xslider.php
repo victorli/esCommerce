@@ -715,7 +715,7 @@ class Xslider extends Module{
 		return $helper->generateList($list,$fields_list);
 	}
 	
-	private function _prepareHook(){
+	public function hookdisplayHeader(){
 		//add js and css
 		$this->context->controller->addCSS($this->_path.'css/camera.css');
 		$this->context->controller->addCSS($this->_path.'css/xslider.css');
@@ -728,7 +728,7 @@ class Xslider extends Module{
 			  '$(function(){';
 		foreach($xsliders as $key => $xslider){
 			$js .='$("#xslider_'.$key.'").camera({'.
-				  'height:'.$xslider['height'].'px,'.
+				  'height:"'.$xslider['height'].'px",'.
 				  'fx:"'.$xslider['fx'].'",'.
 				  'loader:"'.$xslider['loader'].'",'.
 				  'barPosition:"'.$xslider['barPosition'].'",'.
@@ -754,8 +754,6 @@ class Xslider extends Module{
 	public function hookdisplayTopColumn($params){
 		$hook_id = Hook::getIdByName('displayTopColumn');
 		$xsliders = xSliderModel::getSlidersByHook($hook_id);
-		
-		$this->_prepareHook();
 		
 		$this->context->smarty->assign(
 			array(
