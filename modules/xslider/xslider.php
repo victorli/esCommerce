@@ -108,12 +108,16 @@ class Xslider extends Module{
 			$xslider->navigation = (int)Tools::getValue('navigation');
 			$xslider->pagination = (int)Tools::getValue('pagination');
 			$xslider->thumbnails = (int)Tools::getValue('thumbnails');
+			if($xslider->id_hook && is_numeric($xslider->id_hook)){
+				//we need clear old cache first
+				$this->_clearCache($this->tpl, $this->getCacheId('hook_'.$xslider->id_hook));
+			}
 			$xslider->id_hook = (int)Tools::getValue('id_hook');
 			
 			if($xslider->save(false,true)){
 				$output .= $this->displayConfirmation($this->l('Add/Update slide successfully.'));
 				$this->context->cookie->id_xslider = $xslider->id;
-				//clear cache
+				//clear new hook id cache
 				$this->_clearCache($this->tpl, $this->getCacheId('hook_'.$xslider->id_hook));
 			}else{ 
 				$output .= $this->displayError($this->l('Error to Add/Update slide.'));
