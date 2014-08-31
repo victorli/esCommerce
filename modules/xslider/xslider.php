@@ -349,7 +349,7 @@ class Xslider extends Module{
 		);
 		
 		$skins = array(
-			array(
+			/*array(
 				'id_option' => 'camera_amber_skin',
 				'name'		=> $this->l('Amber'),
 				'class'		=> 'skin-amber'
@@ -358,7 +358,7 @@ class Xslider extends Module{
 				'id_option' => 'camera_ash_skin ',
 				'name'		=> $this->l('Ash'),
 				'class'		=> 'skin-ash'
-			),
+			),*/
 			array(
 				'id_option' => 'camera_azure_skin',
 				'name'		=> $this->l('Azure'),
@@ -384,7 +384,7 @@ class Xslider extends Module{
 				'name'		=> $this->l('Brown'),
 				'class'		=> 'skin-brown'
 			),
-			array(
+			/*array(
 				'id_option' => 'camera_burgundy_skin',
 				'name'		=> $this->l('Burgundy'),
 				'class'		=> 'skin-burgundy'
@@ -393,16 +393,17 @@ class Xslider extends Module{
 				'id_option' => 'camera_charcoal_skin',
 				'name'		=> $this->l('Charcoal'),
 				'class'		=> 'skin-charcoal'
-			),
+			),*/
 			array(
 				'id_option' => 'camera_chocolate_skin',
 				'name'		=> $this->l('Chocolate'),
 				'class'		=> 'skin-chocolate'
-			),array(
+			),
+			/*array(
 				'id_option' => 'camera_coffee_skin',
 				'name'		=> $this->l('Coffee'),
 				'class'		=> 'skin-coffee'
-			),
+			),*/
 			array(
 				'id_option' => 'camera_cyan_skin ',
 				'name'		=> $this->l('Cyan'),
@@ -465,28 +466,28 @@ class Xslider extends Module{
 			array(
 				'id_option' => 'camera_pink_skin',
 				'name'		=> $this->l('Pink'),
-				'class'		=> 'skin-green'
+				'class'		=> 'skin-pink'
 			),
 			array(
 				'id_option' => 'camera_grey_skin',
 				'name'		=> $this->l('Grey'),
-				'class'		=> 'skin-pink'
+				'class'		=> 'skin-grey'
 			),
-			array(
+			/*array(
 				'id_option' => 'camera_pistachio_skin',
 				'name'		=> $this->l('Pistachio'),
 				'class'		=> 'skin-pistachio'
-			),
+			),*/
 			array(
 				'id_option' => 'camera_red_skin',
 				'name'		=> $this->l('Red'),
 				'class'		=> 'skin-red'
 			),
-			array(
+			/*array(
 				'id_option' => 'camera_tangerine_skin',
 				'name'		=> $this->l('Tangerine'),
 				'class'		=> 'skin-tangerine'
-			),
+			),*/
 			array(
 				'id_option' => 'camera_turquoise_skin',
 				'name'		=> $this->l('Turquoise'),
