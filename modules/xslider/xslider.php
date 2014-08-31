@@ -92,9 +92,11 @@ class Xslider extends Module{
 		if(Tools::isSubmit('addSlider')){
 			$output .= $this->renderConfigForm();
 		}elseif(Tools::isSubmit('submitSlider')){
-			$xslider = new xSliderModel();
-			if(Tools::getValue('id_xslider') && (int)Tools::getValue('id_xslider') != 0)
-				$xslider->id = (int)Tools::getValue('id_xslider');
+			if(Tools::getValue('id_xslider') && (int)Tools::getValue('id_xslider') != 0){
+				$xslider = new xSliderModel((int)Tools::getValue('id_xslider'));
+			}else{
+				$xslider = new xSliderModel();
+			}
 			$xslider->name = Tools::getValue('name');
 			$xslider->width = (int)Tools::getValue('width');
 			$xslider->height = (int)Tools::getValue('height');
