@@ -364,11 +364,11 @@ class Xslider extends Module{
 				'name'		=> $this->l('Azure'),
 				'class'		=> 'skin-azure'
 			),
-			array(
+			/*array(
 				'id_option' => 'camera_beige_skin',
 				'name'		=> $this->l('Beige'),
 				'class'		=> 'skin-beige'
-			),
+			),*/
 			array(
 				'id_option' => 'camera_black_skin',
 				'name'		=> $this->l('Black'),
@@ -1055,10 +1055,18 @@ class Xslider extends Module{
 		//clear all slides
 		$slides = @glob($this->local_path.'images/slides/*{.jpg,.png,.gif,.jpeg}',GLOB_BRACE);
 		$thumbnails = @glob(_PS_TMP_IMG_DIR_.'xslider_mini_*');
-		$files = array_merge($files,$thumbnails);
-		foreach($files as $file){
-			if(is_file($file))
-				@unlink($file);
+		try{
+			foreach($slides as $file){
+				if(is_file($file))
+					@unlink($file);
+			}
+			
+			foreach($thumbnails as $file){
+				if(is_file($file))
+					@unlink($file);
+			}
+		}catch (Exception $e){
+			return false;
 		}
 		
 		return true;
