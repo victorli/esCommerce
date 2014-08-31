@@ -1,35 +1,34 @@
-@CHARSET "UTF-8";
-.skin_amber,  .skin_ash,  .skin_azure,  .skin_beige,  .skin_black,  .skin_blue,  .skin_brown,  .skin_burgundy,  .skin_charcoal,  .skin_chocolate,  .skin_coffee,  .skin_cyan,  .skin_fuchsia,  .skin_gold,  .skin_green,  .skin_grey,  .skin_indigo,  .skin_khaki,  .skin_lime,  .skin_magenta,  .skin_maroon,  .skin_orange,  .skin_olive,  .skin_pink,  .skin_pistachio,  .skin_pink,  .skin_red,  .skin_tangerine,  .skin_turquoise,  .skin_violet,  .skin_white,  .skin_yellow{
+.skin-amber,  .skin-ash,  .skin-azure,  .skin-beige,  .skin-black,  .skin-blue,  .skin-brown,  .skin-burgundy,  .skin-charcoal,  .skin-chocolate,  .skin-coffee,  .skin-cyan,  .skin-fuchsia,  .skin-gold,  .skin-green,  .skin-grey,  .skin-indigo,  .skin-khaki,  .skin-lime,  .skin-magenta,  .skin-maroon,  .skin-orange,  .skin-olive,  .skin-pink,  .skin-pistachio,  .skin-pink,  .skin-red,  .skin-tangerine,  .skin-turquoise,  .skin-violet,  .skin-white,  .skin-yellow{
 	color:white;
 }
-.skin_amber{background-color:amber;}
-.skin_ash{background-color:ash;}
-.skin_azure{background-color:azure;}
-.skin_beige{background-color:beige;}
-.skin_black{background-color:black;}
-.skin_blue{background-color:blue;}
-.skin_brown{background-color:brown;}
-.skin_burgundy{background-color:burgundy;}
-.skin_charcoal{background-color:charcoal;}
-.skin_chocolate{background-color:chocolate;}
-.skin_coffee{background-color:coffee;}
-.skin_cyan{background-color:cyan;}
-.skin_fuchsia{background-color:fuchsia;}
-.skin_gold{background-color:gold;}
-.skin_green{background-color:green;}
-.skin_grey{background-color:grey;}
-.skin_indigo{background-color:indigo;}
-.skin_khaki{background-color:khaki;}
-.skin_lime{background-color:lime;}
-.skin_magenta{background-color:magenta;}
-.skin_maroon{background-color:maroon;}
-.skin_orange{background-color:orange;}
-.skin_olive{background-color:olive;}
-.skin_pink{background-color:pink;}
-.skin_pistachio{background-color:pistachio;}
-.skin_red{background-color:red;}
-.skin_tangerine{background-color:tangerine;}
-.skin_turquoise{background-color:turquoise;}
-.skin_violet{background-color:violet;}
-.skin_white{background-color:white; color:black;}
-.skin_yellow{background-color:yellow;}
+.skin-amber{background-color:amber;}
+.skin-ash{background-color:ash;}
+.skin-azure{background-color:azure;}
+.skin-beige{background-color:beige;}
+.skin-black{background-color:black;}
+.skin-blue{background-color:blue;}
+.skin-brown{background-color:brown;}
+.skin-burgundy{background-color:burgundy;}
+.skin-charcoal{background-color:charcoal;}
+.skin-chocolate{background-color:chocolate;}
+.skin-coffee{background-color:coffee;}
+.skin-cyan{background-color:cyan;}
+.skin-fuchsia{background-color:fuchsia;}
+.skin-gold{background-color:gold;}
+.skin-green{background-color:green;}
+.skin-grey{background-color:grey;}
+.skin-indigo{background-color:indigo;}
+.skin-khaki{background-color:khaki;}
+.skin-lime{background-color:lime;}
+.skin-magenta{background-color:magenta;}
+.skin-maroon{background-color:maroon;}
+.skin-orange{background-color:orange;}
+.skin-olive{background-color:olive;}
+.skin-pink{background-color:pink;}
+.skin-pistachio{background-color:pistachio;}
+.skin-red{background-color:red;}
+.skin-tangerine{background-color:tangerine;}
+.skin-turquoise{background-color:turquoise;}
+.skin-violet{background-color:violet;}
+.skin-white{background-color:white; color:black;}
+.skin-yellow{background-color:yellow;}
