@@ -932,7 +932,7 @@ class Xslider extends Module{
 				  'thumbnails:'.$xslider['thumbnails'].	','.
 				  'time:'.$xslider['time'].	','.
 				  'imagePath:"'.$this->_path.'images/"'.
-				  '})';
+				  '});';
 		}
 		$js .="});</script>";
 		
