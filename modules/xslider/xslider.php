@@ -52,7 +52,8 @@ class Xslider extends Module{
 			Shop::setContext(Shop::CONTEXT_ALL);
 			
 		if(!parent::install() ||
-			!$this->registerHook('displayHeader') ||
+			!$this->registerHook('displayHeader') || 
+			!$this->registerHook('displayBackOfficeHeader') || 
 			!$this->registerHook('displayTopColumn') || 
 			!Configuration::updateValue('BLX_XSLIDER_NAME','xSlider') ||
 			!xSliderModel::createTables()
@@ -905,6 +906,10 @@ class Xslider extends Module{
 		$this->context->controller->addCSS($this->_path.'css/xslider.css');
 		$this->context->controller->addJS($this->_path.'js/camera.min.js');
 		$this->context->controller->addJS($this->_path.'js/jquery.mobile.customized.min.js');
+	}
+	
+	public function hookdisplayBackOfficeHeader(){
+		$this->context->controller->addCSS($this->_path.'css/xslider.css');
 	}
 	
 	private function _prepareCameraJsScript($xsliders){
