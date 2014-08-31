@@ -933,7 +933,7 @@
 	background-position: -120px -1040px	;
 }
 /*PINK SKIN*/
-.camera_pink_skin .camera_prevThumbs div {
+/*.camera_pink_skin .camera_prevThumbs div {
 	background-position: -160px -80px;
 }
 .camera_pink_skin .camera_nextThumbs div {
@@ -950,7 +950,7 @@
 }
 .camera_pink_skin .camera_commands > .camera_stop {
 	background-position: -120px -80px;
-}
+}*/
 /*RED SKIN*/
 .camera_red_skin .camera_prevThumbs div {
 	background-position: -160px -1000px;
