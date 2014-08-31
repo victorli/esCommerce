@@ -21,7 +21,7 @@
 {foreach from=$xsliders key=key item=xslider}
 	<div class="camera_wrap {$xslider.skin}" id="xslider-{$xslider.id_xslider}">
 	{foreach from=$xslider.items item=item}
-		<div data-thumb="{$thumb_path}xslider_mini_{$item.image}" data-src="{$mod_path}images/{$item.image}" {if $item.link_type == 'image'}data-link="{$item.link}" data-target="_blank"{else}data-time=4500{/if}>
+		<div data-thumb="{$thumb_path}xslider_mini_{$item.image}" data-src="{$mod_path}images/slides/{$item.image}" {if $item.link_type == 'image'}data-link="{$item.link}" data-target="_blank"{else}data-time=4500{/if}>
         	{if $item.link_type == 'image'}
         	<div class="camera_caption fadeFromBottom">
             	{$item.description}
