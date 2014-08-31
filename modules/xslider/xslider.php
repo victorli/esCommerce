@@ -34,6 +34,8 @@ class Xslider extends Module{
 		
 		$this->tableConfig = 'xSliderConfig';
 		$this->tableItem = 'xSliderItem';
+		
+		$this->tpl = 'xslider.tpl';
 		//configurations
 		
 		parent::__construct();
@@ -111,6 +113,8 @@ class Xslider extends Module{
 			if($xslider->save(false,true)){
 				$output .= $this->displayConfirmation($this->l('Add/Update slide successfully.'));
 				$this->context->cookie->id_xslider = $xslider->id;
+				//clear cache
+				$this->_clearCache($this->tpl, $this->getCacheId('hook_'.$xslider->id_hook));
 			}else{ 
 				$output .= $this->displayError($this->l('Error to Add/Update slide.'));
 			}
@@ -165,8 +169,10 @@ class Xslider extends Module{
 					}
 					if(!xSliderModel::saveItem($data))
 						$output .= $this->displayError($this->l('Error to save slider item for '.$xslider->id));
-					else 
+					else{ 
+						$this->_clearCache($this->tpl, $this->getCacheId('hook_'.$xslider->id_hook));
 						$output .= $this->displayConfirmation($this->l('Add/Update slider item successfully.'));	
+					}
 					
 					$output .= $this->renderConfigForm();
 				}
@@ -943,7 +949,7 @@ class Xslider extends Module{
 	
 	private function _prepareHook($hook_id){
 		if(!$this->isCached('xslider.tpl', $this->getCacheId('hook_'.$hook_id))){
-			$xsliders = xSliderModel::getSlidersByHook($$hook_id);
+			$xsliders = xSliderModel::getSlidersByHook($hook_id);
 			$this->context->smarty->assign(
 				array(
 					'xsliders' => $xsliders,
