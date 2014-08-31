@@ -54,7 +54,6 @@ class Xslider extends Module{
 		if(!parent::install() ||
 			!$this->registerHook('displayHeader') ||
 			!$this->registerHook('displayTopColumn') || 
-			//!$this->registerHook('actionShopDataDuplication') ||
 			!Configuration::updateValue('BLX_XSLIDER_NAME','xSlider') ||
 			!xSliderModel::createTables()
 		){
@@ -67,7 +66,8 @@ class Xslider extends Module{
 	public function uninstall(){
 		if(!parent::uninstall() || 
 			!Configuration::deleteByName('BLX_XSLIDER_NAME') ||
-			!xSliderModel::dropTable()
+			!xSliderModel::dropTable() ||
+			!$this->_clearImages()
 		)
 		return false;
 		
@@ -100,6 +100,7 @@ class Xslider extends Module{
 				$xslider->piePosition = Tools::getValue('piePosition');
 			else 
 				$xslider->barPosition = Tools::getValue('barPosition');
+			$xslider->skin = Tools::getValue('skin');
 			$xslider->time = (int)Tools::getValue('time');
 			$xslider->navigation = (int)Tools::getValue('navigation');
 			$xslider->pagination = (int)Tools::getValue('pagination');
@@ -138,7 +139,7 @@ class Xslider extends Module{
 				   		$errors[] = $this->displayError($error);
 				   	elseif((!$temp_name || !move_uploaded_file($_FILES['image']['tmp_name'], $temp_name)))
 				   		$errors[] = $this->displayError($this->l('Something system error occurred.'));
-				   	elseif(!ImageManager::resize($temp_name, dirname(__FILE__).'/images/'.$salt.'_'.$xslider->id.'_'.$_FILES['image']['name'],null,null,$type))
+				   	elseif(!ImageManager::resize($temp_name, dirname(__FILE__).'/images/slides/'.$salt.'_'.$xslider->id.'_'.$_FILES['image']['name'],null,null,$type))
 				   		$errors[] = $this->displayError($this->l('An error occurred during uploding the image.'));
 				   	if(isset($temp_name))
 				   		@unlink($temp_name);
@@ -346,6 +347,59 @@ class Xslider extends Module{
 			)
 		);
 		
+		$skins = array(
+			array(
+				'id_option' => 'camera_grey_skin',
+				'name'		=> $this->l('Grey'),
+				'class'		=> 'skin-grey'
+			),
+			array(
+				'id_option' => 'camera_pink_skin',
+				'name'		=> $this->l('Pink'),
+				'class'		=> 'skin-pink'
+			),
+			array(
+				'id_option' => 'camera_yellow_skin',
+				'name'		=> $this->l('Yellow'),
+				'class'		=> 'skin-yellow'
+			),
+			array(
+				'id_option' => 'camera_black_skin',
+				'name'		=> $this->l('Black'),
+				'class'		=> 'skin-black'
+			),
+			array(
+				'id_option' => 'camera_blue_skin',
+				'name'		=> $this->l('Blue'),
+				'class'		=> 'skin-blue'
+			),
+			array(
+				'id_option' => 'camera_brown_skin',
+				'name'		=> $this->l('Brown'),
+				'class'		=> 'skin-brown'
+			),
+			array(
+				'id_option' => 'camera_green_skin',
+				'name'		=> $this->l('Green'),
+				'class'		=> 'skin-green'
+			),
+			array(
+				'id_option' => 'camera_orange_skin',
+				'name'		=> $this->l('Orange'),
+				'class'		=> 'skin-orange'
+			),
+			array(
+				'id_option' => 'camera_red_skin',
+				'name'		=> $this->l('Red'),
+				'class'		=> 'skin-red'
+			),
+			array(
+				'id_option' => 'camera_white_skin',
+				'name'		=> $this->l('White'),
+				'class'		=> 'skin-white'
+			),
+		);
+		
 		$fields_form[0]['form'] = array(
 				'legend' => array(
 					'title' => 	$this->l('Slide Config Form'),
@@ -412,6 +466,18 @@ class Xslider extends Module{
 						'name'	=>	'time',
 						'suffix'=>	'ms',
 						'required'=> true
+					),
+					array(
+						'type'	=>	'select',
+						'label'	=>	$this->l('Skin'),
+						'name'	=>	'skin',
+						'required'=> true,
+						'options' => array(
+							'query' => 	$skins,
+							'id'	=>	'id_option',
+							'name'	=>	'name',
+							'class' => 	'class'
+						)	
 					),
 					array(
 						'type' => 'switch',
@@ -511,14 +577,6 @@ class Xslider extends Module{
 		$helper->toolbar_scroll = true;
 		$helper->submit_action = 'submitSlider';
 		
-		/*$helper->toolbar_btn = array(
-			'back' => array(
-				'desc' => $this->l('Back to list'),
-				'href' => AdminController::$currentIndex.'&token='.Tools::getAdminTokenLite('AdminModules').'&configure='.$this->name,
-				'icon' => 'icon-backward'
-			)
-		);*/
-		
 		$helper->fields_value = $xslider;
 		$lt = isset($xslider['loader']) ? $xslider['loader'] : 'pie';
 		return $this->headerHTML($lt). $helper->generateForm($fields_form).$this->renderItemList();
@@ -538,6 +596,7 @@ class Xslider extends Module{
 			'height'	=>	array('title' => $this->l('Height(px)'), 'align'=>'right', 'orderby'=>false),
 			'time'		=>	array('title' => $this->l('Time(ms)'),'align'=>'right', 'orderby'=>false),
 			'loader'	=>	array('title' => $this->l('Loader'), 'align'=>'center'),
+			'skin'		=>	array('title' => $this->l('Skin'), 'align'=>'center', 'orderby'=>false),
 			'navigation'=>	array('title' => $this->l('Navigation'), 'class'=>'fixed-width-sm','active'=>'navigation','align'=>'center', 'type'=>'bool','orderby'=>false),
 			'pagination'=>	array('title' => $this->l('Pagination'), 'class'=>'fixed-width-sm','active'=>'pagination','align'=>'center', 'type'=>'bool','orderby'=>false),
 			'thumbnails'=>	array('title' => $this->l('Thumbnails'), 'class'=>'fixed-width-sm','active'=>'thumbnails','align'=>'center', 'type'=>'bool','orderby'=>false)	
@@ -877,6 +936,19 @@ class Xslider extends Module{
 	
 	public function getThumbnail($imgname){
 		return ImageManager::thumbnail($this->local_path.'images/'.$imgname,'xslider_mini_'.$imgname, 40);
+	}
+	
+	private function _clearImages(){
+		//clear all slides
+		$slides = @glob($this->local_path.'images/slides/*{.jpg,.png,.gif,.jpeg}',GLOB_BRACE);
+		$thumbnails = @glob(_PS_TMP_IMG_DIR_.'xslider_mini_*');
+		$files = array_merge($files,$thumbnails);
+		foreach($files as $file){
+			if(is_file($file))
+				@unlink($file);
+		}
+		
+		return true;
 	}
 
 }

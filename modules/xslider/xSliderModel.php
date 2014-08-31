@@ -27,13 +27,14 @@ class xSliderModel extends ObjectModel{
 	public $barDirection = 'leftToRight'; 
 	public $barPosition = 'bottom'; //top or bottom
 	public $loader = 'pie';//or bar
+	public $skin = 'camera_grey_skin';
 	public $navigation = true;
 	public $overlayer = true;
 	public $pagination = true;
 	public $playPause = true;
 	public $piePosition = 'rightTop'; //'rightTop', 'leftTop', 'leftBottom', 'rightBottom'
 	public $thumbnails = false;
-	public $time = 700;
+	public $time = 7000;
 	//distinct by hook position
 	public $id_hook;
 	
@@ -55,6 +56,7 @@ class xSliderModel extends ObjectModel{
 			'barDirection'	=>	array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => true, 'size' => 32),
 			'barPosition'	=>	array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => true, 'size' => 32),
 			'loader'		=>	array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => true, 'size' => 16),
+			'skin'			=>	array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => true, 'size' => 32),
 			'navigation'	=>	array('type' => self::TYPE_BOOL, 'validate' => 'isBool', 'required' => true, 'size' => 8),
 			'overlayer'		=>	array('type' => self::TYPE_BOOL, 'validate' => 'isBool', 'required' => true, 'size' => 8),
 			'pagination'	=>	array('type' => self::TYPE_BOOL, 'validate' => 'isBool', 'required' => true, 'size' => 8),
@@ -96,6 +98,7 @@ class xSliderModel extends ObjectModel{
 				`barDirection`  varchar(32) NOT NULL ,
 				`barPosition`  varchar(32) NOT NULL ,
 				`loader`  varchar(16) NOT NULL ,
+				`skin`	varchar(32) NOT NULL ,
 				`navigation`  tinyint(1) NOT NULL ,
 				`overlayer`  tinyint(1) NOT NULL DEFAULT 1 ,
 				`pagination`  tinyint(1) NOT NULL ,

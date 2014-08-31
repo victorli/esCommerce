@@ -333,6 +333,9 @@
 																{else}
 																	{if $fields_value[$input.name] == $option[$input.options.options.id]}selected="selected"{/if}
 																{/if}
+																{if isset($option[$input.options.options.class])}
+																	 class="{$option[$input.options.options.class]}"
+																{/if}
 															>{$option[$input.options.options.name]}</option>
 														{/foreach}
 													</optgroup>
@@ -351,6 +354,9 @@
 																{if $fields_value[$input.name] == $option->$input.options.id}
 																	selected="selected"
 																{/if}
+															{/if}
+															{if isset($option->$input.options.class)}
+																 class="{$option->$input.options.class}"
 															{/if}
 														>{$option->$input.options.name}</option>
 													{elseif $option == "-"}
