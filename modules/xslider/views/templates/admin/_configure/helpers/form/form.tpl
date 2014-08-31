@@ -374,6 +374,7 @@
 																	selected="selected"
 																{/if}
 															{/if}
+															{if $option[$input.options.class]} class="{$option[$input.options.class]}" {/if}
 														>{$option[$input.options.name]}</option>
 
 													{/if}
