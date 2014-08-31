@@ -202,6 +202,7 @@ class xSliderModel extends ObjectModel{
 		$sql->from('xslider_config','x');
 		if(isset($filter))
 			$sql->where($filter);
+		$sql->where('x.id_shop='.Context::getContext()->shop->id);
 		$sql->orderBy('x.'.(isset($orderBy)? $orderBy : 'id_xslider').' '.(isset($orderWay) ? $orderWay : 'DESC'));
 		
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);

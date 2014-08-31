@@ -315,6 +315,8 @@ class Xslider extends Module{
 		foreach($hs as $h){
 			if(strcmp(substr($h['name'], 0, 7),'display') !== 0)
 				continue;
+			if(!in_array($h['name'], array('displayTop','displayTopColumn','displayLeftColumn','displayRightColumn','displayHome')))
+				continue;
 			array_push($hooks, array('id_option' => $h['id_hook'], 'name' => $h['name']));
 		}
 		
@@ -939,43 +941,50 @@ class Xslider extends Module{
 		return $js;
 	}
 	
-	/*public function hookdisplayHeader($params){
-		return;
-	}*/
+	private function _prepareHook($hook_id){
+		if(!$this->isCached('xslider.tpl', $this->getCacheId('hook_'.$hook_id))){
+			$xsliders = xSliderModel::getSlidersByHook($$hook_id);
+			$this->context->smarty->assign(
+				array(
+					'xsliders' => $xsliders,
+					'mod_path' => $this->_path,
+					'thumb_path' => $this->context->link->getMediaLink('/img/tmp/'),
+					'js'	=>	$this->_prepareCameraJsScript($xsliders)
+				)
+			);
+		}
+		
+		return $this->display(__FILE__,'xslider.tpl', $this->getCacheId('hook_'.$hook_id));
+	}
 	
 	public function hookdisplayTopColumn($params){
 		$hook_id = Hook::getIdByName('displayTopColumn');
-		$xsliders = xSliderModel::getSlidersByHook($hook_id);
 		
-		$this->context->smarty->assign(
-			array(
-				'xsliders' => $xsliders,
-				'mod_path' => $this->_path,
-				'thumb_path' => $this->context->link->getMediaLink('/img/tmp/'),
-				'js'	=>	$this->_prepareCameraJsScript($xsliders)
-			)
-		);
-		return $this->display(__FILE__,'xslider.tpl');
+		return $this->_prepareHook($hook_id);
 	}
 	
 	public function hookdisplayTop($params){
-		return $this->hookdisplayTopColumn($params);
+		$hook_id = Hook::getIdByName('displayTop');
+		
+		return $this->_prepareHook($hook_id);
 	}
 	
 	public function hookdisplayLeftColumn($params){
+		$hook_id = Hook::getIdByName('displayLeftColumn');
 		
+		return $this->_prepareHook($hook_id);
 	}
 	
 	public function hookdisplayRightColumn($params){
+		$hook_id = Hook::getIdByName('displayRightColumn');
 		
-	}
-	
-	public function hookdisplayFooter($params){
-		
+		return $this->_prepareHook($hook_id);
 	}
 	
 	public function hookdisplayHome($params){
+		$hook_id = Hook::getIdByName('displayHome');
 		
+		return $this->_prepareHook($hook_id);
 	}
 	
 	public function displayEditLink($token = null, $id, $name = null){
