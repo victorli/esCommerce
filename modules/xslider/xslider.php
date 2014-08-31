@@ -935,7 +935,7 @@ class Xslider extends Module{
 	}
 	
 	public function getThumbnail($imgname){
-		return ImageManager::thumbnail($this->local_path.'images/'.$imgname,'xslider_mini_'.$imgname, 40);
+		return ImageManager::thumbnail($this->local_path.'images/slides/'.$imgname,'xslider_mini_'.$imgname, 40);
 	}
 	
 	private function _clearImages(){
