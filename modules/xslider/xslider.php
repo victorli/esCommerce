@@ -879,12 +879,12 @@ class Xslider extends Module{
 			return '';// we think just add one new slider config
 			
 		$fields_list = array(
-			'id_xslider_item' => array('title' => $this->l('ID'), 'align' => 'right', 'class' => 'fixed-width-xs','orderby'=>false),
-			'image'		=>	array('title' => $this->l('Image'),'orderby'=>false, 'callback' =>'getThumbnail', 'callback_object' => $this),
-			'link'		=>	array('title' => $this->l('Link'),'orderby'=>false),
-			'link_type'	=>	array('title' => $this->l('Link Type'),'align'=>'center','orderby'=>false),
-			'description'		=>	array('title' => $this->l('Description'),	'align'=>'right', 'orderby'=>false),
-			'active'	=>	array('title' => $this->l('Active'), 'align'=>'center', 'orderby'=>false, 'active'=>'status','type'=>'bool','class'=>'fixed-width-sm')
+			'id_xslider_item' => array('title' => $this->l('ID'), 'align' => 'right', 'class' => 'fixed-width-xs','orderby'=>false, 'search'=>false),
+			'image'		=>	array('title' => $this->l('Image'),'orderby'=>false, 'callback' =>'getThumbnail', 'callback_object' => $this, 'search'=>false),
+			'link'		=>	array('title' => $this->l('Link'),'orderby'=>false, 'search'=>false),
+			'link_type'	=>	array('title' => $this->l('Link Type'),'align'=>'center','orderby'=>false, 'search'=>false),
+			'description'		=>	array('title' => $this->l('Description'),	'align'=>'right', 'orderby'=>false, 'search'=>false),
+			'active'	=>	array('title' => $this->l('Active'), 'align'=>'center', 'orderby'=>false, 'active'=>'status','type'=>'bool','class'=>'fixed-width-sm', 'search'=>false)
 		);
 		
 		$list = xSliderModel::getSliderItems($id_xslider);
@@ -902,7 +902,6 @@ class Xslider extends Module{
 		$helper->table = $this->tableItem;
 		$helper->listTotal = count($list);
 		$helper->no_link = true;
-		$helper->show_filters = false;
 		
 		$helper->tpl_vars = $tpl_list_vars;
 		$helper->tpl_delete_link_vars = $tpl_delete_link_vars;
