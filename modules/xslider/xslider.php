@@ -41,7 +41,7 @@ class Xslider extends Module{
 		parent::__construct();
 		
 		$this->displayName = $this->l('XSlider');
-		$this->description = $this->l('An awesome slder addon based on camera and you can hook all front-office hooks for home page and general site pages.');
+		$this->description = $this->l('An awesome slider addon based on camera and you can hook all front-office hooks for home page and general site pages.');
 		
 		$this->confirmUninstall = $this->l('Are you sure to remove this awesome slider?');
 		
@@ -57,6 +57,12 @@ class Xslider extends Module{
 			!$this->registerHook('displayHeader') || 
 			!$this->registerHook('displayBackOfficeHeader') || 
 			!$this->registerHook('displayTopColumn') || 
+			!$this->registerHook('displayTop') || 
+			!$this->registerHook('displayLeftColumn') || 
+			!$this->registerHook('displayRightColumn') || 
+			!$this->registerHook('displayHome') || 
+			!$this->registerHook('displayBanner') || 
+			!$this->registerHook('displayFooter') || 
 			!Configuration::updateValue('BLX_XSLIDER_NAME','xSlider') ||
 			!xSliderModel::createTables()
 		){
@@ -238,9 +244,9 @@ class Xslider extends Module{
 			$enabled = Tools::getValue('enabled',1);
 			
 			if(xSliderModel::updateSlider(array($field=>!$enabled),'id_xslider='.$id_xslider)){
-				$output .= $this->displayConfirmation($this->l('Update '.$field.' successfully.'));
+				$output .= $this->displayConfirmation($this->l(sprintf('Update %s successfully.',$field)));
 			}else{
-				$output .= $this->displayError($this->l('Fail to update '.$field));
+				$output .= $this->displayError($this->l(sprintf('Fail to update %s.',$field)));
 			}
 			
 			$output .= $this->renderConfigList();			
@@ -327,7 +333,7 @@ class Xslider extends Module{
 		foreach($hs as $h){
 			if(strcmp(substr($h['name'], 0, 7),'display') !== 0)
 				continue;
-			if(!in_array($h['name'], array('displayTop','displayTopColumn','displayLeftColumn','displayRightColumn','displayHome')))
+			if(!in_array($h['name'], array('displayTop','displayTopColumn','displayLeftColumn','displayRightColumn','displayHome','displayBanner','displayFooter')))
 				continue;
 			array_push($hooks, array('id_option' => $h['id_hook'], 'name' => $h['name']));
 		}
@@ -995,6 +1001,18 @@ class Xslider extends Module{
 	
 	public function hookdisplayHome($params){
 		$hook_id = Hook::getIdByName('displayHome');
+		
+		return $this->_prepareHook($hook_id);
+	}
+	
+	public function hookdisplayBanner($params){
+		$hook_id = Hook::getIdByName('displayBanner');
+		
+		return $this->_prepareHook($hook_id);
+	}
+	
+	public function hookdisplayFooter($params){
+		$hook_id = Hook::getIdByName('displayFooter');
 		
 		return $this->_prepareHook($hook_id);
 	}
