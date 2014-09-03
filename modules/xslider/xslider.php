@@ -902,7 +902,7 @@ class Xslider extends Module{
 		$helper->table = $this->tableItem;
 		$helper->listTotal = count($list);
 		$helper->no_link = true;
-		$helper->simple_header = false;
+		$helper->show_filters = false;
 		
 		$helper->tpl_vars = $tpl_list_vars;
 		$helper->tpl_delete_link_vars = $tpl_delete_link_vars;
