@@ -26,7 +26,7 @@ class Xslider extends Module{
 		$this->name = 'xslider';
 		$this->tab = 'front_office_features';
 		$this->version = '1.1.0';
-		$this->author = Module::AUTHOR_IS_BLX90;
+		$this->author = defined('_ECX_VERSION_') ? Module::AUTHOR_IS_BLX90 : 'BLX90';
 		$this->need_instance = 0;
 		$this->ps_versions_compliancy = array('min'=>'1.6');
 		$this->ecx_versions_compliancy = array('min'=>'1.1.0');
