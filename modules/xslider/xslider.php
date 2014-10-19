@@ -31,6 +31,7 @@ class Xslider extends Module{
 		$this->ps_versions_compliancy = array('min'=>'1.6');
 		$this->ecx_versions_compliancy = array('min'=>'1.1.0');
 		$this->bootstrap = true;
+		$this->module_key = '3aab9fdb156e9d43dee39f1b7786ea96';
 		
 		$this->tableConfig = 'xSliderConfig';
 		$this->tableItem = 'xSliderItem';
