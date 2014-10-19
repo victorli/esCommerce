@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2014 PrestaShop
+* 2014 eCartx
 *
 * NOTICE OF LICENSE
 *
@@ -18,10 +18,10 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
+*  @author BLX90 <zs.li@blx90.com>
+*  @copyright 2014
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
+*  @since ps 1.13
 */
 
 require (dirname(__FILE__).'/menutoplinks.class.php');
@@ -52,8 +52,8 @@ class Blocktopmenu extends Module
 	{
 		$this->name = 'blocktopmenu';
 		$this->tab = 'front_office_features';
-		$this->version = '1.13';
-		$this->author = 'PrestaShop';
+		$this->version = '1.0.1';
+		$this->author = Module::AUTHOR_IS_BLX90;
 
 		$this->bootstrap = true;
 		parent::__construct();	
@@ -786,9 +786,9 @@ class Blocktopmenu extends Module
 		$this->context->controller->addJS($this->_path.'js/hoverIntent.js');
 		$this->context->controller->addJS($this->_path.'js/superfish.js');
 		$this->context->controller->addJS($this->_path.'js/blocktopmenu.js');
-		$this->context->controller->addCSS($this->_path.'css/blocktopmenu.css');
 		$this->context->controller->addCSS($this->_path.'css/superfish/superfish.css');
-
+		$this->context->controller->addCSS($this->_path.'css/blocktopmenu.css');
+		
 		$html = $this->display(__FILE__, 'blocktopmenu.tpl', $this->getCacheId());
 		return $html;
 	}
